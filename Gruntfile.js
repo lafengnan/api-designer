@@ -239,6 +239,19 @@ module.exports = function (grunt) {
             src: ['*']
           }
         ]
+      },
+      backupOriginal: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.dist %>',
+          dest: '<%= yeoman.dist %>',
+          src: ['scripts/*.js', 'styles/*.css'],
+          rename: function(dest, src) {
+            return dest + '/' +
+              src.substring(0, src.indexOf('/')) + '/' +
+              src.substring(src.indexOf('.') + 1);
+          }
+        }]
       }
     },
 
@@ -368,6 +381,7 @@ module.exports = function (grunt) {
     'copy:dist',
     'ngmin',
     'rev',
+    'copy:backupOriginal',
     'usemin'
   ]);
 

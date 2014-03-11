@@ -28,7 +28,9 @@
     <!-- endbuild -->
   </head>
   <body ng-app="ramlEditorApp" class="{{$root.theme}}">
-    <div class="container" ng-include src="'views/raml-editor-main.tmpl.html'"></div>
+    <div class="container">
+        <raml-editor></raml-editor>
+    </div>
 
     <!-- build:js({.,.tmp,app}) scripts/vendor.js -->
     <script src="vendor/scripts/codemirror.js"></script>
@@ -84,6 +86,7 @@
     <script src="scripts/controllers/notifications.js"></script>
     <script src="scripts/controllers/mocking-service-controller.js"></script>
     <script src="scripts/directives/splitter.js"></script>
+    <script src="scripts/directives/raml-editor.js"></script>
     <script src="scripts/directives/raml-editor-context-menu.js"></script>
     <script src="scripts/directives/raml-editor-file-browser.js"></script>
     <script src="scripts/directives/raml-editor-save-file-button.js"></script>
