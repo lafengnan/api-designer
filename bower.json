@@ -21,6 +21,7 @@
   },
   "resolutions": {
     "raml-js-parser": "01bf587031db75b1e91b29ce71e05125b9c5314a",
-    "angular": "~1.2.15"
+    "angular": "~1.2.15",
+    "angular-sanitize": "~1.2.15"
   }
 }

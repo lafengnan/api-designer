@@ -9060,7 +9060,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     htmlMode: true
   });
 /**
- * @license AngularJS v1.2.15
+ * @license AngularJS v1.2.16-build.63+sha.8d4d437
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -9120,7 +9120,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         }
         return match;
       });
-      message = message + '\nhttp://errors.angularjs.org/1.2.15/' + (module ? module + '/' : '') + code;
+      message = message + '\nhttp://errors.angularjs.org/1.2.16-build.63+sha.8d4d437/' + (module ? module + '/' : '') + code;
       for (i = 2; i < arguments.length; i++) {
         message = message + (i == 2 ? '?' : '&') + 'p' + (i - 2) + '=' + encodeURIComponent(stringify(arguments[i]));
       }
@@ -10290,7 +10290,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * </file>
  * </example>
  *
- * @param {Element} element DOM element which is the root of angular application.
+ * @param {DOMElement} element DOM element which is the root of angular application.
  * @param {Array<String|Function|Array>=} modules an array of modules to load into the application.
  *     Each item in the array should be the name of a predefined module or a (DI annotated)
  *     function that will be invoked by the injector as a run block.
@@ -10668,11 +10668,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
   var version = {
-      full: '1.2.15',
+      full: '1.2.16-build.63+sha.8d4d437',
       major: 1,
       minor: 2,
-      dot: 15,
-      codeName: 'beer-underestimating'
+      dot: 16,
+      codeName: 'snapshot'
     };
   function publishExternalAPI(angular) {
     extend(angular, {
@@ -12975,7 +12975,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @name $cacheFactory
  *
  * @description
- * Factory that constructs cache objects and gives access to them.
+ * Factory that constructs {@link $cacheFactory.Cache Cache} objects and gives access to
+ * them.
  *
  * ```js
  *
@@ -13007,6 +13008,46 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * - `{void}` `removeAll()` — Removes all cached values.
  * - `{void}` `destroy()` — Removes references to this cache from $cacheFactory.
  *
+ * @example
+   <example module="cacheExampleApp">
+     <file name="index.html">
+       <div ng-controller="CacheController">
+         <input ng-model="newCacheKey" placeholder="Key">
+         <input ng-model="newCacheValue" placeholder="Value">
+         <button ng-click="put(newCacheKey, newCacheValue)">Cache</button>
+
+         <p ng-if="keys.length">Cached Values</p>
+         <div ng-repeat="key in keys">
+           <span ng-bind="key"></span>
+           <span>: </span>
+           <b ng-bind="cache.get(key)"></b>
+         </div>
+
+         <p>Cache Info</p>
+         <div ng-repeat="(key, value) in cache.info()">
+           <span ng-bind="key"></span>
+           <span>: </span>
+           <b ng-bind="value"></b>
+         </div>
+       </div>
+     </file>
+     <file name="script.js">
+       angular.module('cacheExampleApp', []).
+         controller('CacheController', ['$scope', '$cacheFactory', function($scope, $cacheFactory) {
+           $scope.keys = [];
+           $scope.cache = $cacheFactory('cacheId');
+           $scope.put = function(key, value) {
+             $scope.cache.put(key, value);
+             $scope.keys.push(key);
+           };
+         }]);
+     </file>
+     <file name="style.css">
+       p {
+         margin: 10px 0 3px;
+       }
+     </file>
+   </example>
  */
   function $CacheFactoryProvider() {
     this.$get = function () {
@@ -13016,6 +13057,45 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           throw minErr('$cacheFactory')('iid', 'CacheId \'{0}\' is already taken!', cacheId);
         }
         var size = 0, stats = extend({}, options, { id: cacheId }), data = {}, capacity = options && options.capacity || Number.MAX_VALUE, lruHash = {}, freshEnd = null, staleEnd = null;
+        /**
+       * @ngdoc type
+       * @name $cacheFactory.Cache
+       *
+       * @description
+       * A cache object used to store and retrieve data, primarily used by
+       * {@link $http $http} and the {@link ng.directive:script script} directive to cache
+       * templates and other data.
+       *
+       * ```js
+       *  angular.module('superCache')
+       *    .factory('superCache', ['$cacheFactory', function($cacheFactory) {
+       *      return $cacheFactory('super-cache');
+       *    }]);
+       * ```
+       *
+       * Example test:
+       *
+       * ```js
+       *  it('should behave like a cache', inject(function(superCache) {
+       *    superCache.put('key', 'value');
+       *    superCache.put('another key', 'another value');
+       *
+       *    expect(superCache.info()).toEqual({
+       *      id: 'super-cache',
+       *      size: 2
+       *    });
+       *
+       *    superCache.remove('another key');
+       *    expect(superCache.get('another key')).toBeUndefined();
+       *
+       *    superCache.removeAll();
+       *    expect(superCache.info()).toEqual({
+       *      id: 'super-cache',
+       *      size: 0
+       *    });
+       *  }));
+       * ```
+       */
         return caches[cacheId] = {
           put: function (key, value) {
             if (capacity < Number.MAX_VALUE) {
@@ -13245,6 +13325,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *       restrict: 'A',
  *       scope: false,
  *       controller: function($scope, $element, $attrs, $transclude, otherInjectables) { ... },
+ *       controllerAs: 'stringAlias',
  *       require: 'siblingDirectiveName', // or // ['^parentDirectiveName', '?optionalDirectiveName', '?^optionalParent'],
  *       compile: function compile(tElement, tAttrs, transclude) {
  *         return {
@@ -13461,6 +13542,16 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * been cloned. For this reason it is **not** safe to do anything other than DOM transformations that
  * apply to all cloned DOM nodes within the compile function. Specifically, DOM listener registration
  * should be done in a linking function rather than in a compile function.
+ * </div>
+
+ * <div class="alert alert-warning">
+ * **Note:** The compile function cannot handle directives that recursively use themselves in their
+ * own templates or compile functions. Compiling these directives results in an infinite loop and a
+ * stack overflow errors.
+ *
+ * This can be avoided by manually using $compile in the postLink function to imperatively compile
+ * a directive's template instead of relying on automatic template compilation via `template` or
+ * `templateUrl` declaration or manual compilation inside the compile function.
  * </div>
  *
  * <div class="alert alert-error">
@@ -15249,7 +15340,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *
      * ```
      * module.run(function($http) {
-     *   $http.defaults.headers.common.Authentication = 'Basic YmVlcDpib29w'
+     *   $http.defaults.headers.common.Authorization = 'Basic YmVlcDpib29w'
      * });
      * ```
      *
@@ -15543,6 +15634,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *   - **status** – `{number}` – HTTP status code of the response.
      *   - **headers** – `{function([headerName])}` – Header getter function.
      *   - **config** – `{Object}` – The configuration object that was used to generate the request.
+     *   - **statusText** – `{string}` – HTTP status text of the response.
      *
      * @property {Array.<Object>} pendingRequests Array of config objects for currently pending
      *   requests. This is primarily meant to be used for debugging purposes.
@@ -15862,9 +15954,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
               } else {
                 // serving from cache
                 if (isArray(cachedResp)) {
-                  resolvePromise(cachedResp[1], cachedResp[0], copy(cachedResp[2]));
+                  resolvePromise(cachedResp[1], cachedResp[0], copy(cachedResp[2]), cachedResp[3]);
                 } else {
-                  resolvePromise(cachedResp, 200, {});
+                  resolvePromise(cachedResp, 200, {}, 'OK');
                 }
               }
             } else {
@@ -15883,34 +15975,36 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
        *  - resolves the raw $http promise
        *  - calls $apply
        */
-          function done(status, response, headersString) {
+          function done(status, response, headersString, statusText) {
             if (cache) {
               if (isSuccess(status)) {
                 cache.put(url, [
                   status,
                   response,
-                  parseHeaders(headersString)
+                  parseHeaders(headersString),
+                  statusText
                 ]);
               } else {
                 // remove promise from the cache
                 cache.remove(url);
               }
             }
-            resolvePromise(response, status, headersString);
+            resolvePromise(response, status, headersString, statusText);
             if (!$rootScope.$$phase)
               $rootScope.$apply();
           }
           /**
        * Resolves the raw $http promise.
        */
-          function resolvePromise(response, status, headers) {
+          function resolvePromise(response, status, headers, statusText) {
             // normalize internal statuses to 0
             status = Math.max(status, 0);
             (isSuccess(status) ? deferred.resolve : deferred.reject)({
               data: response,
               status: status,
               headers: headersGetter(headers),
-              config: config
+              config: config,
+              statusText: statusText
             });
           }
           function removePendingReq() {
@@ -16027,7 +16121,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
               // response/responseType properties were introduced in XHR Level2 spec (supported by IE10)
               response = 'response' in xhr ? xhr.response : xhr.responseText;
             }
-            completeRequest(callback, status || xhr.status, response, responseHeaders);
+            completeRequest(callback, status || xhr.status, response, responseHeaders, xhr.statusText || '');
           }
         };
         if (withCredentials) {
@@ -16061,7 +16155,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         jsonpDone && jsonpDone();
         xhr && xhr.abort();
       }
-      function completeRequest(callback, status, response, headersString) {
+      function completeRequest(callback, status, response, headersString, statusText) {
         // cancel timeout and subsequent timeout promise resolution
         timeoutId && $browserDefer.cancel(timeoutId);
         jsonpDone = xhr = null;
@@ -16072,8 +16166,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           status = response ? 200 : urlResolve(url).protocol == 'file' ? 404 : 0;
         }
         // normalize IE bug (http://bugs.jquery.com/ticket/1450)
-        status = status == 1223 ? 204 : status;
-        callback(status, response, headersString);
+        status = status === 1223 ? 204 : status;
+        statusText = statusText || '';
+        callback(status, response, headersString, statusText);
         $browser.$$completeOutstandingRequest(noop);
       }
     };
@@ -19233,6 +19328,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             if (this === $rootScope)
               return;
             forEach(this.$$listenerCount, bind(null, decrementListenerCount, this));
+            // sever all the references to parent scopes (after this cleanup, the current scope should
+            // not be retained by any of our references and should be eligible for garbage collection)
             if (parent.$$childHead == this)
               parent.$$childHead = this.$$nextSibling;
             if (parent.$$childTail == this)
@@ -19241,9 +19338,19 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
               this.$$prevSibling.$$nextSibling = this.$$nextSibling;
             if (this.$$nextSibling)
               this.$$nextSibling.$$prevSibling = this.$$prevSibling;
-            // This is bogus code that works around Chrome's GC leak
-            // see: https://github.com/angular/angular.js/issues/1313#issuecomment-10378451
-            this.$parent = this.$$nextSibling = this.$$prevSibling = this.$$childHead = this.$$childTail = null;
+            // This is bogus code that works around V8's memory leak coming from ICs
+            // see: https://code.google.com/p/v8/issues/detail?id=2073#c26
+            //
+            // for more info also see:
+            // - https://github.com/angular/angular.js/issues/6794#issuecomment-38648909
+            // - https://github.com/angular/angular.js/issues/1313#issuecomment-10378451
+            for (var prop in this) {
+              if (hasOwnProperty.call(this, prop)) {
+                this[prop] = null;
+              }
+            }
+            // recreate the $$destroyed flag
+            this.$$destroyed = true;
           },
           $eval: function (expr, locals) {
             return $parse(expr)(this, locals);
@@ -19959,7 +20066,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * | `$sce.HTML`         | For HTML that's safe to source into the application.  The {@link ng.directive:ngBindHtml ngBindHtml} directive uses this context for bindings. |
  * | `$sce.CSS`          | For CSS that's safe to source into the application.  Currently unused.  Feel free to use it in your own directives. |
  * | `$sce.URL`          | For URLs that are safe to follow as links.  Currently unused (`<a href=` and `<img src=` sanitize their urls and don't constitute an SCE context. |
- * | `$sce.RESOURCE_URL` | For URLs that are not only safe to follow as links, but whose contens are also safe to include in your application.  Examples include `ng-include`, `src` / `ngSrc` bindings for tags other than `IMG` (e.g. `IFRAME`, `OBJECT`, etc.)  <br><br>Note that `$sce.RESOURCE_URL` makes a stronger statement about the URL than `$sce.URL` does and therefore contexts requiring values trusted for `$sce.RESOURCE_URL` can be used anywhere that values trusted for `$sce.URL` are required. |
+ * | `$sce.RESOURCE_URL` | For URLs that are not only safe to follow as links, but whose contents are also safe to include in your application.  Examples include `ng-include`, `src` / `ngSrc` bindings for tags other than `IMG` (e.g. `IFRAME`, `OBJECT`, etc.)  <br><br>Note that `$sce.RESOURCE_URL` makes a stronger statement about the URL than `$sce.URL` does and therefore contexts requiring values trusted for `$sce.RESOURCE_URL` can be used anywhere that values trusted for `$sce.URL` are required. |
  * | `$sce.JS`           | For JavaScript that is safe to execute in your application's context.  Currently unused.  Feel free to use it in your own directives. |
  *
  * ## Format of items in {@link ng.$sceDelegateProvider#resourceUrlWhitelist resourceUrlWhitelist}/{@link ng.$sceDelegateProvider#resourceUrlBlacklist Blacklist} <a name="resourceUrlPatternItem"></a>
@@ -21627,7 +21734,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *    - `Array`: An array of function or string predicates. The first predicate in the array
  *      is used for sorting, but when two items are equivalent, the next predicate is used.
  *
- * @param {boolean=} reverse Reverse the order the array.
+ * @param {boolean=} reverse Reverse the order of the array.
  * @returns {Array} Sorted copy of the source array.
  *
  * @example
@@ -22597,7 +22704,6 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         return value;
       };
       ctrl.$parsers.push(validator);
-      ctrl.$formatters.push(validator);
     }
   }
   function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
@@ -24430,7 +24536,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element ANY
  * @priority 0
  * @param {expression} ngClick {@link guide/expression Expression} to evaluate upon
- * click. (Event object is available as `$event`)
+ * click. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -24508,7 +24614,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element ANY
  * @priority 0
  * @param {expression} ngMousedown {@link guide/expression Expression} to evaluate upon
- * mousedown. (Event object is available as `$event`)
+ * mousedown. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -24530,7 +24636,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element ANY
  * @priority 0
  * @param {expression} ngMouseup {@link guide/expression Expression} to evaluate upon
- * mouseup. (Event object is available as `$event`)
+ * mouseup. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -24552,7 +24658,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element ANY
  * @priority 0
  * @param {expression} ngMouseover {@link guide/expression Expression} to evaluate upon
- * mouseover. (Event object is available as `$event`)
+ * mouseover. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -24574,7 +24680,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element ANY
  * @priority 0
  * @param {expression} ngMouseenter {@link guide/expression Expression} to evaluate upon
- * mouseenter. (Event object is available as `$event`)
+ * mouseenter. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -24596,7 +24702,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element ANY
  * @priority 0
  * @param {expression} ngMouseleave {@link guide/expression Expression} to evaluate upon
- * mouseleave. (Event object is available as `$event`)
+ * mouseleave. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -24618,7 +24724,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element ANY
  * @priority 0
  * @param {expression} ngMousemove {@link guide/expression Expression} to evaluate upon
- * mousemove. (Event object is available as `$event`)
+ * mousemove. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -24679,7 +24785,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @element ANY
  * @param {expression} ngKeypress {@link guide/expression Expression} to evaluate upon
- * keypress. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
+ * keypress. ({@link guide/expression#-event- Event object is available as `$event`}
+ * and can be interrogated for keyCode, altKey, etc.)
  *
  * @example
    <example>
@@ -24702,7 +24809,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @element form
  * @priority 0
- * @param {expression} ngSubmit {@link guide/expression Expression} to eval. (Event object is available as `$event`)
+ * @param {expression} ngSubmit {@link guide/expression Expression} to eval.
+ * ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -24752,7 +24860,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element window, input, select, textarea, a
  * @priority 0
  * @param {expression} ngFocus {@link guide/expression Expression} to evaluate upon
- * focus. (Event object is available as `$event`)
+ * focus. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
  * See {@link ng.directive:ngClick ngClick}
@@ -24767,7 +24875,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element window, input, select, textarea, a
  * @priority 0
  * @param {expression} ngBlur {@link guide/expression Expression} to evaluate upon
- * blur. (Event object is available as `$event`)
+ * blur. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
  * See {@link ng.directive:ngClick ngClick}
@@ -24782,7 +24890,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element window, input, select, textarea, a
  * @priority 0
  * @param {expression} ngCopy {@link guide/expression Expression} to evaluate upon
- * copy. (Event object is available as `$event`)
+ * copy. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -24802,7 +24910,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element window, input, select, textarea, a
  * @priority 0
  * @param {expression} ngCut {@link guide/expression Expression} to evaluate upon
- * cut. (Event object is available as `$event`)
+ * cut. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -24822,7 +24930,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element window, input, select, textarea, a
  * @priority 0
  * @param {expression} ngPaste {@link guide/expression Expression} to evaluate upon
- * paste. (Event object is available as `$event`)
+ * paste. ({@link guide/expression#-event- Event object is available as `$event`})
  *
  * @example
    <example>
@@ -26059,7 +26167,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * in AngularJS and sets the display style to none (using an !important flag).
  * For CSP mode please add `angular-csp.css` to your html file (see {@link ng.directive:ngCsp ngCsp}).
  *
- * ```hrml
+ * ```html
  * <!-- when $scope.myValue is truthy (element is hidden) -->
  * <div ng-hide="myValue"></div>
  *
@@ -27798,7 +27906,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   ]);
 }(window, window.angular));
 /**
- * @license AngularJS v1.2.9
+ * @license AngularJS v1.2.16-build.63+sha.8d4d437
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -27806,7 +27914,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   'use strict';
   var $sanitizeMinErr = angular.$$minErr('$sanitize');
   /**
- * @ngdoc overview
+ * @ngdoc module
  * @name ngSanitize
  * @description
  *
@@ -27814,7 +27922,6 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * The `ngSanitize` module provides functionality to sanitize HTML.
  *
- * {@installModule sanitize}
  *
  * <div doc-module-components="ngSanitize"></div>
  *
@@ -27837,7 +27944,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc service
- * @name ngSanitize.$sanitize
+ * @name $sanitize
  * @function
  *
  * @description
@@ -27853,8 +27960,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @returns {string} Sanitized html.
  *
  * @example
-   <doc:example module="ngSanitize">
-   <doc:source>
+   <example module="ngSanitize" deps="angular-sanitize.js">
+   <file name="index.html">
      <script>
        function Ctrl($scope, $sce) {
          $scope.snippet =
@@ -27898,37 +28005,39 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          </tr>
        </table>
        </div>
-   </doc:source>
-   <doc:scenario>
+   </file>
+   <file name="protractor.js" type="protractor">
      it('should sanitize the html snippet by default', function() {
-       expect(using('#bind-html-with-sanitize').element('div').html()).
+       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
          toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
      });
 
      it('should inline raw snippet if bound to a trusted value', function() {
-       expect(using('#bind-html-with-trust').element("div").html()).
+       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).
          toBe("<p style=\"color:blue\">an html\n" +
               "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
               "snippet</p>");
      });
 
      it('should escape snippet without any filter', function() {
-       expect(using('#bind-default').element('div').html()).
+       expect(element(by.css('#bind-default div')).getInnerHtml()).
          toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
               "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
               "snippet&lt;/p&gt;");
      });
 
      it('should update', function() {
-       input('snippet').enter('new <b onclick="alert(1)">text</b>');
-       expect(using('#bind-html-with-sanitize').element('div').html()).toBe('new <b>text</b>');
-       expect(using('#bind-html-with-trust').element('div').html()).toBe(
+       element(by.model('snippet')).clear();
+       element(by.model('snippet')).sendKeys('new <b onclick="alert(1)">text</b>');
+       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+         toBe('new <b>text</b>');
+       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).toBe(
          'new <b onclick="alert(1)">text</b>');
-       expect(using('#bind-default').element('div').html()).toBe(
+       expect(element(by.css('#bind-default div')).getInnerHtml()).toBe(
          "new &lt;b onclick=\"alert(1)\"&gt;text&lt;/b&gt;");
      });
-   </doc:scenario>
-   </doc:example>
+   </file>
+   </example>
  */
   function $SanitizeProvider() {
     this.$get = [
@@ -28125,7 +28234,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * resulting string can be safely inserted into attribute or
  * element text.
  * @param value
- * @returns escaped text
+ * @returns {string} escaped text
  */
   function encodeEntities(value) {
     return value.replace(/&/g, '&amp;').replace(NON_ALPHANUMERIC_REGEXP, function (value) {
@@ -28191,7 +28300,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /* global sanitizeText: false */
   /**
  * @ngdoc filter
- * @name ngSanitize.filter:linky
+ * @name linky
  * @function
  *
  * @description
@@ -28208,8 +28317,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    <span ng-bind-html="linky_expression | linky"></span>
  *
  * @example
-   <doc:example module="ngSanitize">
-     <doc:source>
+   <example module="ngSanitize" deps="angular-sanitize.js">
+     <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.snippet =
@@ -28253,39 +28362,40 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
            <td><div ng-bind="snippet"></div></td>
          </tr>
        </table>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should linkify the snippet with urls', function() {
-         expect(using('#linky-filter').binding('snippet | linky')).
-           toBe('Pretty text with some links:&#10;' +
-                '<a href="http://angularjs.org/">http://angularjs.org/</a>,&#10;' +
-                '<a href="mailto:us@somewhere.org">us@somewhere.org</a>,&#10;' +
-                '<a href="mailto:another@somewhere.org">another@somewhere.org</a>,&#10;' +
-                'and one more: <a href="ftp://127.0.0.1/">ftp://127.0.0.1/</a>.');
+         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+             toBe('Pretty text with some links: http://angularjs.org/, us@somewhere.org, ' +
+                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+         expect(element.all(by.css('#linky-filter a')).count()).toEqual(4);
        });
 
-       it ('should not linkify snippet without the linky filter', function() {
-         expect(using('#escaped-html').binding('snippet')).
-           toBe("Pretty text with some links:\n" +
-                "http://angularjs.org/,\n" +
-                "mailto:us@somewhere.org,\n" +
-                "another@somewhere.org,\n" +
-                "and one more: ftp://127.0.0.1/.");
+       it('should not linkify snippet without the linky filter', function() {
+         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText()).
+             toBe('Pretty text with some links: http://angularjs.org/, mailto:us@somewhere.org, ' +
+                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+         expect(element.all(by.css('#escaped-html a')).count()).toEqual(0);
        });
 
        it('should update', function() {
-         input('snippet').enter('new http://link.');
-         expect(using('#linky-filter').binding('snippet | linky')).
-           toBe('new <a href="http://link">http://link</a>.');
-         expect(using('#escaped-html').binding('snippet')).toBe('new http://link.');
+         element(by.model('snippet')).clear();
+         element(by.model('snippet')).sendKeys('new http://link.');
+         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+             toBe('new http://link.');
+         expect(element.all(by.css('#linky-filter a')).count()).toEqual(1);
+         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText())
+             .toBe('new http://link.');
        });
 
        it('should work with the target property', function() {
-        expect(using('#linky-target').binding("snippetWithTarget | linky:'_blank'")).
-          toBe('<a target="_blank" href="http://angularjs.org/">http://angularjs.org/</a>');
+        expect(element(by.id('linky-target')).
+            element(by.binding("snippetWithTarget | linky:'_blank'")).getText()).
+            toBe('http://angularjs.org/');
+        expect(element(by.css('#linky-target a')).getAttribute('target')).toEqual('_blank');
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  */
   angular.module('ngSanitize').filter('linky', [
     '$sanitize',
