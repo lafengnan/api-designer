@@ -63,7 +63,6 @@ function connectProxy(connect, route) {
 module.exports = function (grunt) {
   // load all grunt tasks
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-  require('./tasks/protractor.js')(grunt);
 
   // configurable paths
   var yeomanConfig = {
@@ -172,7 +171,8 @@ module.exports = function (grunt) {
         'test/mock/{,*/}*.js',
         'test/spec/{,*/}*.js',
         'scenario/test/e2e/{,*/}*.js',
-        'scenario/test/lib/{,*/}*.js'
+        'scenario/test/lib/{,*/}*.js',
+        'scenario/support/{,*/}*.js'
       ]
     },
 

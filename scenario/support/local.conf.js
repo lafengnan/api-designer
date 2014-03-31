@@ -1,3 +1,4 @@
+'use strict';
 exports.config = {
 
   seleniumPort: 4444,
@@ -27,6 +28,8 @@ exports.config = {
       return browser.executeScript('return (editor.getLine(1) === \'title:\');');
     });
   },
+
+  framework: 'jasmine',
 
   jasmineNodeOpts: {
     showColors: true,

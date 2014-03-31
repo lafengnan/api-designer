@@ -6,10 +6,10 @@ exports.config = {
 
   capabilities: {
     'browserName': process.env.BROWSER,
-    name: 'API-Portal-console'
+    name: 'API-Portal-Mocking Service'
   },
 
-  allScriptsTimeout: 90000,
+  allScriptsTimeout: 150000,
 
   specs: [
     '../../test/e2e/mocking-service/*.js',
@@ -39,6 +39,6 @@ exports.config = {
     isVerbose: false,
     showColors: false,
     includeStackTrace: false,
-    defaultTimeoutInterval: 80000
+    defaultTimeoutInterval: 90000
   }
 };

@@ -14,6 +14,9 @@ exports.config = {
     '../test/e2e/raml-example/muse-e2e.js',
     '../test/e2e/console/console-defaultview.js',
     '../test/e2e/console/embedded-console.js',
+    '../test/e2e/console/methods/request-tab.js',
+    '../test/e2e/console/methods/response-tab.js',
+    '../test/e2e/console/methods/console-method-toggle.js',
     '../test/e2e/editor-parser/parser-regressions.js',
     '../test/e2e/editor-parser/parser-root.js',
     '../test/e2e/editor-parser/parser-traits.js',
@@ -51,6 +54,7 @@ exports.config = {
   },
 
   framework: 'jasmine',
+
   jasmineNodeOpts: {
     onComplete: null,
     isVerbose: false,

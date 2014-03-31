@@ -31,6 +31,7 @@
     "describe": false,
     "element": false,
     "expect": false,
+    "jasmine": false,
     "getEditor": false,
     "inject": false,
     "it": false,

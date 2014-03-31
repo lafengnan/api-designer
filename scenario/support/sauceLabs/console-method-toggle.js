@@ -6,13 +6,13 @@ exports.config = {
 
   capabilities: {
     'browserName': process.env.BROWSER,
-    'name': 'API-Portal-parser'
+    name: 'console-methods-toggle'
   },
-  allScriptsTimeout: 150000,
+
+  allScriptsTimeout: 90000,
+
   specs: [
-    '../../test/e2e/editor-parser/*.js',
-    '../../test/e2e/editor-parser/resource/*.js',
-    '../../test/e2e/editor-parser/resourceTypes/*.js',
+    '../../test/e2e/console/methods/console-method-toggle.js',
     '../../test/lib/*.js'
   ],
 
@@ -22,7 +22,6 @@ exports.config = {
     require('jasmine-reporters');
     jasmine.getEnv().addReporter(
       new jasmine.JUnitXmlReporter('scenario/support/', true, true));
-
     browser.get('');
     browser.sleep(2000);
     var alertDialog = browser.driver.switchTo().alert();
@@ -34,11 +33,12 @@ exports.config = {
     });
   },
 
+
   jasmineNodeOpts: {
     onComplete: null,
     isVerbose: false,
     showColors: false,
     includeStackTrace: false,
-    defaultTimeoutInterval: 90000
+    defaultTimeoutInterval: 80000
   }
 };
