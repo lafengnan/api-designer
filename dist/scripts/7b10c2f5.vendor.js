@@ -9060,7 +9060,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     htmlMode: true
   });
 /**
- * @license AngularJS v1.2.9
+ * @license AngularJS v1.2.15
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -9091,7 +9091,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * should all be static strings, not variables or general expressions.
  *
  * @param {string} module The namespace to use for the new minErr instance.
- * @returns {function(string, string, ...): Error} instance
+ * @returns {function(code:string, template:string, ...templateArgs): Error} minErr instance
  */
   function minErr(module) {
     return function () {
@@ -9120,7 +9120,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         }
         return match;
       });
-      message = message + '\nhttp://errors.angularjs.org/1.2.9/' + (module ? module + '/' : '') + code;
+      message = message + '\nhttp://errors.angularjs.org/1.2.15/' + (module ? module + '/' : '') + code;
       for (i = 2; i < arguments.length; i++) {
         message = message + (i == 2 ? '?' : '&') + 'p' + (i - 2) + '=' + encodeURIComponent(stringify(arguments[i]));
       }
@@ -9172,6 +9172,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     -isWindow,
     -isScope,
     -isFile,
+    -isBlob,
     -isBoolean,
     -trim,
     -isElement,
@@ -9208,12 +9209,28 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     -assertNotHasOwnProperty,
     -getter,
     -getBlockElements,
+    -hasOwnProperty,
 
 */
   ////////////////////////////////////
   /**
+ * @ngdoc module
+ * @name ng
+ * @module ng
+ * @description
+ *
+ * # ng (core module)
+ * The ng module is loaded by default when an AngularJS application is started. The module itself
+ * contains the essential components for an AngularJS application to function. The table below
+ * lists a high level breakdown of each of the services/factories, filters, directives and testing
+ * components available within this core module.
+ *
+ * <div doc-module-components="ng"></div>
+ */
+  /**
  * @ngdoc function
  * @name angular.lowercase
+ * @module ng
  * @function
  *
  * @description Converts the specified string to lowercase.
@@ -9223,9 +9240,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   var lowercase = function (string) {
     return isString(string) ? string.toLowerCase() : string;
   };
+  var hasOwnProperty = Object.prototype.hasOwnProperty;
   /**
  * @ngdoc function
  * @name angular.uppercase
+ * @module ng
  * @function
  *
  * @description Converts the specified string to uppercase.
@@ -9294,6 +9313,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.forEach
+ * @module ng
  * @function
  *
  * @description
@@ -9302,17 +9322,17 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * is the value of an object property or an array element and `key` is the object property key or
  * array element index. Specifying a `context` for the function is optional.
  *
- * It is worth nothing that `.forEach` does not iterate over inherited properties because it filters
+ * It is worth noting that `.forEach` does not iterate over inherited properties because it filters
  * using the `hasOwnProperty` method.
  *
-   <pre>
+   ```js
      var values = {name: 'misko', gender: 'male'};
      var log = [];
      angular.forEach(values, function(value, key){
        this.push(key + ': ' + value);
      }, log);
-     expect(log).toEqual(['name: misko', 'gender:male']);
-   </pre>
+     expect(log).toEqual(['name: misko', 'gender: male']);
+   ```
  *
  * @param {Object|Array} obj Object to iterate over.
  * @param {Function} iterator Iterator function.
@@ -9377,7 +9397,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * the number string gets longer over time, and it can also overflow, where as the nextId
  * will grow much slower, it is a string, and it will never overflow.
  *
- * @returns an unique alpha-numeric string
+ * @returns {string} an unique alpha-numeric string
  */
   function nextUid() {
     var index = uid.length;
@@ -9414,6 +9434,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.extend
+ * @module ng
  * @function
  *
  * @description
@@ -9446,17 +9467,18 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.noop
+ * @module ng
  * @function
  *
  * @description
  * A function that performs no operations. This function can be useful when writing code in the
  * functional style.
-   <pre>
+   ```js
      function foo(callback) {
        var result = calculateResult();
        (callback || angular.noop)(result);
      }
-   </pre>
+   ```
  */
   function noop() {
   }
@@ -9464,17 +9486,18 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.identity
+ * @module ng
  * @function
  *
  * @description
  * A function that returns its first argument. This function is useful when writing code in the
  * functional style.
  *
-   <pre>
+   ```js
      function transformer(transformationFn, value) {
        return (transformationFn || angular.identity)(value);
      };
-   </pre>
+   ```
  */
   function identity($) {
     return $;
@@ -9488,6 +9511,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.isUndefined
+ * @module ng
  * @function
  *
  * @description
@@ -9502,6 +9526,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.isDefined
+ * @module ng
  * @function
  *
  * @description
@@ -9516,11 +9541,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.isObject
+ * @module ng
  * @function
  *
  * @description
  * Determines if a reference is an `Object`. Unlike `typeof` in JavaScript, `null`s are not
- * considered to be objects.
+ * considered to be objects. Note that JavaScript arrays are objects.
  *
  * @param {*} value Reference to check.
  * @returns {boolean} True if `value` is an `Object` but not `null`.
@@ -9531,6 +9557,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.isString
+ * @module ng
  * @function
  *
  * @description
@@ -9545,6 +9572,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.isNumber
+ * @module ng
  * @function
  *
  * @description
@@ -9559,6 +9587,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.isDate
+ * @module ng
  * @function
  *
  * @description
@@ -9573,6 +9602,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.isArray
+ * @module ng
  * @function
  *
  * @description
@@ -9587,6 +9617,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.isFunction
+ * @module ng
  * @function
  *
  * @description
@@ -9624,6 +9655,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   function isFile(obj) {
     return toString.call(obj) === '[object File]';
   }
+  function isBlob(obj) {
+    return toString.call(obj) === '[object Blob]';
+  }
   function isBoolean(value) {
     return typeof value === 'boolean';
   }
@@ -9643,6 +9677,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.isElement
+ * @module ng
  * @function
  *
  * @description
@@ -9652,7 +9687,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @returns {boolean} True if `value` is a DOM element (or wrapped jQuery element).
  */
   function isElement(node) {
-    return !!(node && (node.nodeName || node.on && node.find));  // we have an on and find method part of jQuery API
+    return !!(node && (node.nodeName || node.prop && node.attr && node.find));  // we have an on and find method part of jQuery API
   }
   /**
  * @param str 'key1,key2,...'
@@ -9736,6 +9771,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.copy
+ * @module ng
  * @function
  *
  * @description
@@ -9754,8 +9790,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @returns {*} The copy or updated `destination`, if `destination` was specified.
  *
  * @example
- <doc:example>
- <doc:source>
+ <example>
+ <file name="index.html">
  <div ng-controller="Controller">
  <form novalidate class="simple-form">
  Name: <input type="text" ng-model="user.name" /><br />
@@ -9786,8 +9822,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     $scope.reset();
   }
  </script>
- </doc:source>
- </doc:example>
+ </file>
+ </example>
  */
   function copy(source, destination) {
     if (isWindow(source) || isScope(source)) {
@@ -9835,7 +9871,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     for (var key in src) {
       // shallowCopy is only ever called by $compile nodeLinkFn, which has control over src
       // so we don't need to worry about using our custom hasOwnProperty here
-      if (src.hasOwnProperty(key) && key.charAt(0) !== '$' && key.charAt(1) !== '$') {
+      if (src.hasOwnProperty(key) && !(key.charAt(0) === '$' && key.charAt(1) === '$')) {
         dst[key] = src[key];
       }
     }
@@ -9844,6 +9880,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.equals
+ * @module ng
  * @function
  *
  * @description
@@ -9928,6 +9965,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.bind
+ * @module ng
  * @function
  *
  * @description
@@ -9971,6 +10009,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.toJson
+ * @module ng
  * @function
  *
  * @description
@@ -9989,13 +10028,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.fromJson
+ * @module ng
  * @function
  *
  * @description
  * Deserializes a JSON string.
  *
  * @param {string} json JSON string to deserialize.
- * @returns {Object|Array|Date|string|number} Deserialized thingy.
+ * @returns {Object|Array|string|number} Deserialized thingy.
  */
   function fromJson(json) {
     return isString(json) ? JSON.parse(json) : json;
@@ -10050,7 +10090,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * Parses an escaped url query string into key-value pairs.
- * @returns Object.<(string|boolean)>
+ * @returns {Object.<string,boolean|Array>}
  */
   function parseKeyValue(keyValue) {
     var obj = {}, key_value, key;
@@ -10118,7 +10158,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc directive
- * @name ng.directive:ngApp
+ * @name ngApp
+ * @module ng
  *
  * @element ANY
  * @param {angular.Module} ngApp an optional application
@@ -10136,7 +10177,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * {@link angular.bootstrap} instead. AngularJS applications cannot be nested within each other.
  *
  * You can specify an **AngularJS module** to be used as the root module for the application.  This
- * module will be loaded into the {@link AUTO.$injector} when the application is bootstrapped and
+ * module will be loaded into the {@link auto.$injector} when the application is bootstrapped and
  * should contain the application code needed or have dependencies on other modules that will
  * contain the code. See {@link angular.module} for more information.
  *
@@ -10150,6 +10191,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    <file name="index.html">
    <div ng-controller="ngAppDemoController">
      I can add: {{a}} + {{b}} =  {{ a+b }}
+   </div>
    </file>
    <file name="script.js">
    angular.module('ngAppDemo', []).controller('ngAppDemoController', function($scope) {
@@ -10204,20 +10246,56 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.bootstrap
+ * @module ng
  * @description
  * Use this function to manually start up angular application.
  *
  * See: {@link guide/bootstrap Bootstrap}
  *
  * Note that ngScenario-based end-to-end tests cannot use this function to bootstrap manually.
- * They must use {@link api/ng.directive:ngApp ngApp}.
+ * They must use {@link ng.directive:ngApp ngApp}.
+ *
+ * Angular will detect if it has been loaded into the browser more than once and only allow the
+ * first loaded script to be bootstrapped and will report a warning to the browser console for
+ * each of the subsequent scripts.   This prevents strange results in applications, where otherwise
+ * multiple instances of Angular try to work on the DOM.
+ *
+ * <example name="multi-bootstrap" module="multi-bootstrap">
+ * <file name="index.html">
+ * <script src="../../../angular.js"></script>
+ * <div ng-controller="BrokenTable">
+ *   <table>
+ *   <tr>
+ *     <th ng-repeat="heading in headings">{{heading}}</th>
+ *   </tr>
+ *   <tr ng-repeat="filling in fillings">
+ *     <td ng-repeat="fill in filling">{{fill}}</td>
+ *   </tr>
+ * </table>
+ * </div>
+ * </file>
+ * <file name="controller.js">
+ * var app = angular.module('multi-bootstrap', [])
+ *
+ * .controller('BrokenTable', function($scope) {
+ *     $scope.headings = ['One', 'Two', 'Three'];
+ *     $scope.fillings = [[1, 2, 3], ['A', 'B', 'C'], [7, 8, 9]];
+ * });
+ * </file>
+ * <file name="protractor.js" type="protractor">
+ * it('should only insert one table cell for each item in $scope.fillings', function() {
+ *  expect(element.all(by.css('td')).count())
+ *      .toBe(9);
+ * });
+ * </file>
+ * </example>
  *
  * @param {Element} element DOM element which is the root of angular application.
  * @param {Array<String|Function|Array>=} modules an array of modules to load into the application.
  *     Each item in the array should be the name of a predefined module or a (DI annotated)
  *     function that will be invoked by the injector as a run block.
  *     See: {@link angular.module modules}
- * @returns {AUTO.$injector} Returns the newly created injector for this app.
+ * @returns {auto.$injector} Returns the newly created injector for this app.
  */
   function bootstrap(element, modules) {
     var doBootstrap = function () {
@@ -10321,9 +10399,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * Return the value accessible from the object by path. Any undefined traversals are ignored
  * @param {Object} obj starting object
- * @param {string} path path to traverse
- * @param {boolean=true} bindFnToScope
- * @returns value as accessible by path
+ * @param {String} path path to traverse
+ * @param {boolean} [bindFnToScope=true]
+ * @returns {Object} value as accessible by path
  */
   //TODO(misko): this function needs to be removed
   function getter(obj, path, bindFnToScope) {
@@ -10347,7 +10425,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * Return the DOM siblings between the first and last node in the given array.
  * @param {Array} array like object
- * @returns jQlite object containing the elements
+ * @returns {DOMElement} object containing the elements
  */
   function getBlockElements(nodes) {
     var startNode = nodes[0], endNode = nodes[nodes.length - 1];
@@ -10365,8 +10443,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     return jqLite(elements);
   }
   /**
- * @ngdoc interface
+ * @ngdoc type
  * @name angular.Module
+ * @module ng
  * @description
  *
  * Interface for configuring angular {@link angular.module modules}.
@@ -10386,6 +10465,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       /**
      * @ngdoc function
      * @name angular.module
+     * @module ng
      * @description
      *
      * The `angular.module` is a global place for creating, registering and retrieving Angular
@@ -10400,9 +10480,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      * # Module
      *
      * A module is a collection of services, directives, filters, and configuration information.
-     * `angular.module` is used to configure the {@link AUTO.$injector $injector}.
+     * `angular.module` is used to configure the {@link auto.$injector $injector}.
      *
-     * <pre>
+     * ```js
      * // Create a new module
      * var myModule = angular.module('myModule', []);
      *
@@ -10410,17 +10490,17 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      * myModule.value('appName', 'MyCoolApp');
      *
      * // configure existing services inside initialization blocks.
-     * myModule.config(function($locationProvider) {
+     * myModule.config(['$locationProvider', function($locationProvider) {
      *   // Configure existing providers
      *   $locationProvider.hashPrefix('!');
-     * });
-     * </pre>
+     * }]);
+     * ```
      *
      * Then you can create an injector and load your modules like this:
      *
-     * <pre>
-     * var injector = angular.injector(['ng', 'MyModule'])
-     * </pre>
+     * ```js
+     * var injector = angular.injector(['ng', 'myModule'])
+     * ```
      *
      * However it's more likely that you'll just use
      * {@link ng.directive:ngApp ngApp} or
@@ -10428,9 +10508,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *
      * @param {!string} name The name of the module to create or retrieve.
      * @param {Array.<string>=} requires If specified then new module is being created. If
-     *        unspecified then the the module is being retrieved for further configuration.
+     *        unspecified then the module is being retrieved for further configuration.
      * @param {Function} configFn Optional configuration function for the module. Same as
-     *        {@link angular.Module#methods_config Module#config()}.
+     *        {@link angular.Module#config Module#config()}.
      * @returns {module} new module with the {@link angular.Module} api.
      */
       return function module(name, requires, configFn) {
@@ -10500,10 +10580,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /* global
     angularModule: true,
     version: true,
-    
+
     $LocaleProvider,
     $CompileProvider,
-    
+
     htmlAnchorDirective,
     inputDirective,
     inputDirective,
@@ -10569,11 +10649,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     $SnifferProvider,
     $TemplateCacheProvider,
     $TimeoutProvider,
+    $$RAFProvider,
+    $$AsyncCallbackProvider,
     $WindowProvider
 */
   /**
- * @ngdoc property
+ * @ngdoc object
  * @name angular.version
+ * @module ng
  * @description
  * An object that contains information about the current AngularJS version. This object has the
  * following properties:
@@ -10585,11 +10668,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
   var version = {
-      full: '1.2.9',
+      full: '1.2.15',
       major: 1,
       minor: 2,
-      dot: 9,
-      codeName: 'enchanted-articulacy'
+      dot: 15,
+      codeName: 'beer-underestimating'
     };
   function publishExternalAPI(angular) {
     extend(angular, {
@@ -10694,7 +10777,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           $sniffer: $SnifferProvider,
           $templateCache: $TemplateCacheProvider,
           $timeout: $TimeoutProvider,
-          $window: $WindowProvider
+          $window: $WindowProvider,
+          $$rAF: $$RAFProvider,
+          $$asyncCallback: $$AsyncCallbackProvider
         });
       }
     ]);
@@ -10712,6 +10797,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * @ngdoc function
  * @name angular.element
+ * @module ng
  * @function
  *
  * @description
@@ -10737,7 +10823,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * - [`after()`](http://api.jquery.com/after/)
  * - [`append()`](http://api.jquery.com/append/)
  * - [`attr()`](http://api.jquery.com/attr/)
- * - [`bind()`](http://api.jquery.com/on/) - Does not support namespaces, selectors or eventData
+ * - [`bind()`](http://api.jquery.com/bind/) - Does not support namespaces, selectors or eventData
  * - [`children()`](http://api.jquery.com/children/) - Does not support selectors
  * - [`clone()`](http://api.jquery.com/clone/)
  * - [`contents()`](http://api.jquery.com/contents/)
@@ -10764,7 +10850,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * - [`text()`](http://api.jquery.com/text/)
  * - [`toggleClass()`](http://api.jquery.com/toggleClass/)
  * - [`triggerHandler()`](http://api.jquery.com/triggerHandler/) - Passes a dummy event object to handlers.
- * - [`unbind()`](http://api.jquery.com/off/) - Does not support namespaces
+ * - [`unbind()`](http://api.jquery.com/unbind/) - Does not support namespaces
  * - [`val()`](http://api.jquery.com/val/)
  * - [`wrap()`](http://api.jquery.com/wrap/)
  *
@@ -10782,9 +10868,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   camelCase directive name, then the controller for this directive will be retrieved (e.g.
  *   `'ngModel'`).
  * - `injector()` - retrieves the injector of the current element or its parent.
- * - `scope()` - retrieves the {@link api/ng.$rootScope.Scope scope} of the current
+ * - `scope()` - retrieves the {@link ng.$rootScope.Scope scope} of the current
  *   element or its parent.
- * - `isolateScope()` - retrieves an isolate {@link api/ng.$rootScope.Scope scope} if one is attached directly to the
+ * - `isolateScope()` - retrieves an isolate {@link ng.$rootScope.Scope scope} if one is attached directly to the
  *   current element. This getter should be used only on elements that contain a directive which starts a new isolate
  *   scope. Calling `scope()` on this element always returns the original non-isolate scope.
  * - `inheritedData()` - same as `data()`, but walks up the DOM until a value is found or the top
@@ -10801,6 +10887,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       element.removeEventListener(type, fn, false);
     } : function (element, type, fn) {
       element.detachEvent('on' + type, fn);
+    };
+  /*
+ * !!! This is an undocumented "private" function !!!
+ */
+  var jqData = JQLite._data = function (node) {
+      //jQuery always returns an object on cache miss
+      return this.cache[node[this.expando]] || {};
     };
   function jqNextId() {
     return ++jqId;
@@ -10856,6 +10949,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   function JQLite(element) {
     if (element instanceof JQLite) {
       return element;
+    }
+    if (isString(element)) {
+      element = trim(element);
     }
     if (!(this instanceof JQLite)) {
       if (isString(element) && element.charAt(0) != '<') {
@@ -11001,11 +11097,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     }
     var names = isArray(name) ? name : [name];
     while (element.length) {
+      var node = element[0];
       for (var i = 0, ii = names.length; i < ii; i++) {
         if ((value = element.data(names[i])) !== undefined)
           return value;
       }
-      element = element.parent();
+      // If dealing with a document fragment node with a host element, and no parent, use the host
+      // element as the parent. This enables directives within a Shadow DOM or polyfilled Shadow DOM
+      // to lookup parent controllers.
+      element = jqLite(node.parentNode || node.nodeType === 11 && node.host);
     }
   }
   function jqLiteEmpty(element) {
@@ -11376,7 +11476,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       return children;
     },
     contents: function (element) {
-      return element.childNodes || [];
+      return element.contentDocument || element.childNodes || [];
     },
     append: function (element, node) {
       forEach(new JQLite(node), function (child) {
@@ -11417,10 +11517,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     addClass: jqLiteAddClass,
     removeClass: jqLiteRemoveClass,
     toggleClass: function (element, selector, condition) {
-      if (isUndefined(condition)) {
-        condition = !jqLiteHasClass(element, selector);
+      if (selector) {
+        forEach(selector.split(' '), function (className) {
+          var classCondition = condition;
+          if (isUndefined(classCondition)) {
+            classCondition = !jqLiteHasClass(element, className);
+          }
+          (classCondition ? jqLiteAddClass : jqLiteRemoveClass)(element, className);
+        });
       }
-      (condition ? jqLiteAddClass : jqLiteRemoveClass)(element, selector);
     },
     parent: function (element) {
       var parent = element.parentNode;
@@ -11526,6 +11631,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   };
   /**
  * @ngdoc function
+ * @module ng
  * @name angular.injector
  * @function
  *
@@ -11536,11 +11642,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
 
  * @param {Array.<string|Function>} modules A list of module functions or their aliases. See
  *        {@link angular.module}. The `ng` module must be explicitly added.
- * @returns {function()} Injector function. See {@link AUTO.$injector $injector}.
+ * @returns {function()} Injector function. See {@link auto.$injector $injector}.
  *
  * @example
  * Typical usage
- * <pre>
+ * ```js
  *   // create an injector
  *   var $injector = angular.injector(['ng']);
  *
@@ -11550,7 +11656,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *     $compile($document)($rootScope);
  *     $rootScope.$digest();
  *   });
- * </pre>
+ * ```
  *
  * Sometimes you want to get access to the injector of a currently running Angular app
  * from outside Angular. Perhaps, you want to inject and compile some markup after the
@@ -11564,7 +11670,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * directive is added to the end of the document body by JQuery. We then compile and link
  * it into the current AngularJS scope.
  *
- * <pre>
+ * ```js
  * var $div = $('<div ng-controller="MyCtrl">{{content.label}}</div>');
  * $(document.body).append($div);
  *
@@ -11572,14 +11678,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   var scope = angular.element($div).scope();
  *   $compile($div)(scope);
  * });
- * </pre>
+ * ```
  */
   /**
- * @ngdoc overview
- * @name AUTO
+ * @ngdoc module
+ * @name auto
  * @description
  *
- * Implicit module which gets automatically added to each {@link AUTO.$injector $injector}.
+ * Implicit module which gets automatically added to each {@link auto.$injector $injector}.
  */
   var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
   var FN_ARG_SPLIT = /,/;
@@ -11613,32 +11719,32 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   ///////////////////////////////////////
   /**
- * @ngdoc object
- * @name AUTO.$injector
+ * @ngdoc service
+ * @name $injector
  * @function
  *
  * @description
  *
  * `$injector` is used to retrieve object instances as defined by
- * {@link AUTO.$provide provider}, instantiate types, invoke methods,
+ * {@link auto.$provide provider}, instantiate types, invoke methods,
  * and load modules.
  *
  * The following always holds true:
  *
- * <pre>
+ * ```js
  *   var $injector = angular.injector();
  *   expect($injector.get('$injector')).toBe($injector);
  *   expect($injector.invoke(function($injector){
  *     return $injector;
  *   }).toBe($injector);
- * </pre>
+ * ```
  *
  * # Injection Function Annotation
  *
  * JavaScript does not have annotations, and annotations are needed for dependency injection. The
  * following are all valid ways of annotating function with injection arguments and are equivalent.
  *
- * <pre>
+ * ```js
  *   // inferred (only works if code not minified/obfuscated)
  *   $injector.invoke(function(serviceA){});
  *
@@ -11649,7 +11755,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  *   // inline
  *   $injector.invoke(['serviceA', function(serviceA){}]);
- * </pre>
+ * ```
  *
  * ## Inference
  *
@@ -11665,8 +11771,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc method
- * @name AUTO.$injector#get
- * @methodOf AUTO.$injector
+ * @name $injector#get
  *
  * @description
  * Return an instance of the service.
@@ -11676,13 +11781,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc method
- * @name AUTO.$injector#invoke
- * @methodOf AUTO.$injector
+ * @name $injector#invoke
  *
  * @description
  * Invoke the method and supply the method arguments from the `$injector`.
  *
- * @param {!function} fn The function to invoke. Function parameters are injected according to the
+ * @param {!Function} fn The function to invoke. Function parameters are injected according to the
  *   {@link guide/di $inject Annotation} rules.
  * @param {Object=} self The `this` for the invoked method.
  * @param {Object=} locals Optional object. If preset then any argument names are read from this
@@ -11691,8 +11795,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc method
- * @name AUTO.$injector#has
- * @methodOf AUTO.$injector
+ * @name $injector#has
  *
  * @description
  * Allows the user to query if the particular service exist.
@@ -11702,22 +11805,20 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc method
- * @name AUTO.$injector#instantiate
- * @methodOf AUTO.$injector
+ * @name $injector#instantiate
  * @description
  * Create a new instance of JS type. The method takes a constructor function invokes the new
  * operator and supplies all of the arguments to the constructor function as specified by the
  * constructor annotation.
  *
- * @param {function} Type Annotated constructor function.
+ * @param {Function} Type Annotated constructor function.
  * @param {Object=} locals Optional object. If preset then any argument names are read from this
  * object first, before the `$injector` is consulted.
  * @returns {Object} new instance of `Type`.
  */
   /**
  * @ngdoc method
- * @name AUTO.$injector#annotate
- * @methodOf AUTO.$injector
+ * @name $injector#annotate
  *
  * @description
  * Returns an array of service names which the function is requesting for injection. This API is
@@ -11730,7 +11831,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * The simplest form is to extract the dependencies from the arguments of the function. This is done
  * by converting the function into a string using `toString()` method and extracting the argument
  * names.
- * <pre>
+ * ```js
  *   // Given
  *   function MyController($scope, $route) {
  *     // ...
@@ -11738,7 +11839,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  *   // Then
  *   expect(injector.annotate(MyController)).toEqual(['$scope', '$route']);
- * </pre>
+ * ```
  *
  * This method does not work with code minification / obfuscation. For this reason the following
  * annotation strategies are supported.
@@ -11747,7 +11848,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * If a function has an `$inject` property and its value is an array of strings, then the strings
  * represent names of services to be injected into the function.
- * <pre>
+ * ```js
  *   // Given
  *   var MyController = function(obfuscatedScope, obfuscatedRoute) {
  *     // ...
@@ -11757,7 +11858,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  *   // Then
  *   expect(injector.annotate(MyController)).toEqual(['$scope', '$route']);
- * </pre>
+ * ```
  *
  * # The array notation
  *
@@ -11765,7 +11866,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * is very inconvenient. In these situations using the array notation to specify the dependencies in
  * a way that survives minification is a better choice:
  *
- * <pre>
+ * ```js
  *   // We wish to write this (not minification / obfuscation safe)
  *   injector.invoke(function($compile, $rootScope) {
  *     // ...
@@ -11787,21 +11888,21 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   expect(injector.annotate(
  *      ['$compile', '$rootScope', function(obfus_$compile, obfus_$rootScope) {}])
  *    ).toEqual(['$compile', '$rootScope']);
- * </pre>
+ * ```
  *
- * @param {function|Array.<string|Function>} fn Function for which dependent service names need to
+ * @param {Function|Array.<string|Function>} fn Function for which dependent service names need to
  * be retrieved as described above.
  *
  * @returns {Array.<string>} The names of the services which the function requires.
  */
   /**
  * @ngdoc object
- * @name AUTO.$provide
+ * @name $provide
  *
  * @description
  *
- * The {@link AUTO.$provide $provide} service has a number of methods for registering components
- * with the {@link AUTO.$injector $injector}. Many of these functions are also exposed on
+ * The {@link auto.$provide $provide} service has a number of methods for registering components
+ * with the {@link auto.$injector $injector}. Many of these functions are also exposed on
  * {@link angular.Module}.
  *
  * An Angular **service** is a singleton object created by a **service factory**.  These **service
@@ -11809,25 +11910,25 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * The **service providers** are constructor functions. When instantiated they must contain a
  * property called `$get`, which holds the **service factory** function.
  *
- * When you request a service, the {@link AUTO.$injector $injector} is responsible for finding the
+ * When you request a service, the {@link auto.$injector $injector} is responsible for finding the
  * correct **service provider**, instantiating it and then calling its `$get` **service factory**
  * function to get the instance of the **service**.
  *
  * Often services have no configuration options and there is no need to add methods to the service
  * provider.  The provider will be no more than a constructor function with a `$get` property. For
- * these cases the {@link AUTO.$provide $provide} service has additional helper methods to register
+ * these cases the {@link auto.$provide $provide} service has additional helper methods to register
  * services without specifying a provider.
  *
- * * {@link AUTO.$provide#methods_provider provider(provider)} - registers a **service provider** with the
- *     {@link AUTO.$injector $injector}
- * * {@link AUTO.$provide#methods_constant constant(obj)} - registers a value/object that can be accessed by
+ * * {@link auto.$provide#provider provider(provider)} - registers a **service provider** with the
+ *     {@link auto.$injector $injector}
+ * * {@link auto.$provide#constant constant(obj)} - registers a value/object that can be accessed by
  *     providers and services.
- * * {@link AUTO.$provide#methods_value value(obj)} - registers a value/object that can only be accessed by
+ * * {@link auto.$provide#value value(obj)} - registers a value/object that can only be accessed by
  *     services, not providers.
- * * {@link AUTO.$provide#methods_factory factory(fn)} - registers a service **factory function**, `fn`,
+ * * {@link auto.$provide#factory factory(fn)} - registers a service **factory function**, `fn`,
  *     that will be wrapped in a **service provider** object, whose `$get` property will contain the
  *     given factory function.
- * * {@link AUTO.$provide#methods_service service(class)} - registers a **constructor function**, `class` that
+ * * {@link auto.$provide#service service(class)} - registers a **constructor function**, `class`
  *     that will be wrapped in a **service provider** object, whose `$get` property will instantiate
  *      a new object using the given constructor function.
  *
@@ -11835,11 +11936,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc method
- * @name AUTO.$provide#provider
- * @methodOf AUTO.$provide
+ * @name $provide#provider
  * @description
  *
- * Register a **provider function** with the {@link AUTO.$injector $injector}. Provider functions
+ * Register a **provider function** with the {@link auto.$injector $injector}. Provider functions
  * are constructor functions, whose instances are responsible for "providing" a factory for a
  * service.
  *
@@ -11859,20 +11959,18 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @param {(Object|function())} provider If the provider is:
  *
  *   - `Object`: then it should have a `$get` method. The `$get` method will be invoked using
- *               {@link AUTO.$injector#invoke $injector.invoke()} when an instance needs to be
- *               created.
+ *     {@link auto.$injector#invoke $injector.invoke()} when an instance needs to be created.
  *   - `Constructor`: a new instance of the provider will be created using
- *               {@link AUTO.$injector#instantiate $injector.instantiate()}, then treated as
- *               `object`.
+ *     {@link auto.$injector#instantiate $injector.instantiate()}, then treated as `object`.
  *
  * @returns {Object} registered provider instance
 
  * @example
  *
  * The following example shows how to create a simple event tracking service and register it using
- * {@link AUTO.$provide#methods_provider $provide.provider()}.
+ * {@link auto.$provide#provider $provide.provider()}.
  *
- * <pre>
+ * ```js
  *  // Define the eventTracker provider
  *  function EventTrackerProvider() {
  *    var trackingUrl = '/track';
@@ -11929,18 +12027,17 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *      expect(postSpy.mostRecentCall.args[1]).toEqual({ 'login': 1 });
  *    }));
  *  });
- * </pre>
+ * ```
  */
   /**
  * @ngdoc method
- * @name AUTO.$provide#factory
- * @methodOf AUTO.$provide
+ * @name $provide#factory
  * @description
  *
  * Register a **service factory**, which will be called to return the service instance.
  * This is short for registering a service where its provider consists of only a `$get` property,
  * which is the given service factory function.
- * You should use {@link AUTO.$provide#factory $provide.factory(getFn)} if you do not need to
+ * You should use {@link auto.$provide#factory $provide.factory(getFn)} if you do not need to
  * configure your service in a provider.
  *
  * @param {string} name The name of the instance.
@@ -11950,24 +12047,23 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @example
  * Here is an example of registering a service
- * <pre>
+ * ```js
  *   $provide.factory('ping', ['$http', function($http) {
  *     return function ping() {
  *       return $http.send('/ping');
  *     };
  *   }]);
- * </pre>
+ * ```
  * You would then inject and use this service like this:
- * <pre>
+ * ```js
  *   someModule.controller('Ctrl', ['ping', function(ping) {
  *     ping();
  *   }]);
- * </pre>
+ * ```
  */
   /**
  * @ngdoc method
- * @name AUTO.$provide#service
- * @methodOf AUTO.$provide
+ * @name $provide#service
  * @description
  *
  * Register a **service constructor**, which will be invoked with `new` to create the service
@@ -11975,7 +12071,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * This is short for registering a service where its provider's `$get` property is the service
  * constructor function that will be used to instantiate the service instance.
  *
- * You should use {@link AUTO.$provide#methods_service $provide.service(class)} if you define your service
+ * You should use {@link auto.$provide#service $provide.service(class)} if you define your service
  * as a type/class.
  *
  * @param {string} name The name of the instance.
@@ -11984,34 +12080,32 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @example
  * Here is an example of registering a service using
- * {@link AUTO.$provide#methods_service $provide.service(class)}.
- * <pre>
- *   $provide.service('ping', ['$http', function($http) {
- *     var Ping = function() {
- *       this.$http = $http;
- *     };
- *   
- *     Ping.prototype.send = function() {
- *       return this.$http.get('/ping');
- *     }; 
- *   
- *     return Ping;
- *   }]);
- * </pre>
+ * {@link auto.$provide#service $provide.service(class)}.
+ * ```js
+ *   var Ping = function($http) {
+ *     this.$http = $http;
+ *   };
+ *
+ *   Ping.$inject = ['$http'];
+ *
+ *   Ping.prototype.send = function() {
+ *     return this.$http.get('/ping');
+ *   };
+ *   $provide.service('ping', Ping);
+ * ```
  * You would then inject and use this service like this:
- * <pre>
+ * ```js
  *   someModule.controller('Ctrl', ['ping', function(ping) {
  *     ping.send();
  *   }]);
- * </pre>
+ * ```
  */
   /**
  * @ngdoc method
- * @name AUTO.$provide#value
- * @methodOf AUTO.$provide
+ * @name $provide#value
  * @description
  *
- * Register a **value service** with the {@link AUTO.$injector $injector}, such as a string, a
+ * Register a **value service** with the {@link auto.$injector $injector}, such as a string, a
  * number, an array, an object or a function.  This is short for registering a service where its
  * provider's `$get` property is a factory function that takes no arguments and returns the **value
  * service**.
@@ -12019,7 +12113,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * Value services are similar to constant services, except that they cannot be injected into a
  * module configuration function (see {@link angular.Module#config}) but they can be overridden by
  * an Angular
- * {@link AUTO.$provide#decorator decorator}.
+ * {@link auto.$provide#decorator decorator}.
  *
  * @param {string} name The name of the instance.
  * @param {*} value The value.
@@ -12027,7 +12121,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @example
  * Here are some examples of creating value services.
- * <pre>
+ * ```js
  *   $provide.value('ADMIN_USER', 'admin');
  *
  *   $provide.value('RoleLookup', { admin: 0, writer: 1, reader: 2 });
@@ -12035,18 +12129,17 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   $provide.value('halfOf', function(value) {
  *     return value / 2;
  *   });
- * </pre>
+ * ```
  */
   /**
  * @ngdoc method
- * @name AUTO.$provide#constant
- * @methodOf AUTO.$provide
+ * @name $provide#constant
  * @description
  *
  * Register a **constant service**, such as a string, a number, an array, an object or a function,
- * with the {@link AUTO.$injector $injector}. Unlike {@link AUTO.$provide#value value} it can be
+ * with the {@link auto.$injector $injector}. Unlike {@link auto.$provide#value value} it can be
  * injected into a module configuration function (see {@link angular.Module#config}) and it cannot
- * be overridden by an Angular {@link AUTO.$provide#decorator decorator}.
+ * be overridden by an Angular {@link auto.$provide#decorator decorator}.
  *
  * @param {string} name The name of the constant.
  * @param {*} value The constant value.
@@ -12054,7 +12147,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @example
  * Here a some examples of creating constants:
- * <pre>
+ * ```js
  *   $provide.constant('SHARD_HEIGHT', 306);
  *
  *   $provide.constant('MY_COLOURS', ['red', 'blue', 'grey']);
@@ -12062,15 +12155,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   $provide.constant('double', function(value) {
  *     return value * 2;
  *   });
- * </pre>
+ * ```
  */
   /**
  * @ngdoc method
- * @name AUTO.$provide#decorator
- * @methodOf AUTO.$provide
+ * @name $provide#decorator
  * @description
  *
- * Register a **service decorator** with the {@link AUTO.$injector $injector}. A service decorator
+ * Register a **service decorator** with the {@link auto.$injector $injector}. A service decorator
  * intercepts the creation of a service, allowing it to override or modify the behaviour of the
  * service. The object returned by the decorator may be the original service, or a new service
  * object which replaces or wraps and delegates to the original service.
@@ -12078,7 +12170,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @param {string} name The name of the service to decorate.
  * @param {function()} decorator This function will be invoked when the service needs to be
  *    instantiated and should return the decorated service instance. The function is called using
- *    the {@link AUTO.$injector#invoke injector.invoke} method and is therefore fully injectable.
+ *    the {@link auto.$injector#invoke injector.invoke} method and is therefore fully injectable.
  *    Local injection arguments:
  *
  *    * `$delegate` - The original service instance, which can be monkey patched, configured,
@@ -12087,12 +12179,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @example
  * Here we decorate the {@link ng.$log $log} service to convert warnings to errors by intercepting
  * calls to {@link ng.$log#error $log.warn()}.
- * <pre>
- *   $provider.decorator('$log', ['$delegate', function($delegate) {
+ * ```js
+ *   $provide.decorator('$log', ['$delegate', function($delegate) {
  *     $delegate.warn = $delegate.error;
  *     return $delegate;
  *   }]);
- * </pre>
+ * ```
  */
   function createInjector(modulesToLoad) {
     var INSTANTIATING = {}, providerSuffix = 'Provider', path = [], loadedModules = new HashMap(), providerCache = {
@@ -12267,8 +12359,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     }
   }
   /**
- * @ngdoc function
- * @name ng.$anchorScroll
+ * @ngdoc service
+ * @name $anchorScroll
+ * @kind function
  * @requires $window
  * @requires $location
  * @requires $rootScope
@@ -12276,11 +12369,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @description
  * When called, it checks current value of `$location.hash()` and scroll to related element,
  * according to rules specified in
- * {@link http://dev.w3.org/html5/spec/Overview.html#the-indicated-part-of-the-document Html5 spec}.
+ * [Html5 spec](http://dev.w3.org/html5/spec/Overview.html#the-indicated-part-of-the-document).
  *
  * It also watches the `$location.hash()` and scrolls whenever it changes to match any anchor.
  * This can be disabled by calling `$anchorScrollProvider.disableAutoScrolling()`.
- * 
+ *
  * @example
    <example>
      <file name="index.html">
@@ -12295,10 +12388,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
            // set the location.hash to the id of
            // the element you wish to scroll to.
            $location.hash('bottom');
-           
+
            // call $anchorScroll()
            $anchorScroll();
-         }
+         };
        }
      </file>
      <file name="style.css">
@@ -12364,8 +12457,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   var $animateMinErr = minErr('$animate');
   /**
- * @ngdoc object
- * @name ng.$animateProvider
+ * @ngdoc provider
+ * @name $animateProvider
  *
  * @description
  * Default implementation of $animate that doesn't perform any animations, instead just
@@ -12381,9 +12474,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       function ($provide) {
         this.$$selectors = {};
         /**
-   * @ngdoc function
-   * @name ng.$animateProvider#register
-   * @methodOf ng.$animateProvider
+   * @ngdoc method
+   * @name $animateProvider#register
    *
    * @description
    * Registers a new injectable animation factory function. The factory function produces the
@@ -12396,7 +12488,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    *   triggered.
    *
    *
-   *<pre>
+   * ```js
    *   return {
      *     eventFn : function(element, done) {
      *       //code to run the animation
@@ -12406,10 +12498,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *       }
      *     }
      *   }
-   *</pre>
+   * ```
    *
    * @param {string} name The name of the animation.
-   * @param {function} factory The factory function that will be executed to return the animation
+   * @param {Function} factory The factory function that will be executed to return the animation
    *                           object.
    */
         this.register = function (name, factory) {
@@ -12420,9 +12512,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           $provide.factory(key, factory);
         };
         /**
-   * @ngdoc function
-   * @name ng.$animateProvider#classNameFilter
-   * @methodOf ng.$animateProvider
+   * @ngdoc method
+   * @name $animateProvider#classNameFilter
    *
    * @description
    * Sets and/or returns the CSS class regular expression that is checked when performing
@@ -12442,11 +12533,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         };
         this.$get = [
           '$timeout',
-          function ($timeout) {
+          '$$asyncCallback',
+          function ($timeout, $$asyncCallback) {
+            function async(fn) {
+              fn && $$asyncCallback(fn);
+            }
             /**
      *
-     * @ngdoc object
-     * @name ng.$animate
+     * @ngdoc service
+     * @name $animate
      * @description The $animate service provides rudimentary DOM manipulation functions to
      * insert, remove and move elements within the DOM, as well as adding and removing classes.
      * This service is the core service used by the ngAnimate $animator service which provides
@@ -12470,11 +12565,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
                   }
                   parent.append(element);
                 }
-                done && $timeout(done, 0, false);
+                async(done);
               },
               leave: function (element, done) {
                 element.remove();
-                done && $timeout(done, 0, false);
+                async(done);
               },
               move: function (element, parent, after, done) {
                 // Do not remove element before insert. Removing will cause data associated with the
@@ -12486,14 +12581,21 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
                 forEach(element, function (element) {
                   jqLiteAddClass(element, className);
                 });
-                done && $timeout(done, 0, false);
+                async(done);
               },
               removeClass: function (element, className, done) {
                 className = isString(className) ? className : isArray(className) ? className.join(' ') : '';
                 forEach(element, function (element) {
                   jqLiteRemoveClass(element, className);
                 });
-                done && $timeout(done, 0, false);
+                async(done);
+              },
+              setClass: function (element, add, remove, done) {
+                forEach(element, function (element) {
+                  jqLiteAddClass(element, add);
+                  jqLiteRemoveClass(element, remove);
+                });
+                async(done);
               },
               enabled: noop
             };
@@ -12501,10 +12603,23 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         ];
       }
     ];
+  function $$AsyncCallbackProvider() {
+    this.$get = [
+      '$$rAF',
+      '$timeout',
+      function ($$rAF, $timeout) {
+        return $$rAF.supported ? function (fn) {
+          return $$rAF(fn);
+        } : function (fn) {
+          return $timeout(fn, 0, false);
+        };
+      }
+    ];
+  }
   /**
  * ! This is a private undocumented service !
  *
- * @name ng.$browser
+ * @name $browser
  * @requires $log
  * @description
  * This object has two goals:
@@ -12577,8 +12692,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     //////////////////////////////////////////////////////////////
     var pollFns = [], pollTimeout;
     /**
-   * @name ng.$browser#addPollFn
-   * @methodOf ng.$browser
+   * @name $browser#addPollFn
    *
    * @param {function()} fn Poll function to add
    *
@@ -12615,8 +12729,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     //////////////////////////////////////////////////////////////
     var lastBrowserUrl = location.href, baseElement = document.find('base'), newLocation = null;
     /**
-   * @name ng.$browser#url
-   * @methodOf ng.$browser
+   * @name $browser#url
    *
    * @description
    * GETTER:
@@ -12680,9 +12793,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       });
     }
     /**
-   * @name ng.$browser#onUrlChange
-   * @methodOf ng.$browser
-   * @TODO(vojta): refactor to use node's syntax for events
+   * @name $browser#onUrlChange
    *
    * @description
    * Register callback function that will be called, when url changes.
@@ -12703,6 +12814,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    * @return {function(string)} Returns the registered listener fn - handy if the fn is anonymous.
    */
     self.onUrlChange = function (callback) {
+      // TODO(vojta): refactor to use node's syntax for events
       if (!urlChangeInit) {
         // We listen on both (hashchange/popstate) when available, as some browsers (e.g. Opera)
         // don't fire popstate when user change the address bar and don't fire hashchange when url
@@ -12724,14 +12836,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     // Misc API
     //////////////////////////////////////////////////////////////
     /**
-   * @name ng.$browser#baseHref
-   * @methodOf ng.$browser
+   * @name $browser#baseHref
    *
    * @description
    * Returns current <base href>
    * (always relative - without domain)
    *
-   * @returns {string=} current <base href>
+   * @returns {string} The current base href
    */
     self.baseHref = function () {
       var href = baseElement.attr('href');
@@ -12744,8 +12855,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     var lastCookieString = '';
     var cookiePath = self.baseHref();
     /**
-   * @name ng.$browser#cookies
-   * @methodOf ng.$browser
+   * @name $browser#cookies
    *
    * @param {string=} name Cookie name
    * @param {string=} value Cookie value
@@ -12806,8 +12916,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       }
     };
     /**
-   * @name ng.$browser#defer
-   * @methodOf ng.$browser
+   * @name $browser#defer
    * @param {function()} fn A function, who's execution should be deferred.
    * @param {number=} [delay=0] of milliseconds to defer the function execution.
    * @returns {*} DeferId that can be used to cancel the task via `$browser.defer.cancel()`.
@@ -12831,8 +12940,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       return timeoutId;
     };
     /**
-   * @name ng.$browser#defer.cancel
-   * @methodOf ng.$browser.defer
+   * @name $browser#defer.cancel
    *
    * @description
    * Cancels a deferred task identified with `deferId`.
@@ -12863,14 +12971,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   }
   /**
- * @ngdoc object
- * @name ng.$cacheFactory
+ * @ngdoc service
+ * @name $cacheFactory
  *
  * @description
  * Factory that constructs cache objects and gives access to them.
- * 
- * <pre>
- * 
+ *
+ * ```js
+ *
  *  var cache = $cacheFactory('cacheId');
  *  expect($cacheFactory.get('cacheId')).toBe(cache);
  *  expect($cacheFactory.get('noSuchCacheId')).not.toBeDefined();
@@ -12879,9 +12987,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *  cache.put("another key", "another value");
  *
  *  // We've specified no options on creation
- *  expect(cache.info()).toEqual({id: 'cacheId', size: 2}); 
- * 
- * </pre>
+ *  expect(cache.info()).toEqual({id: 'cacheId', size: 2});
+ *
+ * ```
  *
  *
  * @param {string} cacheId Name or id of the newly created cache.
@@ -12910,8 +13018,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         var size = 0, stats = extend({}, options, { id: cacheId }), data = {}, capacity = options && options.capacity || Number.MAX_VALUE, lruHash = {}, freshEnd = null, staleEnd = null;
         return caches[cacheId] = {
           put: function (key, value) {
-            var lruEntry = lruHash[key] || (lruHash[key] = { key: key });
-            refresh(lruEntry);
+            if (capacity < Number.MAX_VALUE) {
+              var lruEntry = lruHash[key] || (lruHash[key] = { key: key });
+              refresh(lruEntry);
+            }
             if (isUndefined(value))
               return;
             if (!(key in data))
@@ -12923,22 +13033,26 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             return value;
           },
           get: function (key) {
-            var lruEntry = lruHash[key];
-            if (!lruEntry)
-              return;
-            refresh(lruEntry);
+            if (capacity < Number.MAX_VALUE) {
+              var lruEntry = lruHash[key];
+              if (!lruEntry)
+                return;
+              refresh(lruEntry);
+            }
             return data[key];
           },
           remove: function (key) {
-            var lruEntry = lruHash[key];
-            if (!lruEntry)
-              return;
-            if (lruEntry == freshEnd)
-              freshEnd = lruEntry.p;
-            if (lruEntry == staleEnd)
-              staleEnd = lruEntry.n;
-            link(lruEntry.n, lruEntry.p);
-            delete lruHash[key];
+            if (capacity < Number.MAX_VALUE) {
+              var lruEntry = lruHash[key];
+              if (!lruEntry)
+                return;
+              if (lruEntry == freshEnd)
+                freshEnd = lruEntry.p;
+              if (lruEntry == staleEnd)
+                staleEnd = lruEntry.n;
+              link(lruEntry.n, lruEntry.p);
+              delete lruHash[key];
+            }
             delete data[key];
             size--;
           },
@@ -12989,8 +13103,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       }
       /**
    * @ngdoc method
-   * @name ng.$cacheFactory#info
-   * @methodOf ng.$cacheFactory
+   * @name $cacheFactory#info
    *
    * @description
    * Get information about all the of the caches that have been created
@@ -13006,8 +13119,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       };
       /**
    * @ngdoc method
-   * @name ng.$cacheFactory#get
-   * @methodOf ng.$cacheFactory
+   * @name $cacheFactory#get
    *
    * @description
    * Get access to a cache object by the `cacheId` used when it was created.
@@ -13022,48 +13134,44 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     };
   }
   /**
- * @ngdoc object
- * @name ng.$templateCache
+ * @ngdoc service
+ * @name $templateCache
  *
  * @description
  * The first time a template is used, it is loaded in the template cache for quick retrieval. You
  * can load templates directly into the cache in a `script` tag, or by consuming the
  * `$templateCache` service directly.
- * 
+ *
  * Adding via the `script` tag:
- * <pre>
- * <html ng-app>
- * <head>
- * <script type="text/ng-template" id="templateId.html">
- *   This is the content of the template
- * </script>
- * </head>
- *   ...
- * </html>
- * </pre>
- * 
+ *
+ * ```html
+ *   <script type="text/ng-template" id="templateId.html">
+ *     <p>This is the content of the template</p>
+ *   </script>
+ * ```
+ *
  * **Note:** the `script` tag containing the template does not need to be included in the `head` of
  * the document, but it must be below the `ng-app` definition.
- * 
+ *
  * Adding via the $templateCache service:
- * 
- * <pre>
+ *
+ * ```js
  * var myApp = angular.module('myApp', []);
  * myApp.run(function($templateCache) {
  *   $templateCache.put('templateId.html', 'This is the content of the template');
  * });
- * </pre>
- * 
+ * ```
+ *
  * To retrieve the template later, simply use it in your HTML:
- * <pre>
+ * ```html
  * <div ng-include=" 'templateId.html' "></div>
- * </pre>
- * 
+ * ```
+ *
  * or get it via Javascript:
- * <pre>
+ * ```js
  * $templateCache.get('templateId.html')
- * </pre>
- * 
+ * ```
+ *
  * See {@link ng.$cacheFactory $cacheFactory}.
  *
  */
@@ -13092,8 +13200,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * - "compositeLinkFn" - function that aggregates all linking fns for a compilation root (nodeList)
  */
   /**
- * @ngdoc function
- * @name ng.$compile
+ * @ngdoc service
+ * @name $compile
  * @function
  *
  * @description
@@ -13101,7 +13209,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * can then be used to link {@link ng.$rootScope.Scope `scope`} and the template together.
  *
  * The compilation is a process of walking the DOM tree and matching DOM elements to
- * {@link ng.$compileProvider#methods_directive directives}.
+ * {@link ng.$compileProvider#directive directives}.
  *
  * <div class="alert alert-warning">
  * **Note:** This document is an in-depth reference of all directive options.
@@ -13123,7 +13231,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * Here's an example directive declared with a Directive Definition Object:
  *
- * <pre>
+ * ```js
  *   var myModule = angular.module(...);
  *
  *   myModule.directive('directiveName', function factory(injectables) {
@@ -13156,7 +13264,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *     };
  *     return directiveDefinitionObject;
  *   });
- * </pre>
+ * ```
  *
  * <div class="alert alert-warning">
  * **Note:** Any unspecified options will use the default value. You can see the default values below.
@@ -13164,7 +13272,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * Therefore the above can be simplified as:
  *
- * <pre>
+ * ```js
  *   var myModule = angular.module(...);
  *
  *   myModule.directive('directiveName', function factory(injectables) {
@@ -13175,13 +13283,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *     // or
  *     // return function postLink(scope, iElement, iAttrs) { ... }
  *   });
- * </pre>
+ * ```
  *
  *
  *
  * ### Directive Definition Object
  *
- * The directive definition object provides instructions to the {@link api/ng.$compile
+ * The directive definition object provides instructions to the {@link ng.$compile
  * compiler}. The attributes are:
  *
  * #### `priority`
@@ -13304,7 +13412,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * You can specify `templateUrl` as a string representing the URL or as a function which takes two
  * arguments `tElement` and `tAttrs` (described in the `compile` function api below) and returns
  * a string value representing the url.  In either case, the template URL is passed through {@link
- * api/ng.$sce#methods_getTrustedResourceUrl $sce.getTrustedResourceUrl}.
+ * api/ng.$sce#getTrustedResourceUrl $sce.getTrustedResourceUrl}.
  *
  *
  * #### `replace`
@@ -13316,7 +13424,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * #### `transclude`
  * compile the content of the element and make it available to the directive.
- * Typically used with {@link api/ng.directive:ngTransclude
+ * Typically used with {@link ng.directive:ngTransclude
  * ngTransclude}. The advantage of transclusion is that the linking function receives a
  * transclusion function which is pre-bound to the correct scope. In a typical setup the widget
  * creates an `isolate` scope, but the transclusion is not a child, but a sibling of the `isolate`
@@ -13329,15 +13437,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * #### `compile`
  *
- * <pre>
+ * ```js
  *   function compile(tElement, tAttrs, transclude) { ... }
- * </pre>
+ * ```
  *
  * The compile function deals with transforming the template DOM. Since most directives do not do
  * template transformation, it is not used often. Examples that require compile functions are
  * directives that transform template DOM, such as {@link
  * api/ng.directive:ngRepeat ngRepeat}, or load the contents
- * asynchronously, such as {@link api/ngRoute.directive:ngView ngView}. The
+ * asynchronously, such as {@link ngRoute.directive:ngView ngView}. The
  * compile function takes the following arguments.
  *
  *   * `tElement` - template element - The element where the directive has been declared. It is
@@ -13374,16 +13482,16 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * #### `link`
  * This property is used only if the `compile` property is not defined.
  *
- * <pre>
+ * ```js
  *   function link(scope, iElement, iAttrs, controller, transcludeFn) { ... }
- * </pre>
+ * ```
  *
  * The link function is responsible for registering DOM listeners as well as updating the DOM. It is
  * executed after the template has been cloned. This is where most of the directive logic will be
  * put.
  *
- *   * `scope` - {@link api/ng.$rootScope.Scope Scope} - The scope to be used by the
- *     directive for registering {@link api/ng.$rootScope.Scope#methods_$watch watches}.
+ *   * `scope` - {@link ng.$rootScope.Scope Scope} - The scope to be used by the
+ *     directive for registering {@link ng.$rootScope.Scope#$watch watches}.
  *
  *   * `iElement` - instance element - The element where the directive is to be used. It is safe to
  *     manipulate the children of the element only in `postLink` function since the children have
@@ -13414,7 +13522,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * <a name="Attributes"></a>
  * ### Attributes
  *
- * The {@link api/ng.$compile.directive.Attributes Attributes} object - passed as a parameter in the
+ * The {@link ng.$compile.directive.Attributes Attributes} object - passed as a parameter in the
  * `link()` or `compile()` functions. It has a variety of uses.
  *
  * accessing *Normalized attribute names:*
@@ -13434,7 +13542,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   the only way to easily get the actual value because during the linking phase the interpolation
  *   hasn't been evaluated yet and so the value is at this time set to `undefined`.
  *
- * <pre>
+ * ```js
  * function linkingFn(scope, elm, attrs, ctrl) {
  *   // get the attribute value
  *   console.log(attrs.ngModel);
@@ -13447,7 +13555,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *     console.log('ngModel has changed value to ' + value);
  *   });
  * }
- * </pre>
+ * ```
  *
  * Below is an example using `$compileProvider`.
  *
@@ -13456,8 +13564,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * to illustrate how `$compile` works.
  * </div>
  *
- <doc:example module="compile">
-   <doc:source>
+ <example module="compile">
+   <file name="index.html">
     <script>
       angular.module('compile', [], function($compileProvider) {
         // configure new 'compile' directive by passing a directive
@@ -13496,23 +13604,27 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       <textarea ng-model="html"></textarea> <br>
       <div compile="html"></div>
     </div>
-   </doc:source>
-   <doc:scenario>
+   </file>
+   <file name="protractor.js" type="protractor">
      it('should auto compile', function() {
-       expect(element('div[compile]').text()).toBe('Hello Angular');
-       input('html').enter('{{name}}!');
-       expect(element('div[compile]').text()).toBe('Angular!');
+       var textarea = $('textarea');
+       var output = $('div[compile]');
+       // The initial state reads 'Hello Angular'.
+       expect(output.getText()).toBe('Hello Angular');
+       textarea.clear();
+       textarea.sendKeys('{{name}}!');
+       expect(output.getText()).toBe('Angular!');
      });
-   </doc:scenario>
- </doc:example>
+   </file>
+ </example>
 
  *
  *
  * @param {string|DOMElement} element Element or HTML string to compile into a template function.
- * @param {function(angular.Scope[, cloneAttachFn]} transclude function available to directives.
- * @param {number} maxPriority only apply directives lower then given priority (Only effects the
+ * @param {function(angular.Scope, cloneAttachFn=)} transclude function available to directives.
+ * @param {number} maxPriority only apply directives lower than given priority (Only effects the
  *                 root element(s), not their children)
- * @returns {function(scope[, cloneAttachFn])} a link function which is used to bind template
+ * @returns {function(scope, cloneAttachFn=)} a link function which is used to bind template
  * (a DOM element/tree) to a scope. Where:
  *
  *  * `scope` - A {@link ng.$rootScope.Scope Scope} to bind to.
@@ -13534,14 +13646,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * - If you are not asking the linking function to clone the template, create the DOM element(s)
  *   before you send them to the compiler and keep this reference around.
- *   <pre>
+ *   ```js
  *     var element = $compile('<p>{{total}}</p>')(scope);
- *   </pre>
+ *   ```
  *
  * - if on the other hand, you need the element to be cloned, the view reference from the original
  *   example would not point to the clone, but rather to the original template that was cloned. In
  *   this case, you can access the clone via the cloneAttachFn:
- *   <pre>
+ *   ```js
  *     var templateElement = angular.element('<p>{{total}}</p>'),
  *         scope = ....;
  *
@@ -13550,7 +13662,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *     });
  *
  *     //now we have reference to the cloned DOM via `clonedElement`
- *   </pre>
+ *   ```
  *
  *
  * For information on how the compiler works, see the
@@ -13558,8 +13670,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   var $compileMinErr = minErr('$compile');
   /**
- * @ngdoc service
- * @name ng.$compileProvider
+ * @ngdoc provider
+ * @name $compileProvider
  * @function
  *
  * @description
@@ -13569,15 +13681,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     '$$sanitizeUriProvider'
   ];
   function $CompileProvider($provide, $$sanitizeUriProvider) {
-    var hasDirectives = {}, Suffix = 'Directive', COMMENT_DIRECTIVE_REGEXP = /^\s*directive\:\s*([\d\w\-_]+)\s+(.*)$/, CLASS_DIRECTIVE_REGEXP = /(([\d\w\-_]+)(?:\:([^;]+))?;?)/;
+    var hasDirectives = {}, Suffix = 'Directive', COMMENT_DIRECTIVE_REGEXP = /^\s*directive\:\s*([\d\w\-_]+)\s+(.*)$/, CLASS_DIRECTIVE_REGEXP = /(([\d\w\-_]+)(?:\:([^;]+))?;?)/, TABLE_CONTENT_REGEXP = /^<\s*(tr|th|td|thead|tbody|tfoot)(\s+[^>]*)?>/i;
     // Ref: http://developers.whatwg.org/webappapis.html#event-handler-idl-attributes
     // The assumption is that future DOM event attribute names will begin with
     // 'on' and be composed of only English letters.
     var EVENT_HANDLER_ATTR_REGEXP = /^(on[a-z]+|formaction)$/;
     /**
-   * @ngdoc function
-   * @name ng.$compileProvider#directive
-   * @methodOf ng.$compileProvider
+   * @ngdoc method
+   * @name $compileProvider#directive
    * @function
    *
    * @description
@@ -13586,7 +13697,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    * @param {string|Object} name Name of the directive in camel-case (i.e. <code>ngBind</code> which
    *    will match as <code>ng-bind</code>), or an object map of directives where the keys are the
    *    names and the values are the factories.
-   * @param {function|Array} directiveFactory An injectable directive factory function. See
+   * @param {Function|Array} directiveFactory An injectable directive factory function. See
    *    {@link guide/directive} for more info.
    * @returns {ng.$compileProvider} Self for chaining.
    */
@@ -13630,9 +13741,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       return this;
     };
     /**
-   * @ngdoc function
-   * @name ng.$compileProvider#aHrefSanitizationWhitelist
-   * @methodOf ng.$compileProvider
+   * @ngdoc method
+   * @name $compileProvider#aHrefSanitizationWhitelist
    * @function
    *
    * @description
@@ -13659,9 +13769,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       }
     };
     /**
-   * @ngdoc function
-   * @name ng.$compileProvider#imgSrcSanitizationWhitelist
-   * @methodOf ng.$compileProvider
+   * @ngdoc method
+   * @name $compileProvider#imgSrcSanitizationWhitelist
    * @function
    *
    * @description
@@ -13718,8 +13827,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             }
           },
           $updateClass: function (newClasses, oldClasses) {
-            this.$removeClass(tokenDifference(oldClasses, newClasses));
-            this.$addClass(tokenDifference(newClasses, oldClasses));
+            var toAdd = tokenDifference(newClasses, oldClasses);
+            var toRemove = tokenDifference(oldClasses, newClasses);
+            if (toAdd.length === 0) {
+              $animate.removeClass(this.$$element, toRemove);
+            } else if (toRemove.length === 0) {
+              $animate.addClass(this.$$element, toAdd);
+            } else {
+              $animate.setClass(this.$$element, toAdd, toRemove);
+            }
           },
           $set: function (key, value, writeAttr, attrName) {
             // TODO: decide whether or not to throw an error if "class"
@@ -13829,13 +13945,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      * function, which is the a linking function for the node.
      *
      * @param {NodeList} nodeList an array of nodes or NodeList to compile
-     * @param {function(angular.Scope[, cloneAttachFn]} transcludeFn A linking function, where the
+     * @param {function(angular.Scope, cloneAttachFn=)} transcludeFn A linking function, where the
      *        scope argument is auto-generated to the new child of the transcluded parent scope.
      * @param {DOMElement=} $rootElement If the nodeList is the root of the compilation tree then
      *        the rootElement must be set the jqLite collection of the compile root. This is
      *        needed so that the jqLite collection items can be replaced with widgets.
      * @param {number=} maxPriority Max directive priority.
-     * @returns {?function} A composite linking function of all of the matched directives or null.
+     * @returns {Function} A composite linking function of all of the matched directives or null.
      */
         function compileNodes(nodeList, transcludeFn, $rootElement, maxPriority, ignoreDirective, previousCompileContext) {
           var linkFns = [], attrs, directives, nodeLinkFn, childNodes, childLinkFn, linkFnFound;
@@ -14033,7 +14149,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *        this needs to be pre-sorted by priority order.
      * @param {Node} compileNode The raw DOM node to apply the compile functions to
      * @param {Object} templateAttrs The shared attribute function
-     * @param {function(angular.Scope[, cloneAttachFn]} transcludeFn A linking function, where the
+     * @param {function(angular.Scope, cloneAttachFn=)} transcludeFn A linking function, where the
      *                                                  scope argument is auto-generated to the new
      *                                                  child of the transcluded parent scope.
      * @param {JQLite} jqCollection If we are working on the root of the compile tree then this
@@ -14045,11 +14161,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      * @param {Array.<Function>} postLinkFns
      * @param {Object} previousCompileContext Context used for previous compilation of the current
      *                                        node
-     * @returns linkFn
+     * @returns {Function} linkFn
      */
         function applyDirectivesToNode(directives, compileNode, templateAttrs, transcludeFn, jqCollection, originalReplaceDirective, preLinkFns, postLinkFns, previousCompileContext) {
           previousCompileContext = previousCompileContext || {};
-          var terminalPriority = -Number.MAX_VALUE, newScopeDirective, controllerDirectives = previousCompileContext.controllerDirectives, newIsolateScopeDirective = previousCompileContext.newIsolateScopeDirective, templateDirective = previousCompileContext.templateDirective, nonTlbTranscludeDirective = previousCompileContext.nonTlbTranscludeDirective, hasTranscludeDirective = false, hasElementTranscludeDirective = false, $compileNode = templateAttrs.$$element = jqLite(compileNode), directive, directiveName, $template, replaceDirective = originalReplaceDirective, childTranscludeFn = transcludeFn, linkFn, directiveValue;
+          var terminalPriority = -Number.MAX_VALUE, newScopeDirective, controllerDirectives = previousCompileContext.controllerDirectives, newIsolateScopeDirective = previousCompileContext.newIsolateScopeDirective, templateDirective = previousCompileContext.templateDirective, nonTlbTranscludeDirective = previousCompileContext.nonTlbTranscludeDirective, hasTranscludeDirective = false, hasElementTranscludeDirective = previousCompileContext.hasElementTranscludeDirective, $compileNode = templateAttrs.$$element = jqLite(compileNode), directive, directiveName, $template, replaceDirective = originalReplaceDirective, childTranscludeFn = transcludeFn, linkFn, directiveValue;
           // executes all directives on the current element
           for (var i = 0, ii = directives.length; i < ii; i++) {
             directive = directives[i];
@@ -14084,7 +14200,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             if (directiveValue = directive.transclude) {
               hasTranscludeDirective = true;
               // Special case ngIf and ngRepeat so that we don't complain about duplicate transclusion.
-              // This option should only be used by directives that know how to how to safely handle element transclusion,
+              // This option should only be used by directives that know how to safely handle element transclusion,
               // where the transcluded nodes are added or replaced after linking.
               if (!directive.$$tlb) {
                 assertNoDuplicate('transclusion', nonTlbTranscludeDirective, directive, $compileNode);
@@ -14112,7 +14228,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
               directiveValue = denormalizeTemplate(directiveValue);
               if (directive.replace) {
                 replaceDirective = directive;
-                $template = jqLite('<div>' + trim(directiveValue) + '</div>').contents();
+                $template = directiveTemplateContents(directiveValue);
                 compileNode = $template[0];
                 if ($template.length != 1 || compileNode.nodeType !== 1) {
                   throw $compileMinErr('tplrt', 'Template for directive \'{0}\' must have exactly one root element. {1}', directiveName, '');
@@ -14168,6 +14284,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           }
           nodeLinkFn.scope = newScopeDirective && newScopeDirective.scope === true;
           nodeLinkFn.transclude = hasTranscludeDirective && childTranscludeFn;
+          previousCompileContext.hasElementTranscludeDirective = hasElementTranscludeDirective;
           // might be normal or delayed nodeLinkFn depending on if templateUrl is present
           return nodeLinkFn;
           ////////////////////
@@ -14384,7 +14501,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *   * `A': attribute
      *   * `C`: class
      *   * `M`: comment
-     * @returns true if directive was added.
+     * @returns {boolean} true if directive was added.
      */
         function addDirective(tDirectives, name, location, maxPriority, ignoreDirective, startAttrName, endAttrName) {
           if (name === ignoreDirective)
@@ -14446,6 +14563,23 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             }
           });
         }
+        function directiveTemplateContents(template) {
+          var type;
+          template = trim(template);
+          if (type = TABLE_CONTENT_REGEXP.exec(template)) {
+            type = type[1].toLowerCase();
+            var table = jqLite('<table>' + template + '</table>');
+            if (/(thead|tbody|tfoot)/.test(type)) {
+              return table.children(type);
+            }
+            table = table.children('tbody');
+            if (type === 'tr') {
+              return table.children('tr');
+            }
+            return table.children('tr').contents();
+          }
+          return jqLite('<div>' + template + '</div>').contents();
+        }
         function compileTemplateUrl(directives, $compileNode, tAttrs, $rootElement, childTranscludeFn, preLinkFns, postLinkFns, previousCompileContext) {
           var linkQueue = [], afterTemplateNodeLinkFn, afterTemplateChildLinkFn, beforeTemplateCompileNode = $compileNode[0], origAsyncDirective = directives.shift(),
             // The fact that we have to copy and patch the directive seems wrong!
@@ -14460,7 +14594,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             var compileNode, tempTemplateAttrs, $template, childBoundTranscludeFn;
             content = denormalizeTemplate(content);
             if (origAsyncDirective.replace) {
-              $template = jqLite('<div>' + trim(content) + '</div>').contents();
+              $template = directiveTemplateContents(content);
               compileNode = $template[0];
               if ($template.length != 1 || compileNode.nodeType !== 1) {
                 throw $compileMinErr('tplrt', 'Template for directive \'{0}\' must have exactly one root element. {1}', origAsyncDirective.name, templateUrl);
@@ -14488,9 +14622,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             while (linkQueue.length) {
               var scope = linkQueue.shift(), beforeTemplateLinkNode = linkQueue.shift(), linkRootElement = linkQueue.shift(), boundTranscludeFn = linkQueue.shift(), linkNode = $compileNode[0];
               if (beforeTemplateLinkNode !== beforeTemplateCompileNode) {
-                // it was cloned therefore we have to clone as well.
-                linkNode = jqLiteClone(compileNode);
+                var oldClasses = beforeTemplateLinkNode.className;
+                if (!(previousCompileContext.hasElementTranscludeDirective && origAsyncDirective.replace)) {
+                  // it was cloned therefore we have to clone as well.
+                  linkNode = jqLiteClone(compileNode);
+                }
                 replaceWith(linkRootElement, jqLite(beforeTemplateLinkNode), linkNode);
+                // Copy in CSS classes from original node
+                safeAddClass(jqLite(linkNode), oldClasses);
               }
               if (afterTemplateNodeLinkFn.transclude) {
                 childBoundTranscludeFn = createBoundTranscludeFn(scope, afterTemplateNodeLinkFn.transclude);
@@ -14670,8 +14809,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     return camelCase(name.replace(PREFIX_REGEXP, ''));
   }
   /**
- * @ngdoc object
- * @name ng.$compile.directive.Attributes
+ * @ngdoc type
+ * @name $compile.directive.Attributes
  *
  * @description
  * A shared object between directive compile / linking functions which contains normalized DOM
@@ -14682,15 +14821,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc property
- * @name ng.$compile.directive.Attributes#$attr
- * @propertyOf ng.$compile.directive.Attributes
+ * @name $compile.directive.Attributes#$attr
  * @returns {object} A map of DOM element attribute names to the normalized name. This is
  *                   needed to do reverse lookup from normalized name back to actual name.
  */
   /**
- * @ngdoc function
- * @name ng.$compile.directive.Attributes#$set
- * @methodOf ng.$compile.directive.Attributes
+ * @ngdoc method
+ * @name $compile.directive.Attributes#$set
  * @function
  *
  * @description
@@ -14723,21 +14860,20 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     return values;
   }
   /**
- * @ngdoc object
- * @name ng.$controllerProvider
+ * @ngdoc provider
+ * @name $controllerProvider
  * @description
  * The {@link ng.$controller $controller service} is used by Angular to create new
  * controllers.
  *
  * This provider allows controller registration via the
- * {@link ng.$controllerProvider#methods_register register} method.
+ * {@link ng.$controllerProvider#register register} method.
  */
   function $ControllerProvider() {
     var controllers = {}, CNTRL_REG = /^(\S+)(\s+as\s+(\w+))?$/;
     /**
-   * @ngdoc function
-   * @name ng.$controllerProvider#register
-   * @methodOf ng.$controllerProvider
+   * @ngdoc method
+   * @name $controllerProvider#register
    * @param {string|Object} name Controller name, or an object map of controllers where the keys are
    *    the names and the values are the constructors.
    * @param {Function|Array} constructor Controller constructor fn (optionally decorated with DI
@@ -14756,8 +14892,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       '$window',
       function ($injector, $window) {
         /**
-     * @ngdoc function
-     * @name ng.$controller
+     * @ngdoc service
+     * @name $controller
      * @requires $injector
      *
      * @param {Function|string} constructor If called with a function then it's considered to be the
@@ -14774,9 +14910,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      * @description
      * `$controller` service is responsible for instantiating controllers.
      *
-     * It's just a simple call to {@link AUTO.$injector $injector}, but extracted into
-     * a service, so that one can override this service with {@link https://gist.github.com/1649788
-     * BC version}.
+     * It's just a simple call to {@link auto.$injector $injector}, but extracted into
+     * a service, so that one can override this service with [BC version](https://gist.github.com/1649788).
      */
         return function (expression, locals) {
           var instance, match, constructor, identifier;
@@ -14798,12 +14933,28 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   }
   /**
- * @ngdoc object
- * @name ng.$document
+ * @ngdoc service
+ * @name $document
  * @requires $window
  *
  * @description
  * A {@link angular.element jQuery or jqLite} wrapper for the browser's `window.document` object.
+ *
+ * @example
+   <example>
+     <file name="index.html">
+       <div ng-controller="MainCtrl">
+         <p>$document title: <b ng-bind="title"></b></p>
+         <p>window.document title: <b ng-bind="windowTitle"></b></p>
+       </div>
+     </file>
+     <file name="script.js">
+       function MainCtrl($scope, $document) {
+         $scope.title = $document[0].title;
+         $scope.windowTitle = angular.element(window.document)[0].title;
+       }
+     </file>
+   </example>
  */
   function $DocumentProvider() {
     this.$get = [
@@ -14814,29 +14965,29 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   }
   /**
- * @ngdoc function
- * @name ng.$exceptionHandler
- * @requires $log
+ * @ngdoc service
+ * @name $exceptionHandler
+ * @requires ng.$log
  *
  * @description
  * Any uncaught exception in angular expressions is delegated to this service.
  * The default implementation simply delegates to `$log.error` which logs it into
  * the browser console.
- * 
+ *
  * In unit tests, if `angular-mocks.js` is loaded, this service is overridden by
  * {@link ngMock.$exceptionHandler mock $exceptionHandler} which aids in testing.
  *
  * ## Example:
- * 
- * <pre>
+ *
+ * ```js
  *   angular.module('exceptionOverride', []).factory('$exceptionHandler', function () {
  *     return function (exception, cause) {
  *       exception.message += ' (caused by "' + cause + '")';
  *       throw exception;
  *     };
  *   });
- * </pre>
- * 
+ * ```
+ *
  * This example will override the normal action of `$exceptionHandler`, to make angular
  * exceptions fail hard when they happen, instead of just logging to the console.
  *
@@ -14909,7 +15060,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @param {*} data Data to transform.
  * @param {function(string=)} headers Http headers getter fn.
- * @param {(function|Array.<function>)} fns Function or an array of functions.
+ * @param {(Function|Array.<Function>)} fns Function or an array of functions.
  * @returns {*} Transformed data.
  */
   function transformData(data, headers, fns) {
@@ -14936,7 +15087,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             return data;
           }],
         transformRequest: [function (d) {
-            return isObject(d) && !isFile(d) ? toJson(d) : d;
+            return isObject(d) && !isFile(d) && !isBlob(d) ? toJson(d) : d;
           }],
         headers: {
           common: { 'Accept': 'application/json, text/plain, */*' },
@@ -14992,10 +15143,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           });
         });
         /**
-     * @ngdoc function
-     * @name ng.$http
-     * @requires $httpBackend
-     * @requires $browser
+     * @ngdoc service
+     * @kind function
+     * @name $http
+     * @requires ng.$httpBackend
      * @requires $cacheFactory
      * @requires $rootScope
      * @requires $q
@@ -15003,8 +15154,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *
      * @description
      * The `$http` service is a core Angular service that facilitates communication with the remote
-     * HTTP servers via the browser's {@link https://developer.mozilla.org/en/xmlhttprequest
-     * XMLHttpRequest} object or via {@link http://en.wikipedia.org/wiki/JSONP JSONP}.
+     * HTTP servers via the browser's [XMLHttpRequest](https://developer.mozilla.org/en/xmlhttprequest)
+     * object or via [JSONP](http://en.wikipedia.org/wiki/JSONP).
      *
      * For unit testing applications that use `$http` service, see
      * {@link ngMock.$httpBackend $httpBackend mock}.
@@ -15022,7 +15173,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      * that is used to generate an HTTP request and returns  a {@link ng.$q promise}
      * with two $http specific methods: `success` and `error`.
      *
-     * <pre>
+     * ```js
      *   $http({method: 'GET', url: '/someUrl'}).
      *     success(function(data, status, headers, config) {
      *       // this callback will be called asynchronously
@@ -15032,7 +15183,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *       // called asynchronously if an error occurs
      *       // or server returns response with an error status.
      *     });
-     * </pre>
+     * ```
      *
      * Since the returned value of calling the $http function is a `promise`, you can also use
      * the `then` method to register callbacks, and these callbacks will receive a single argument –
@@ -15044,53 +15195,35 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      * XMLHttpRequest will transparently follow it, meaning that the error callback will not be
      * called for such responses.
      *
-     * # Calling $http from outside AngularJS
-     * The `$http` service will not actually send the request until the next `$digest()` is
-     * executed. Normally this is not an issue, since almost all the time your call to `$http` will
-     * be from within a `$apply()` block.
-     * If you are calling `$http` from outside Angular, then you should wrap it in a call to
-     * `$apply` to cause a $digest to occur and also to handle errors in the block correctly.
-     *
-     * ```
-     * $scope.$apply(function() {
-     *   $http(...);
-     * });
-     * ```
-     *
      * # Writing Unit Tests that use $http
-     * When unit testing you are mostly responsible for scheduling the `$digest` cycle. If you do
-     * not trigger a `$digest` before calling `$httpBackend.flush()` then the request will not have
-     * been made and `$httpBackend.expect(...)` expectations will fail.  The solution is to run the
-     * code that calls the `$http()` method inside a $apply block as explained in the previous
-     * section.
+     * When unit testing (using {@link ngMock ngMock}), it is necessary to call
+     * {@link ngMock.$httpBackend#flush $httpBackend.flush()} to flush each pending
+     * request using trained responses.
      *
      * ```
      * $httpBackend.expectGET(...);
-     * $scope.$apply(function() {
-     *   $http.get(...);
-     * });
+     * $http.get(...);
      * $httpBackend.flush();
      * ```
      *
      * # Shortcut methods
      *
-     * Since all invocations of the $http service require passing in an HTTP method and URL, and
-     * POST/PUT requests require request data to be provided as well, shortcut methods
-     * were created:
+     * Shortcut methods are also available. All shortcut methods require passing in the URL, and
+     * request data must be passed in for POST/PUT requests.
      *
-     * <pre>
+     * ```js
      *   $http.get('/someUrl').success(successCallback);
      *   $http.post('/someUrl', data).success(successCallback);
-     * </pre>
+     * ```
      *
      * Complete list of shortcut methods:
      *
-     * - {@link ng.$http#methods_get $http.get}
-     * - {@link ng.$http#methods_head $http.head}
-     * - {@link ng.$http#methods_post $http.post}
-     * - {@link ng.$http#methods_put $http.put}
-     * - {@link ng.$http#methods_delete $http.delete}
-     * - {@link ng.$http#methods_jsonp $http.jsonp}
+     * - {@link ng.$http#get $http.get}
+     * - {@link ng.$http#head $http.head}
+     * - {@link ng.$http#post $http.post}
+     * - {@link ng.$http#put $http.put}
+     * - {@link ng.$http#delete $http.delete}
+     * - {@link ng.$http#jsonp $http.jsonp}
      *
      *
      * # Setting HTTP Headers
@@ -15206,7 +15339,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *     resolved with a rejection.
      *
      *
-     * <pre>
+     * ```js
      *   // register the interceptor as a service
      *   $provide.factory('myHttpInterceptor', function($q, dependency1, dependency2) {
      *     return {
@@ -15259,7 +15392,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *       }
      *     };
      *   });
-     * </pre>
+     * ```
      *
      * # Response interceptors (DEPRECATED)
      *
@@ -15277,7 +15410,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      * injected with dependencies (if specified) and returns the interceptor  — a function that
      * takes a {@link ng.$q promise} and returns the original or a new promise.
      *
-     * <pre>
+     * ```js
      *   // register the interceptor as a service
      *   $provide.factory('myHttpInterceptor', function($q, dependency1, dependency2) {
      *     return function(promise) {
@@ -15303,16 +15436,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *       // same as above
      *     }
      *   });
-     * </pre>
+     * ```
      *
      *
      * # Security Considerations
      *
      * When designing web applications, consider security threats from:
      *
-     * - {@link http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-     *   JSON vulnerability}
-     * - {@link http://en.wikipedia.org/wiki/Cross-site_request_forgery XSRF}
+     * - [JSON vulnerability](http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx)
+     * - [XSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery)
      *
      * Both server and the client must cooperate in order to eliminate these threats. Angular comes
      * pre-configured with strategies that address these issues, but for this to work backend server
@@ -15320,29 +15452,29 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *
      * ## JSON Vulnerability Protection
      *
-     * A {@link http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-     * JSON vulnerability} allows third party website to turn your JSON resource URL into
-     * {@link http://en.wikipedia.org/wiki/JSONP JSONP} request under some conditions. To
+     * A [JSON vulnerability](http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx)
+     * allows third party website to turn your JSON resource URL into
+     * [JSONP](http://en.wikipedia.org/wiki/JSONP) request under some conditions. To
      * counter this your server can prefix all JSON requests with following string `")]}',\n"`.
      * Angular will automatically strip the prefix before processing it as JSON.
      *
      * For example if your server needs to return:
-     * <pre>
+     * ```js
      * ['one','two']
-     * </pre>
+     * ```
      *
      * which is vulnerable to attack, your server can return:
-     * <pre>
+     * ```js
      * )]}',
      * ['one','two']
-     * </pre>
+     * ```
      *
      * Angular will strip the prefix, before processing the JSON.
      *
      *
      * ## Cross Site Request Forgery (XSRF) Protection
      *
-     * {@link http://en.wikipedia.org/wiki/Cross-site_request_forgery XSRF} is a technique by which
+     * [XSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) is a technique by which
      * an unauthorized site can gain your user's private data. Angular provides a mechanism
      * to counter XSRF. When performing XHR requests, the $http service reads a token from a cookie
      * (by default, `XSRF-TOKEN`) and sets it as an HTTP header (`X-XSRF-TOKEN`). Since only
@@ -15356,7 +15488,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      * that only JavaScript running on your domain could have sent the request. The token must be
      * unique for each user and must be verifiable by the server (to prevent the JavaScript from
      * making up its own tokens). We recommend that the token is a digest of your site's
-     * authentication cookie with a {@link https://en.wikipedia.org/wiki/Salt_(cryptography) salt}
+     * authentication cookie with a [salt](https://en.wikipedia.org/wiki/Salt_(cryptography))
      * for added security.
      *
      * The name of the headers can be specified using the xsrfHeaderName and xsrfCookieName
@@ -15393,10 +15525,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *    - **timeout** – `{number|Promise}` – timeout in milliseconds, or {@link ng.$q promise}
      *      that should abort the request when resolved.
      *    - **withCredentials** - `{boolean}` - whether to to set the `withCredentials` flag on the
-     *      XHR object. See {@link https://developer.mozilla.org/en/http_access_control#section_5
-     *      requests with credentials} for more information.
-     *    - **responseType** - `{string}` - see {@link
-     *      https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest#responseType requestType}.
+     *      XHR object. See [requests with credentials]https://developer.mozilla.org/en/http_access_control#section_5
+     *      for more information.
+     *    - **responseType** - `{string}` - see
+     *      [requestType](https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest#responseType).
      *
      * @returns {HttpPromise} Returns a {@link ng.$q promise} object with the
      *   standard `then` method and two http specific methods: `success` and `error`. The `then`
@@ -15425,14 +15557,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       <option>JSONP</option>
     </select>
     <input type="text" ng-model="url" size="80"/>
-    <button ng-click="fetch()">fetch</button><br>
-    <button ng-click="updateModel('GET', 'http-hello.html')">Sample GET</button>
-    <button
+    <button id="fetchbtn" ng-click="fetch()">fetch</button><br>
+    <button id="samplegetbtn" ng-click="updateModel('GET', 'http-hello.html')">Sample GET</button>
+    <button id="samplejsonpbtn"
       ng-click="updateModel('JSONP',
                     'http://angularjs.org/greet.php?callback=JSON_CALLBACK&name=Super%20Hero')">
       Sample JSONP
     </button>
-    <button
+    <button id="invalidjsonpbtn"
       ng-click="updateModel('JSONP', 'http://angularjs.org/doesntexist&callback=JSON_CALLBACK')">
         Invalid JSONP
       </button>
@@ -15469,33 +15601,41 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
 <file name="http-hello.html">
   Hello, $http!
 </file>
-<file name="scenario.js">
+<file name="protractor.js" type="protractor">
+  var status = element(by.binding('status'));
+  var data = element(by.binding('data'));
+  var fetchBtn = element(by.id('fetchbtn'));
+  var sampleGetBtn = element(by.id('samplegetbtn'));
+  var sampleJsonpBtn = element(by.id('samplejsonpbtn'));
+  var invalidJsonpBtn = element(by.id('invalidjsonpbtn'));
+
   it('should make an xhr GET request', function() {
-    element(':button:contains("Sample GET")').click();
-    element(':button:contains("fetch")').click();
-    expect(binding('status')).toBe('200');
-    expect(binding('data')).toMatch(/Hello, \$http!/);
+    sampleGetBtn.click();
+    fetchBtn.click();
+    expect(status.getText()).toMatch('200');
+    expect(data.getText()).toMatch(/Hello, \$http!/);
   });
 
   it('should make a JSONP request to angularjs.org', function() {
-    element(':button:contains("Sample JSONP")').click();
-    element(':button:contains("fetch")').click();
-    expect(binding('status')).toBe('200');
-    expect(binding('data')).toMatch(/Super Hero!/);
+    sampleJsonpBtn.click();
+    fetchBtn.click();
+    expect(status.getText()).toMatch('200');
+    expect(data.getText()).toMatch(/Super Hero!/);
   });
 
   it('should make JSONP request to invalid URL and invoke the error handler',
       function() {
-    element(':button:contains("Invalid JSONP")').click();
-    element(':button:contains("fetch")').click();
-    expect(binding('status')).toBe('0');
-    expect(binding('data')).toBe('Request failed');
+    invalidJsonpBtn.click();
+    fetchBtn.click();
+    expect(status.getText()).toMatch('0');
+    expect(data.getText()).toMatch('Request failed');
   });
 </file>
 </example>
      */
         function $http(requestConfig) {
           var config = {
+              method: 'get',
               transformRequest: defaults.transformRequest,
               transformResponse: defaults.transformResponse
             };
@@ -15597,8 +15737,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         $http.pendingRequests = [];
         /**
      * @ngdoc method
-     * @name ng.$http#get
-     * @methodOf ng.$http
+     * @name $http#get
      *
      * @description
      * Shortcut method to perform `GET` request.
@@ -15609,8 +15748,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      */
         /**
      * @ngdoc method
-     * @name ng.$http#delete
-     * @methodOf ng.$http
+     * @name $http#delete
      *
      * @description
      * Shortcut method to perform `DELETE` request.
@@ -15621,8 +15759,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      */
         /**
      * @ngdoc method
-     * @name ng.$http#head
-     * @methodOf ng.$http
+     * @name $http#head
      *
      * @description
      * Shortcut method to perform `HEAD` request.
@@ -15633,8 +15770,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      */
         /**
      * @ngdoc method
-     * @name ng.$http#jsonp
-     * @methodOf ng.$http
+     * @name $http#jsonp
      *
      * @description
      * Shortcut method to perform `JSONP` request.
@@ -15647,8 +15783,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         createShortMethods('get', 'delete', 'head', 'jsonp');
         /**
      * @ngdoc method
-     * @name ng.$http#post
-     * @methodOf ng.$http
+     * @name $http#post
      *
      * @description
      * Shortcut method to perform `POST` request.
@@ -15660,8 +15795,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      */
         /**
      * @ngdoc method
-     * @name ng.$http#put
-     * @methodOf ng.$http
+     * @name $http#put
      *
      * @description
      * Shortcut method to perform `PUT` request.
@@ -15674,8 +15808,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         createShortMethodsWithData('post', 'put');
         /**
          * @ngdoc property
-         * @name ng.$http#defaults
-         * @propertyOf ng.$http
+         * @name $http#defaults
          *
          * @description
          * Runtime equivalent of the `$httpProvider.defaults` property. Allows configuration of
@@ -15802,20 +15935,28 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
               parts.push(encodeUriQuery(key) + '=' + encodeUriQuery(v));
             });
           });
-          return url + (url.indexOf('?') == -1 ? '?' : '&') + parts.join('&');
+          if (parts.length > 0) {
+            url += (url.indexOf('?') == -1 ? '?' : '&') + parts.join('&');
+          }
+          return url;
         }
       }
     ];
   }
   function createXhr(method) {
-    // IE8 doesn't support PATCH method, but the ActiveX object does
-    /* global ActiveXObject */
-    return msie <= 8 && lowercase(method) === 'patch' ? new ActiveXObject('Microsoft.XMLHTTP') : new window.XMLHttpRequest();
+    //if IE and the method is not RFC2616 compliant, or if XMLHttpRequest
+    //is not available, try getting an ActiveXObject. Otherwise, use XMLHttpRequest
+    //if it is available
+    if (msie <= 8 && (!method.match(/^(get|post|head|put|delete|options)$/i) || !window.XMLHttpRequest)) {
+      return new window.ActiveXObject('Microsoft.XMLHTTP');
+    } else if (window.XMLHttpRequest) {
+      return new window.XMLHttpRequest();
+    }
+    throw minErr('$httpBackend')('noxhr', 'This browser does not support XMLHttpRequest.');
   }
   /**
- * @ngdoc object
- * @name ng.$httpBackend
- * @requires $browser
+ * @ngdoc service
+ * @name $httpBackend
  * @requires $window
  * @requires $document
  *
@@ -15893,7 +16034,20 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           xhr.withCredentials = true;
         }
         if (responseType) {
-          xhr.responseType = responseType;
+          try {
+            xhr.responseType = responseType;
+          } catch (e) {
+            // WebKit added support for the json responseType value on 09/03/2013
+            // https://bugs.webkit.org/show_bug.cgi?id=73648. Versions of Safari prior to 7 are
+            // known to throw when setting the value "json" as the response type. Other older
+            // browsers implementing the responseType
+            //
+            // The json response type can be ignored if not supported, because JSON payloads are
+            // parsed on the client-side regardless.
+            if (responseType !== 'json') {
+              throw e;
+            }
+          }
         }
         xhr.send(post || null);
       }
@@ -15912,9 +16066,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         timeoutId && $browserDefer.cancel(timeoutId);
         jsonpDone = xhr = null;
         // fix status code when it is 0 (0 status is undocumented).
-        // Occurs when accessing file resources.
-        // On Android 4.1 stock browser it occurs while retrieving files from application cache.
-        status = status === 0 ? response ? 200 : 404 : status;
+        // Occurs when accessing file resources or on Android 4.1 stock browser
+        // while retrieving files from application cache.
+        if (status === 0) {
+          status = response ? 200 : urlResolve(url).protocol == 'file' ? 404 : 0;
+        }
         // normalize IE bug (http://bugs.jquery.com/ticket/1450)
         status = status == 1223 ? 204 : status;
         callback(status, response, headersString);
@@ -15950,8 +16106,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   var $interpolateMinErr = minErr('$interpolate');
   /**
- * @ngdoc object
- * @name ng.$interpolateProvider
+ * @ngdoc provider
+ * @name $interpolateProvider
  * @function
  *
  * @description
@@ -15959,8 +16115,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * Used for configuring the interpolation markup. Defaults to `{{` and `}}`.
  *
  * @example
-<doc:example module="customInterpolationApp">
-<doc:source>
+<example module="customInterpolationApp">
+<file name="index.html">
 <script>
   var customInterpolationApp = angular.module('customInterpolationApp', []);
 
@@ -15977,21 +16133,20 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
 <div ng-app="App" ng-controller="DemoController as demo">
     //demo.label//
 </div>
-</doc:source>
-<doc:scenario>
- it('should interpolate binding with custom symbols', function() {
-  expect(binding('demo.label')).toBe('This binding is brought you by // interpolation symbols.');
- });
-</doc:scenario>
-</doc:example>
+</file>
+<file name="protractor.js" type="protractor">
+  it('should interpolate binding with custom symbols', function() {
+    expect(element(by.binding('demo.label')).getText()).toBe('This binding is brought you by // interpolation symbols.');
+  });
+</file>
+</example>
  */
   function $InterpolateProvider() {
     var startSymbol = '{{';
     var endSymbol = '}}';
     /**
    * @ngdoc method
-   * @name ng.$interpolateProvider#startSymbol
-   * @methodOf ng.$interpolateProvider
+   * @name $interpolateProvider#startSymbol
    * @description
    * Symbol to denote start of expression in the interpolated string. Defaults to `{{`.
    *
@@ -16008,8 +16163,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     };
     /**
    * @ngdoc method
-   * @name ng.$interpolateProvider#endSymbol
-   * @methodOf ng.$interpolateProvider
+   * @name $interpolateProvider#endSymbol
    * @description
    * Symbol to denote the end of expression in the interpolated string. Defaults to `}}`.
    *
@@ -16031,8 +16185,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       function ($parse, $exceptionHandler, $sce) {
         var startSymbolLength = startSymbol.length, endSymbolLength = endSymbol.length;
         /**
-     * @ngdoc function
-     * @name ng.$interpolate
+     * @ngdoc service
+     * @name $interpolate
      * @function
      *
      * @requires $parse
@@ -16046,11 +16200,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      * interpolation markup.
      *
      *
-       <pre>
-         var $interpolate = ...; // injected
-         var exp = $interpolate('Hello {{name | uppercase}}!');
-         expect(exp({name:'Angular'}).toEqual('Hello ANGULAR!');
-       </pre>
+     * ```js
+     *   var $interpolate = ...; // injected
+     *   var exp = $interpolate('Hello {{name | uppercase}}!');
+     *   expect(exp({name:'Angular'}).toEqual('Hello ANGULAR!');
+     * ```
      *
      *
      * @param {string} text The text with markup to interpolate.
@@ -16058,7 +16212,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      *    embedded expression in order to return an interpolation function. Strings with no
      *    embedded expression will return null for the interpolation function.
      * @param {string=} trustedContext when provided, the returned function passes the interpolated
-     *    result through {@link ng.$sce#methods_getTrusted $sce.getTrusted(interpolatedResult,
+     *    result through {@link ng.$sce#getTrusted $sce.getTrusted(interpolatedResult,
      *    trustedContext)} before returning it.  Refer to the {@link ng.$sce $sce} service that
      *    provides Strict Contextual Escaping for details.
      * @returns {function(context)} an interpolation function which is used to compute the
@@ -16130,8 +16284,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         }
         /**
      * @ngdoc method
-     * @name ng.$interpolate#startSymbol
-     * @methodOf ng.$interpolate
+     * @name $interpolate#startSymbol
      * @description
      * Symbol to denote the start of expression in the interpolated string. Defaults to `{{`.
      *
@@ -16145,15 +16298,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         };
         /**
      * @ngdoc method
-     * @name ng.$interpolate#endSymbol
-     * @methodOf ng.$interpolate
+     * @name $interpolate#endSymbol
      * @description
      * Symbol to denote the end of expression in the interpolated string. Defaults to `}}`.
      *
      * Use {@link ng.$interpolateProvider#endSymbol $interpolateProvider#endSymbol} to change
      * the symbol.
      *
-     * @returns {string} start symbol.
+     * @returns {string} end symbol.
      */
         $interpolate.endSymbol = function () {
           return endSymbol;
@@ -16170,8 +16322,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       function ($rootScope, $window, $q) {
         var intervals = {};
         /**
-      * @ngdoc function
-      * @name ng.$interval
+      * @ngdoc service
+      * @name $interval
       *
       * @description
       * Angular's wrapper for `window.setInterval`. The `fn` function is executed every `delay`
@@ -16183,10 +16335,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       * number of iterations that have run.
       * To cancel an interval, call `$interval.cancel(promise)`.
       *
-      * In tests you can use {@link ngMock.$interval#methods_flush `$interval.flush(millis)`} to
+      * In tests you can use {@link ngMock.$interval#flush `$interval.flush(millis)`} to
       * move forward by `millis` milliseconds and trigger any functions scheduled to run in that
       * time.
-      * 
+      *
       * <div class="alert alert-warning">
       * **Note**: Intervals created by this service must be explicitly destroyed when you are finished
       * with them.  In particular they are not automatically destroyed when a controller's scope or a
@@ -16200,101 +16352,102 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       * @param {number=} [count=0] Number of times to repeat. If not set, or 0, will repeat
       *   indefinitely.
       * @param {boolean=} [invokeApply=true] If set to `false` skips model dirty checking, otherwise
-      *   will invoke `fn` within the {@link ng.$rootScope.Scope#methods_$apply $apply} block.
+      *   will invoke `fn` within the {@link ng.$rootScope.Scope#$apply $apply} block.
       * @returns {promise} A promise which will be notified on each iteration.
       *
       * @example
-      <doc:example module="time">
-        <doc:source>
-          <script>
-            function Ctrl2($scope,$interval) {
-              $scope.format = 'M/d/yy h:mm:ss a';
-              $scope.blood_1 = 100;
-              $scope.blood_2 = 120;
-
-              var stop;
-              $scope.fight = function() {
-                // Don't start a new fight if we are already fighting
-                if ( angular.isDefined(stop) ) return;
-
-                stop = $interval(function() {
-                  if ($scope.blood_1 > 0 && $scope.blood_2 > 0) {
-                      $scope.blood_1 = $scope.blood_1 - 3;
-                      $scope.blood_2 = $scope.blood_2 - 4;
-                  } else {
-                      $scope.stopFight();
-                  }
-                }, 100);
-              };
-
-              $scope.stopFight = function() {
-                if (angular.isDefined(stop)) {
-                  $interval.cancel(stop);
-                  stop = undefined;
-                }
-              };
-
-              $scope.resetFight = function() {
-                $scope.blood_1 = 100;
-                $scope.blood_2 = 120;
-              }
-
-              $scope.$on('$destroy', function() {
-                // Make sure that the interval is destroyed too
-                $scope.stopFight();
-              });
-            }
-
-            angular.module('time', [])
-              // Register the 'myCurrentTime' directive factory method.
-              // We inject $interval and dateFilter service since the factory method is DI.
-              .directive('myCurrentTime', function($interval, dateFilter) {
-                // return the directive link function. (compile function not needed)
-                return function(scope, element, attrs) {
-                  var format,  // date format
-                  stopTime; // so that we can cancel the time updates
-
-                  // used to update the UI
-                  function updateTime() {
-                    element.text(dateFilter(new Date(), format));
-                  }
-
-                  // watch the expression, and update the UI on change.
-                  scope.$watch(attrs.myCurrentTime, function(value) {
-                    format = value;
-                    updateTime();
-                  });
-
-                  stopTime = $interval(updateTime, 1000);
-
-                  // listen on DOM destroy (removal) event, and cancel the next UI update
-                  // to prevent updating time ofter the DOM element was removed.
-                  element.bind('$destroy', function() {
-                    $interval.cancel(stopTime);
-                  });
-                }
-              });
-          </script>
-
-          <div>
-            <div ng-controller="Ctrl2">
-              Date format: <input ng-model="format"> <hr/>
-              Current time is: <span my-current-time="format"></span>
-              <hr/>
-              Blood 1 : <font color='red'>{{blood_1}}</font>
-              Blood 2 : <font color='red'>{{blood_2}}</font>
-              <button type="button" data-ng-click="fight()">Fight</button>
-              <button type="button" data-ng-click="stopFight()">StopFight</button>
-              <button type="button" data-ng-click="resetFight()">resetFight</button>
-            </div>
-          </div>
-
-        </doc:source>
-      </doc:example>
+      * <example module="time">
+      *   <file name="index.html">
+      *     <script>
+      *       function Ctrl2($scope,$interval) {
+      *         $scope.format = 'M/d/yy h:mm:ss a';
+      *         $scope.blood_1 = 100;
+      *         $scope.blood_2 = 120;
+      *
+      *         var stop;
+      *         $scope.fight = function() {
+      *           // Don't start a new fight if we are already fighting
+      *           if ( angular.isDefined(stop) ) return;
+      *
+      *           stop = $interval(function() {
+      *             if ($scope.blood_1 > 0 && $scope.blood_2 > 0) {
+      *                 $scope.blood_1 = $scope.blood_1 - 3;
+      *                 $scope.blood_2 = $scope.blood_2 - 4;
+      *             } else {
+      *                 $scope.stopFight();
+      *             }
+      *           }, 100);
+      *         };
+      *
+      *         $scope.stopFight = function() {
+      *           if (angular.isDefined(stop)) {
+      *             $interval.cancel(stop);
+      *             stop = undefined;
+      *           }
+      *         };
+      *
+      *         $scope.resetFight = function() {
+      *           $scope.blood_1 = 100;
+      *           $scope.blood_2 = 120;
+      *         }
+      *
+      *         $scope.$on('$destroy', function() {
+      *           // Make sure that the interval is destroyed too
+      *           $scope.stopFight();
+      *         });
+      *       }
+      *
+      *       angular.module('time', [])
+      *         // Register the 'myCurrentTime' directive factory method.
+      *         // We inject $interval and dateFilter service since the factory method is DI.
+      *         .directive('myCurrentTime', function($interval, dateFilter) {
+      *           // return the directive link function. (compile function not needed)
+      *           return function(scope, element, attrs) {
+      *             var format,  // date format
+      *             stopTime; // so that we can cancel the time updates
+      *
+      *             // used to update the UI
+      *             function updateTime() {
+      *               element.text(dateFilter(new Date(), format));
+      *             }
+      *
+      *             // watch the expression, and update the UI on change.
+      *             scope.$watch(attrs.myCurrentTime, function(value) {
+      *               format = value;
+      *               updateTime();
+      *             });
+      *
+      *             stopTime = $interval(updateTime, 1000);
+      *
+      *             // listen on DOM destroy (removal) event, and cancel the next UI update
+      *             // to prevent updating time ofter the DOM element was removed.
+      *             element.bind('$destroy', function() {
+      *               $interval.cancel(stopTime);
+      *             });
+      *           }
+      *         });
+      *     </script>
+      *
+      *     <div>
+      *       <div ng-controller="Ctrl2">
+      *         Date format: <input ng-model="format"> <hr/>
+      *         Current time is: <span my-current-time="format"></span>
+      *         <hr/>
+      *         Blood 1 : <font color='red'>{{blood_1}}</font>
+      *         Blood 2 : <font color='red'>{{blood_2}}</font>
+      *         <button type="button" data-ng-click="fight()">Fight</button>
+      *         <button type="button" data-ng-click="stopFight()">StopFight</button>
+      *         <button type="button" data-ng-click="resetFight()">resetFight</button>
+      *       </div>
+      *     </div>
+      *
+      *   </file>
+      * </example>
       */
         function interval(fn, delay, count, invokeApply) {
           var setInterval = $window.setInterval, clearInterval = $window.clearInterval, deferred = $q.defer(), promise = deferred.promise, iteration = 0, skipApply = isDefined(invokeApply) && !invokeApply;
-          count = isDefined(count) ? count : 0, promise.then(null, null, fn);
+          count = isDefined(count) ? count : 0;
+          promise.then(null, null, fn);
           promise.$$intervalId = setInterval(function tick() {
             deferred.notify(iteration++);
             if (count > 0 && iteration >= count) {
@@ -16309,14 +16462,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           return promise;
         }
         /**
-      * @ngdoc function
-      * @name ng.$interval#cancel
-      * @methodOf ng.$interval
+      * @ngdoc method
+      * @name $interval#cancel
       *
       * @description
       * Cancels a task associated with the `promise`.
       *
-      * @param {number} promise Promise returned by the `$interval` function.
+      * @param {promise} promise returned by the `$interval` function.
       * @returns {boolean} Returns `true` if the task was successfully canceled.
       */
         interval.cancel = function (promise) {
@@ -16333,8 +16485,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   }
   /**
- * @ngdoc object
- * @name ng.$locale
+ * @ngdoc service
+ * @name $locale
  *
  * @description
  * $locale service provides localization rules for various Angular components. As of right now the
@@ -16681,16 +16833,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     };
   }
   /**
- * @ngdoc object
- * @name ng.$location
+ * @ngdoc service
+ * @name $location
  *
- * @requires $browser
- * @requires $sniffer
  * @requires $rootElement
  *
  * @description
  * The $location service parses the URL in the browser address bar (based on the
- * {@link https://developer.mozilla.org/en/window.location window.location}) and makes the URL
+ * [window.location](https://developer.mozilla.org/en/window.location)) and makes the URL
  * available to your application. Changes to the URL in the address bar are reflected into
  * $location service and changes to $location are reflected into the browser address bar.
  *
@@ -16709,8 +16859,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * Services: Using $location}
  */
   /**
- * @ngdoc object
- * @name ng.$locationProvider
+ * @ngdoc provider
+ * @name $locationProvider
  * @description
  * Use the `$locationProvider` to configure how the application deep linking paths are stored.
  */
@@ -16718,8 +16868,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     var hashPrefix = '', html5Mode = false;
     /**
    * @ngdoc property
-   * @name ng.$locationProvider#hashPrefix
-   * @methodOf ng.$locationProvider
+   * @name $locationProvider#hashPrefix
    * @description
    * @param {string=} prefix Prefix for hash part (containing path and search)
    * @returns {*} current value if used as getter or itself (chaining) if used as setter
@@ -16734,8 +16883,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     };
     /**
    * @ngdoc property
-   * @name ng.$locationProvider#html5Mode
-   * @methodOf ng.$locationProvider
+   * @name $locationProvider#html5Mode
    * @description
    * @param {boolean=} mode Use HTML5 strategy if available.
    * @returns {*} current value if used as getter or itself (chaining) if used as setter
@@ -16750,8 +16898,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     };
     /**
    * @ngdoc event
-   * @name ng.$location#$locationChangeStart
-   * @eventOf ng.$location
+   * @name $location#$locationChangeStart
    * @eventType broadcast on root scope
    * @description
    * Broadcasted before a URL will change. This change can be prevented by calling
@@ -16765,8 +16912,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    */
     /**
    * @ngdoc event
-   * @name ng.$location#$locationChangeSuccess
-   * @eventOf ng.$location
+   * @name $location#$locationChangeSuccess
    * @eventType broadcast on root scope
    * @description
    * Broadcasted after a URL was changed.
@@ -16871,14 +17017,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   }
   /**
- * @ngdoc object
- * @name ng.$log
+ * @ngdoc service
+ * @name $log
  * @requires $window
  *
  * @description
  * Simple service for logging. Default implementation safely writes the message
  * into the browser's console (if present).
- * 
+ *
  * The main purpose of this service is to simplify debugging and troubleshooting.
  *
  * The default is to log `debug` messages. You can use
@@ -16906,8 +17052,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    </example>
  */
   /**
- * @ngdoc object
- * @name ng.$logProvider
+ * @ngdoc provider
+ * @name $logProvider
  * @description
  * Use the `$logProvider` to configure how the application logs messages
  */
@@ -16915,10 +17061,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     var debug = true, self = this;
     /**
    * @ngdoc property
-   * @name ng.$logProvider#debugEnabled
-   * @methodOf ng.$logProvider
+   * @name $logProvider#debugEnabled
    * @description
-   * @param {string=} flag enable or disable debug level messages
+   * @param {boolean=} flag enable or disable debug level messages
    * @returns {*} current value if used as getter or itself (chaining) if used as setter
    */
     this.debugEnabled = function (flag) {
@@ -17026,7 +17171,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         throw $parseMinErr('isecfn', 'Referencing Function in Angular expressions is disallowed! Expression: {0}', fullExpression);
       } else if (obj.document && obj.location && obj.alert && obj.setInterval) {
         throw $parseMinErr('isecwindow', 'Referencing the Window in Angular expressions is disallowed! Expression: {0}', fullExpression);
-      } else if (obj.children && (obj.nodeName || obj.on && obj.find)) {
+      } else if (obj.children && (obj.nodeName || obj.prop && obj.attr && obj.find)) {
         throw $parseMinErr('isecdom', 'Referencing DOM nodes in Angular expressions is disallowed! Expression: {0}', fullExpression);
       }
     }
@@ -17651,7 +17796,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       var field = this.expect().text;
       var getter = getterFn(field, this.options, this.text);
       return extend(function (scope, locals, self) {
-        return getter(self || object(scope, locals), locals);
+        return getter(self || object(scope, locals));
       }, {
         assign: function (scope, value, locals) {
           return setter(object(scope, locals), field, value, parser.text, parser.options);
@@ -17715,6 +17860,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       var allConstant = true;
       if (this.peekToken().text !== ']') {
         do {
+          if (this.peek(']')) {
+            // Support trailing commas per ES5.1.
+            break;
+          }
           var elementFn = this.expression();
           elementFns.push(elementFn);
           if (!elementFn.constant) {
@@ -17739,6 +17888,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       var allConstant = true;
       if (this.peekToken().text !== '}') {
         do {
+          if (this.peek('}')) {
+            // Support trailing commas per ES5.1.
+            break;
+          }
           var token = this.expect(), key = token.string || token.text;
           this.consume(':');
           var value = this.expression();
@@ -17992,15 +18145,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   ///////////////////////////////////
   /**
- * @ngdoc function
- * @name ng.$parse
- * @function
+ * @ngdoc service
+ * @name $parse
+ * @kind function
  *
  * @description
  *
  * Converts Angular {@link guide/expression expression} into a function.
  *
- * <pre>
+ * ```js
  *   var getter = $parse('user.name');
  *   var setter = getter.assign;
  *   var context = {user:{name:'angular'}};
@@ -18010,7 +18163,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   setter(context, 'newValue');
  *   expect(context.user.name).toEqual('newValue');
  *   expect(getter(context, locals)).toEqual('local');
- * </pre>
+ * ```
  *
  *
  * @param {string} expression String expression to compile.
@@ -18031,8 +18184,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  */
   /**
- * @ngdoc object
- * @name ng.$parseProvider
+ * @ngdoc provider
+ * @name $parseProvider
  * @function
  *
  * @description
@@ -18050,8 +18203,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    * @deprecated Promise unwrapping via $parse is deprecated and will be removed in the future.
    *
    * @ngdoc method
-   * @name ng.$parseProvider#unwrapPromises
-   * @methodOf ng.$parseProvider
+   * @name $parseProvider#unwrapPromises
    * @description
    *
    * **This feature is deprecated, see deprecation notes below for more info**
@@ -18103,8 +18255,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    * @deprecated Promise unwrapping via $parse is deprecated and will be removed in the future.
    *
    * @ngdoc method
-   * @name ng.$parseProvider#logPromiseWarnings
-   * @methodOf ng.$parseProvider
+   * @name $parseProvider#logPromiseWarnings
    * @description
    *
    * Controls whether Angular should log a warning on any encounter of a promise in an expression.
@@ -18164,7 +18315,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc service
- * @name ng.$q
+ * @name $q
  * @requires $rootScope
  *
  * @description
@@ -18177,9 +18328,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * From the perspective of dealing with error handling, deferred and promise APIs are to
  * asynchronous programming what `try`, `catch` and `throw` keywords are to synchronous programming.
  *
- * <pre>
- *   // for the purpose of this example let's assume that variables `$q` and `scope` are
- *   // available in the current lexical scope (they could have been injected or passed in).
+ * ```js
+ *   // for the purpose of this example let's assume that variables `$q`, `scope` and `okToGreet`
+ *   // are available in the current lexical scope (they could have been injected or passed in).
  *
  *   function asyncGreet(name) {
  *     var deferred = $q.defer();
@@ -18209,7 +18360,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   }, function(update) {
  *     alert('Got notification: ' + update);
  *   });
- * </pre>
+ * ```
  *
  * At first it might not be obvious why this extra complexity is worth the trouble. The payoff
  * comes in the way of guarantees that promise and deferred APIs make, see
@@ -18235,7 +18386,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   constructed via `$q.reject`, the promise will be rejected instead.
  * - `reject(reason)` – rejects the derived promise with the `reason`. This is equivalent to
  *   resolving it with a rejection constructed via `$q.reject`.
- * - `notify(value)` - provides updates on the status of the promises execution. This may be called
+ * - `notify(value)` - provides updates on the status of the promise's execution. This may be called
  *   multiple times before the promise is either resolved or rejected.
  *
  * **Properties**
@@ -18274,21 +18425,21 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  *   Because `finally` is a reserved word in JavaScript and reserved keywords are not supported as
  *   property names by ES3, you'll need to invoke the method like `promise['finally'](callback)` to
- *   make your code IE8 compatible.
+ *   make your code IE8 and Android 2.x compatible.
  *
  * # Chaining promises
  *
  * Because calling the `then` method of a promise returns a new derived promise, it is easily
  * possible to create a chain of promises:
  *
- * <pre>
+ * ```js
  *   promiseB = promiseA.then(function(result) {
  *     return result + 1;
  *   });
  *
  *   // promiseB will be resolved immediately after promiseA is resolved and its value
  *   // will be the result of promiseA incremented by 1
- * </pre>
+ * ```
  *
  * It is possible to create chains of any length and since a promise can be resolved with another
  * promise (which will defer its resolution further), it is possible to pause/defer resolution of
@@ -18308,7 +18459,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  *  # Testing
  *
- *  <pre>
+ *  ```js
  *    it('should simulate promise', inject(function($q, $rootScope) {
  *      var deferred = $q.defer();
  *      var promise = deferred.promise;
@@ -18328,7 +18479,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *      $rootScope.$apply();
  *      expect(resolvedValue).toEqual(123);
  *    }));
- *  </pre>
+ *  ```
  */
   function $QProvider() {
     this.$get = [
@@ -18344,16 +18495,17 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * Constructs a promise manager.
  *
- * @param {function(function)} nextTick Function for executing functions in the next turn.
+ * @param {function(Function)} nextTick Function for executing functions in the next turn.
  * @param {function(...*)} exceptionHandler Function into which unexpected exceptions are passed for
  *     debugging purposes.
  * @returns {object} Promise manager.
  */
   function qFactory(nextTick, exceptionHandler) {
     /**
-   * @ngdoc
-   * @name ng.$q#defer
-   * @methodOf ng.$q
+   * @ngdoc method
+   * @name $q#defer
+   * @function
+   *
    * @description
    * Creates a `Deferred` object which represents a task which will finish in the future.
    *
@@ -18379,7 +18531,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           }
         },
         reject: function (reason) {
-          deferred.resolve(reject(reason));
+          deferred.resolve(createInternalRejectedPromise(reason));
         },
         notify: function (progress) {
           if (pending) {
@@ -18486,9 +18638,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       };
     };
     /**
-   * @ngdoc
-   * @name ng.$q#reject
-   * @methodOf ng.$q
+   * @ngdoc method
+   * @name $q#reject
+   * @function
+   *
    * @description
    * Creates a promise that is resolved as rejected with the specified `reason`. This api should be
    * used to forward rejection in a chain of promises. If you are dealing with the last promise in
@@ -18500,7 +18653,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    * current promise, you have to "rethrow" the error by returning a rejection constructed via
    * `reject`.
    *
-   * <pre>
+   * ```js
    *   promiseB = promiseA.then(function(result) {
    *     // success: do something and resolve promiseB
    *     //          with the old or a new result
@@ -18515,12 +18668,17 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    *     }
    *     return $q.reject(reason);
    *   });
-   * </pre>
+   * ```
    *
    * @param {*} reason Constant, message, exception or an object representing the rejection reason.
    * @returns {Promise} Returns a promise that was already resolved as rejected with the `reason`.
    */
     var reject = function (reason) {
+      var result = defer();
+      result.reject(reason);
+      return result.promise;
+    };
+    var createInternalRejectedPromise = function (reason) {
       return {
         then: function (callback, errback) {
           var result = defer();
@@ -18537,9 +18695,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       };
     };
     /**
-   * @ngdoc
-   * @name ng.$q#when
-   * @methodOf ng.$q
+   * @ngdoc method
+   * @name $q#when
+   * @function
+   *
    * @description
    * Wraps an object that might be a value or a (3rd party) then-able promise into a $q promise.
    * This is useful when you are dealing with an object that might or might not be a promise, or if
@@ -18599,9 +18758,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       return reject(reason);
     }
     /**
-   * @ngdoc
-   * @name ng.$q#all
-   * @methodOf ng.$q
+   * @ngdoc method
+   * @name $q#all
+   * @function
+   *
    * @description
    * Combines multiple promises into a single promise that is resolved when all of the input
    * promises are resolved.
@@ -18640,6 +18800,32 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       all: all
     };
   }
+  function $$RAFProvider() {
+    //rAF
+    this.$get = [
+      '$window',
+      '$timeout',
+      function ($window, $timeout) {
+        var requestAnimationFrame = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame;
+        var cancelAnimationFrame = $window.cancelAnimationFrame || $window.webkitCancelAnimationFrame || $window.mozCancelAnimationFrame || $window.webkitCancelRequestAnimationFrame;
+        var rafSupported = !!requestAnimationFrame;
+        var raf = rafSupported ? function (fn) {
+            var id = requestAnimationFrame(fn);
+            return function () {
+              cancelAnimationFrame(id);
+            };
+          } : function (fn) {
+            var timer = $timeout(fn, 16.66, false);
+            // 1000 / 60 = 16.666
+            return function () {
+              $timeout.cancel(timer);
+            };
+          };
+        raf.supported = rafSupported;
+        return raf;
+      }
+    ];
+  }
   /**
  * DESIGN NOTES
  *
@@ -18665,16 +18851,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * are expensive to construct.
  */
   /**
- * @ngdoc object
- * @name ng.$rootScopeProvider
+ * @ngdoc provider
+ * @name $rootScopeProvider
  * @description
  *
  * Provider for the $rootScope service.
  */
   /**
- * @ngdoc function
- * @name ng.$rootScopeProvider#digestTtl
- * @methodOf ng.$rootScopeProvider
+ * @ngdoc method
+ * @name $rootScopeProvider#digestTtl
  * @description
  *
  * Sets the number of `$digest` iterations the scope should attempt to execute before giving up and
@@ -18693,8 +18878,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @param {number} limit The number of digest iterations.
  */
   /**
- * @ngdoc object
- * @name ng.$rootScope
+ * @ngdoc service
+ * @name $rootScope
  * @description
  *
  * Every application has a single root {@link ng.$rootScope.Scope scope}.
@@ -18720,23 +18905,23 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       '$browser',
       function ($injector, $exceptionHandler, $parse, $browser) {
         /**
-     * @ngdoc function
-     * @name ng.$rootScope.Scope
+     * @ngdoc type
+     * @name $rootScope.Scope
      *
      * @description
      * A root scope can be retrieved using the {@link ng.$rootScope $rootScope} key from the
-     * {@link AUTO.$injector $injector}. Child scopes are created using the
-     * {@link ng.$rootScope.Scope#methods_$new $new()} method. (Most scopes are created automatically when
+     * {@link auto.$injector $injector}. Child scopes are created using the
+     * {@link ng.$rootScope.Scope#$new $new()} method. (Most scopes are created automatically when
      * compiled HTML template is executed.)
      *
      * Here is a simple scope snippet to show how you can interact with the scope.
-     * <pre>
+     * ```html
      * <file src="./test/ng/rootScopeSpec.js" tag="docs1" />
-     * </pre>
+     * ```
      *
      * # Inheritance
      * A scope can inherit from a parent scope, as in this example:
-     * <pre>
+     * ```js
          var parent = $rootScope;
          var child = parent.$new();
 
@@ -18747,7 +18932,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          child.salutation = "Welcome";
          expect(child.salutation).toEqual('Welcome');
          expect(parent.salutation).toEqual('Hello');
-     * </pre>
+     * ```
      *
      *
      * @param {Object.<string, function()>=} providers Map of service factory which need to be
@@ -18772,8 +18957,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         }
         /**
      * @ngdoc property
-     * @name ng.$rootScope.Scope#$id
-     * @propertyOf ng.$rootScope.Scope
+     * @name $rootScope.Scope#$id
      * @returns {number} Unique scope ID (monotonically increasing alphanumeric sequence) useful for
      *   debugging.
      */
@@ -18847,17 +19031,26 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           },
           $watchCollection: function (obj, listener) {
             var self = this;
-            var oldValue;
+            // the current value, updated on each dirty-check run
             var newValue;
+            // a shallow copy of the newValue from the last dirty-check run,
+            // updated to match newValue during dirty-check run
+            var oldValue;
+            // a shallow copy of the newValue from when the last change happened
+            var veryOldValue;
+            // only track veryOldValue if the listener is asking for it
+            var trackVeryOldValue = listener.length > 1;
             var changeDetected = 0;
             var objGetter = $parse(obj);
             var internalArray = [];
             var internalObject = {};
+            var initRun = true;
             var oldLength = 0;
             function $watchCollectionWatch() {
               newValue = objGetter(self);
               var newLength, key;
               if (!isObject(newValue)) {
+                // if primitive
                 if (oldValue !== newValue) {
                   oldValue = newValue;
                   changeDetected++;
@@ -18877,7 +19070,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
                 }
                 // copy the items to oldValue and look for changes.
                 for (var i = 0; i < newLength; i++) {
-                  if (oldValue[i] !== newValue[i]) {
+                  var bothNaN = oldValue[i] !== oldValue[i] && newValue[i] !== newValue[i];
+                  if (!bothNaN && oldValue[i] !== newValue[i]) {
                     changeDetected++;
                     oldValue[i] = newValue[i];
                   }
@@ -18920,7 +19114,32 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
               return changeDetected;
             }
             function $watchCollectionAction() {
-              listener(newValue, oldValue, self);
+              if (initRun) {
+                initRun = false;
+                listener(newValue, newValue, self);
+              } else {
+                listener(newValue, veryOldValue, self);
+              }
+              // make a copy for the next time a collection is changed
+              if (trackVeryOldValue) {
+                if (!isObject(newValue)) {
+                  //primitive
+                  veryOldValue = newValue;
+                } else if (isArrayLike(newValue)) {
+                  veryOldValue = new Array(newValue.length);
+                  for (var i = 0; i < newValue.length; i++) {
+                    veryOldValue[i] = newValue[i];
+                  }
+                } else {
+                  // if object
+                  veryOldValue = {};
+                  for (var key in newValue) {
+                    if (hasOwnProperty.call(newValue, key)) {
+                      veryOldValue[key] = newValue[key];
+                    }
+                  }
+                }
+              }
             }
             return this.$watch($watchCollectionWatch, $watchCollectionAction);
           },
@@ -19308,7 +19527,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc service
- * @name ng.$sceDelegate
+ * @name $sceDelegate
  * @function
  *
  * @description
@@ -19328,20 +19547,20 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * can override it completely to change the behavior of `$sce`, the common case would
  * involve configuring the {@link ng.$sceDelegateProvider $sceDelegateProvider} instead by setting
  * your own whitelists and blacklists for trusting URLs used for loading AngularJS resources such as
- * templates.  Refer {@link ng.$sceDelegateProvider#methods_resourceUrlWhitelist
+ * templates.  Refer {@link ng.$sceDelegateProvider#resourceUrlWhitelist
  * $sceDelegateProvider.resourceUrlWhitelist} and {@link
- * ng.$sceDelegateProvider#methods_resourceUrlBlacklist $sceDelegateProvider.resourceUrlBlacklist}
+ * ng.$sceDelegateProvider#resourceUrlBlacklist $sceDelegateProvider.resourceUrlBlacklist}
  */
   /**
- * @ngdoc object
- * @name ng.$sceDelegateProvider
+ * @ngdoc provider
+ * @name $sceDelegateProvider
  * @description
  *
  * The `$sceDelegateProvider` provider allows developers to configure the {@link ng.$sceDelegate
  * $sceDelegate} service.  This allows one to get/set the whitelists and blacklists used to ensure
  * that the URLs used for sourcing Angular templates are safe.  Refer {@link
- * ng.$sceDelegateProvider#methods_resourceUrlWhitelist $sceDelegateProvider.resourceUrlWhitelist} and
- * {@link ng.$sceDelegateProvider#methods_resourceUrlBlacklist $sceDelegateProvider.resourceUrlBlacklist}
+ * ng.$sceDelegateProvider#resourceUrlWhitelist $sceDelegateProvider.resourceUrlWhitelist} and
+ * {@link ng.$sceDelegateProvider#resourceUrlBlacklist $sceDelegateProvider.resourceUrlBlacklist}
  *
  * For the general details about this service in Angular, read the main page for {@link ng.$sce
  * Strict Contextual Escaping (SCE)}.
@@ -19374,9 +19593,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     // Resource URLs can also be trusted by policy.
     var resourceUrlWhitelist = ['self'], resourceUrlBlacklist = [];
     /**
-   * @ngdoc function
-   * @name ng.sceDelegateProvider#resourceUrlWhitelist
-   * @methodOf ng.$sceDelegateProvider
+   * @ngdoc method
+   * @name $sceDelegateProvider#resourceUrlWhitelist
    * @function
    *
    * @param {Array=} whitelist When provided, replaces the resourceUrlWhitelist with the value
@@ -19403,9 +19621,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       return resourceUrlWhitelist;
     };
     /**
-   * @ngdoc function
-   * @name ng.sceDelegateProvider#resourceUrlBlacklist
-   * @methodOf ng.$sceDelegateProvider
+   * @ngdoc method
+   * @name $sceDelegateProvider#resourceUrlBlacklist
    * @function
    *
    * @param {Array=} blacklist When provided, replaces the resourceUrlBlacklist with the value
@@ -19498,12 +19715,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         byType[SCE_CONTEXTS.RESOURCE_URL] = generateHolderType(byType[SCE_CONTEXTS.URL]);
         /**
      * @ngdoc method
-     * @name ng.$sceDelegate#trustAs
-     * @methodOf ng.$sceDelegate
+     * @name $sceDelegate#trustAs
      *
      * @description
      * Returns an object that is trusted by angular for use in specified strict
-     * contextual escaping contexts (such as ng-html-bind-unsafe, ng-include, any src
+     * contextual escaping contexts (such as ng-bind-html, ng-include, any src
      * attribute interpolation, any dom event binding attribute interpolation
      * such as for onclick,  etc.) that uses the provided value.
      * See {@link ng.$sce $sce} for enabling strict contextual escaping.
@@ -19531,20 +19747,19 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         }
         /**
      * @ngdoc method
-     * @name ng.$sceDelegate#valueOf
-     * @methodOf ng.$sceDelegate
+     * @name $sceDelegate#valueOf
      *
      * @description
-     * If the passed parameter had been returned by a prior call to {@link ng.$sceDelegate#methods_trustAs
+     * If the passed parameter had been returned by a prior call to {@link ng.$sceDelegate#trustAs
      * `$sceDelegate.trustAs`}, returns the value that had been passed to {@link
-     * ng.$sceDelegate#methods_trustAs `$sceDelegate.trustAs`}.
+     * ng.$sceDelegate#trustAs `$sceDelegate.trustAs`}.
      *
      * If the passed parameter is not a value that had been returned by {@link
-     * ng.$sceDelegate#methods_trustAs `$sceDelegate.trustAs`}, returns it as-is.
+     * ng.$sceDelegate#trustAs `$sceDelegate.trustAs`}, returns it as-is.
      *
-     * @param {*} value The result of a prior {@link ng.$sceDelegate#methods_trustAs `$sceDelegate.trustAs`}
+     * @param {*} value The result of a prior {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs`}
      *      call or anything else.
-     * @returns {*} The `value` that was originally provided to {@link ng.$sceDelegate#methods_trustAs
+     * @returns {*} The `value` that was originally provided to {@link ng.$sceDelegate#trustAs
      *     `$sceDelegate.trustAs`} if `value` is the result of such a call.  Otherwise, returns
      *     `value` unchanged.
      */
@@ -19557,18 +19772,17 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         }
         /**
      * @ngdoc method
-     * @name ng.$sceDelegate#getTrusted
-     * @methodOf ng.$sceDelegate
+     * @name $sceDelegate#getTrusted
      *
      * @description
-     * Takes the result of a {@link ng.$sceDelegate#methods_trustAs `$sceDelegate.trustAs`} call and
+     * Takes the result of a {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs`} call and
      * returns the originally supplied value if the queried context type is a supertype of the
      * created type.  If this condition isn't satisfied, throws an exception.
      *
      * @param {string} type The kind of context in which this value is to be used.
-     * @param {*} maybeTrusted The result of a prior {@link ng.$sceDelegate#methods_trustAs
+     * @param {*} maybeTrusted The result of a prior {@link ng.$sceDelegate#trustAs
      *     `$sceDelegate.trustAs`} call.
-     * @returns {*} The value the was originally provided to {@link ng.$sceDelegate#methods_trustAs
+     * @returns {*} The value the was originally provided to {@link ng.$sceDelegate#trustAs
      *     `$sceDelegate.trustAs`} if valid in this context.  Otherwise, throws an exception.
      */
         function getTrusted(type, maybeTrusted) {
@@ -19602,8 +19816,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   }
   /**
- * @ngdoc object
- * @name ng.$sceProvider
+ * @ngdoc provider
+ * @name $sceProvider
  * @description
  *
  * The $sceProvider provider allows developers to configure the {@link ng.$sce $sce} service.
@@ -19615,7 +19829,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /* jshint maxlen: false*/
   /**
  * @ngdoc service
- * @name ng.$sce
+ * @name $sce
  * @function
  *
  * @description
@@ -19669,20 +19883,20 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * allowing only the files in a specific directory to do this.  Ensuring that the internal API
  * exposed by that code doesn't markup arbitrary values as safe then becomes a more manageable task.
  *
- * In the case of AngularJS' SCE service, one uses {@link ng.$sce#methods_trustAs $sce.trustAs} 
- * (and shorthand methods such as {@link ng.$sce#methods_trustAsHtml $sce.trustAsHtml}, etc.) to
+ * In the case of AngularJS' SCE service, one uses {@link ng.$sce#trustAs $sce.trustAs}
+ * (and shorthand methods such as {@link ng.$sce#trustAsHtml $sce.trustAsHtml}, etc.) to
  * obtain values that will be accepted by SCE / privileged contexts.
  *
  *
  * ## How does it work?
  *
- * In privileged contexts, directives and code will bind to the result of {@link ng.$sce#methods_getTrusted
+ * In privileged contexts, directives and code will bind to the result of {@link ng.$sce#getTrusted
  * $sce.getTrusted(context, value)} rather than to the value directly.  Directives use {@link
- * ng.$sce#methods_parse $sce.parseAs} rather than `$parse` to watch attribute bindings, which performs the
- * {@link ng.$sce#methods_getTrusted $sce.getTrusted} behind the scenes on non-constant literals.
+ * ng.$sce#parse $sce.parseAs} rather than `$parse` to watch attribute bindings, which performs the
+ * {@link ng.$sce#getTrusted $sce.getTrusted} behind the scenes on non-constant literals.
  *
  * As an example, {@link ng.directive:ngBindHtml ngBindHtml} uses {@link
- * ng.$sce#methods_parseAsHtml $sce.parseAsHtml(binding expression)}.  Here's the actual code (slightly
+ * ng.$sce#parseAsHtml $sce.parseAsHtml(binding expression)}.  Here's the actual code (slightly
  * simplified):
  *
  * <pre class="prettyprint">
@@ -19701,15 +19915,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * `templateUrl`'s specified by {@link guide/directive directives}.
  *
  * By default, Angular only loads templates from the same domain and protocol as the application
- * document.  This is done by calling {@link ng.$sce#methods_getTrustedResourceUrl
+ * document.  This is done by calling {@link ng.$sce#getTrustedResourceUrl
  * $sce.getTrustedResourceUrl} on the template URL.  To load templates from other domains and/or
- * protocols, you may either either {@link ng.$sceDelegateProvider#methods_resourceUrlWhitelist whitelist
- * them} or {@link ng.$sce#methods_trustAsResourceUrl wrap it} into a trusted value.
+ * protocols, you may either either {@link ng.$sceDelegateProvider#resourceUrlWhitelist whitelist
+ * them} or {@link ng.$sce#trustAsResourceUrl wrap it} into a trusted value.
  *
  * *Please note*:
  * The browser's
- * {@link https://code.google.com/p/browsersec/wiki/Part2#Same-origin_policy_for_XMLHttpRequest
- * Same Origin Policy} and {@link http://www.w3.org/TR/cors/ Cross-Origin Resource Sharing (CORS)}
+ * [Same Origin Policy](https://code.google.com/p/browsersec/wiki/Part2#Same-origin_policy_for_XMLHttpRequest)
+ * and [Cross-Origin Resource Sharing (CORS)](http://www.w3.org/TR/cors/)
  * policy apply in addition to this and may further restrict whether the template is successfully
  * loaded.  This means that without the right CORS policy, loading templates from a different domain
  * won't work on all browsers.  Also, loading templates from `file://` URL does not work on some
@@ -19720,18 +19934,18 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * It's important to remember that SCE only applies to interpolation expressions.
  *
  * If your expressions are constant literals, they're automatically trusted and you don't need to
- * call `$sce.trustAs` on them.  (e.g.
- * `<div ng-html-bind-unsafe="'<b>implicitly trusted</b>'"></div>`) just works.
+ * call `$sce.trustAs` on them (remember to include the `ngSanitize` module) (e.g.
+ * `<div ng-bind-html="'<b>implicitly trusted</b>'"></div>`) just works.
  *
  * Additionally, `a[href]` and `img[src]` automatically sanitize their URLs and do not pass them
- * through {@link ng.$sce#methods_getTrusted $sce.getTrusted}.  SCE doesn't play a role here.
+ * through {@link ng.$sce#getTrusted $sce.getTrusted}.  SCE doesn't play a role here.
  *
  * The included {@link ng.$sceDelegate $sceDelegate} comes with sane defaults to allow you to load
  * templates in `ng-include` from your application's domain without having to even know about SCE.
  * It blocks loading templates from other domains or loading templates over http from an https
  * served document.  You can change these by setting your own custom {@link
- * ng.$sceDelegateProvider#methods_resourceUrlWhitelist whitelists} and {@link
- * ng.$sceDelegateProvider#methods_resourceUrlBlacklist blacklists} for matching such URLs.
+ * ng.$sceDelegateProvider#resourceUrlWhitelist whitelists} and {@link
+ * ng.$sceDelegateProvider#resourceUrlBlacklist blacklists} for matching such URLs.
  *
  * This significantly reduces the overhead.  It is far easier to pay the small overhead and have an
  * application that's secure and can be audited to verify that with much more ease than bolting
@@ -19744,11 +19958,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * |---------------------|----------------|
  * | `$sce.HTML`         | For HTML that's safe to source into the application.  The {@link ng.directive:ngBindHtml ngBindHtml} directive uses this context for bindings. |
  * | `$sce.CSS`          | For CSS that's safe to source into the application.  Currently unused.  Feel free to use it in your own directives. |
- * | `$sce.URL`          | For URLs that are safe to follow as links.  Currently unused (`<a href=` and `<img src=` sanitize their urls and don't consititute an SCE context. |
+ * | `$sce.URL`          | For URLs that are safe to follow as links.  Currently unused (`<a href=` and `<img src=` sanitize their urls and don't constitute an SCE context. |
  * | `$sce.RESOURCE_URL` | For URLs that are not only safe to follow as links, but whose contens are also safe to include in your application.  Examples include `ng-include`, `src` / `ngSrc` bindings for tags other than `IMG` (e.g. `IFRAME`, `OBJECT`, etc.)  <br><br>Note that `$sce.RESOURCE_URL` makes a stronger statement about the URL than `$sce.URL` does and therefore contexts requiring values trusted for `$sce.RESOURCE_URL` can be used anywhere that values trusted for `$sce.URL` are required. |
  * | `$sce.JS`           | For JavaScript that is safe to execute in your application's context.  Currently unused.  Feel free to use it in your own directives. |
  *
- * ## Format of items in {@link ng.$sceDelegateProvider#methods_resourceUrlWhitelist resourceUrlWhitelist}/{@link ng.$sceDelegateProvider#methods_resourceUrlBlacklist Blacklist} <a name="resourceUrlPatternItem"></a>
+ * ## Format of items in {@link ng.$sceDelegateProvider#resourceUrlWhitelist resourceUrlWhitelist}/{@link ng.$sceDelegateProvider#resourceUrlBlacklist Blacklist} <a name="resourceUrlPatternItem"></a>
  *
  *  Each element in these arrays must be one of the following:
  *
@@ -19760,10 +19974,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *      being tested (substring matches are not good enough.)
  *    - There are exactly **two wildcard sequences** - `*` and `**`.  All other characters
  *      match themselves.
- *    - `*`: matches zero or more occurances of any character other than one of the following 6
+ *    - `*`: matches zero or more occurrences of any character other than one of the following 6
  *      characters: '`:`', '`/`', '`.`', '`?`', '`&`' and ';'.  It's a useful wildcard for use
  *      in a whitelist.
- *    - `**`: matches zero or more occurances of *any* character.  As such, it's not
+ *    - `**`: matches zero or more occurrences of *any* character.  As such, it's not
  *      not appropriate to use in for a scheme, domain, etc. as it would match too much.  (e.g.
  *      http://**.example.com/ would match http://evil.com/?ignore=.example.com/ and that might
  *      not have been the intention.)  It's usage at the very end of the path is ok.  (e.g.
@@ -19781,7 +19995,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *      matched against the **entire** *normalized / absolute URL* of the resource being tested
  *      (even when the RegExp did not have the `^` and `$` codes.)  In addition, any flags
  *      present on the RegExp (such as multiline, global, ignoreCase) are ignored.
- *    - If you are generating your Javascript from some other templating engine (not
+ *    - If you are generating your JavaScript from some other templating engine (not
  *      recommended, e.g. in issue [#4006](https://github.com/angular/angular.js/issues/4006)),
  *      remember to escape your regular expression (and be aware that you might need more than
  *      one level of escaping depending on your templating engine and the way you interpolated
@@ -19798,7 +20012,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * ## Show me an example using SCE.
  *
  * @example
-<example module="mySceApp">
+<example module="mySceApp" deps="angular-sanitize.js">
 <file name="index.html">
   <div ng-controller="myAppController as myCtrl">
     <i ng-bind-html="myCtrl.explicitlyTrustedHtml" id="explicitlyTrustedHtml"></i><br><br>
@@ -19842,13 +20056,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
 ]
 </file>
 
-<file name="scenario.js">
+<file name="protractor.js" type="protractor">
   describe('SCE doc demo', function() {
     it('should sanitize untrusted values', function() {
-      expect(element('.htmlComment').html()).toBe('<span>Is <i>anyone</i> reading this?</span>');
+      expect(element(by.css('.htmlComment')).getInnerHtml())
+          .toBe('<span>Is <i>anyone</i> reading this?</span>');
     });
+
     it('should NOT sanitize explicitly trusted values', function() {
-      expect(element('#explicitlyTrustedHtml').html()).toBe(
+      expect(element(by.id('explicitlyTrustedHtml')).getInnerHtml()).toBe(
           '<span onmouseover="this.textContent=&quot;Explicitly trusted HTML bypasses ' +
           'sanitization.&quot;">Hover over this text.</span>');
     });
@@ -19881,9 +20097,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   function $SceProvider() {
     var enabled = true;
     /**
-   * @ngdoc function
-   * @name ng.sceProvider#enabled
-   * @methodOf ng.$sceProvider
+   * @ngdoc method
+   * @name $sceProvider#enabled
    * @function
    *
    * @param {boolean=} value If provided, then enables/disables SCE.
@@ -19955,9 +20170,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         }
         var sce = copy(SCE_CONTEXTS);
         /**
-     * @ngdoc function
-     * @name ng.sce#isEnabled
-     * @methodOf ng.$sce
+     * @ngdoc method
+     * @name $sce#isEnabled
      * @function
      *
      * @return {Boolean} true if SCE is enabled, false otherwise.  If you want to set the value, you
@@ -19980,13 +20194,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         }
         /**
      * @ngdoc method
-     * @name ng.$sce#parse
-     * @methodOf ng.$sce
+     * @name $sce#parse
      *
      * @description
      * Converts Angular {@link guide/expression expression} into a function.  This is like {@link
      * ng.$parse $parse} and is identical when the expression is a literal constant.  Otherwise, it
-     * wraps the expression in a call to {@link ng.$sce#methods_getTrusted $sce.getTrusted(*type*,
+     * wraps the expression in a call to {@link ng.$sce#getTrusted $sce.getTrusted(*type*,
      * *result*)}
      *
      * @param {string} type The kind of SCE context in which this result will be used.
@@ -20010,13 +20223,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         };
         /**
      * @ngdoc method
-     * @name ng.$sce#trustAs
-     * @methodOf ng.$sce
+     * @name $sce#trustAs
      *
      * @description
-     * Delegates to {@link ng.$sceDelegate#methods_trustAs `$sceDelegate.trustAs`}.  As such,
-     * returns an objectthat is trusted by angular for use in specified strict contextual
-     * escaping contexts (such as ng-html-bind-unsafe, ng-include, any src attribute
+     * Delegates to {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs`}.  As such,
+     * returns an object that is trusted by angular for use in specified strict contextual
+     * escaping contexts (such as ng-bind-html, ng-include, any src attribute
      * interpolation, any dom event binding attribute interpolation such as for onclick,  etc.)
      * that uses the provided value.  See * {@link ng.$sce $sce} for enabling strict contextual
      * escaping.
@@ -20029,150 +20241,139 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#trustAsHtml
-     * @methodOf ng.$sce
+     * @name $sce#trustAsHtml
      *
      * @description
      * Shorthand method.  `$sce.trustAsHtml(value)` →
-     *     {@link ng.$sceDelegate#methods_trustAs `$sceDelegate.trustAs($sce.HTML, value)`}
+     *     {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs($sce.HTML, value)`}
      *
      * @param {*} value The value to trustAs.
-     * @returns {*} An object that can be passed to {@link ng.$sce#methods_getTrustedHtml
+     * @returns {*} An object that can be passed to {@link ng.$sce#getTrustedHtml
      *     $sce.getTrustedHtml(value)} to obtain the original value.  (privileged directives
      *     only accept expressions that are either literal constants or are the
-     *     return value of {@link ng.$sce#methods_trustAs $sce.trustAs}.)
+     *     return value of {@link ng.$sce#trustAs $sce.trustAs}.)
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#trustAsUrl
-     * @methodOf ng.$sce
+     * @name $sce#trustAsUrl
      *
      * @description
      * Shorthand method.  `$sce.trustAsUrl(value)` →
-     *     {@link ng.$sceDelegate#methods_trustAs `$sceDelegate.trustAs($sce.URL, value)`}
+     *     {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs($sce.URL, value)`}
      *
      * @param {*} value The value to trustAs.
-     * @returns {*} An object that can be passed to {@link ng.$sce#methods_getTrustedUrl
+     * @returns {*} An object that can be passed to {@link ng.$sce#getTrustedUrl
      *     $sce.getTrustedUrl(value)} to obtain the original value.  (privileged directives
      *     only accept expressions that are either literal constants or are the
-     *     return value of {@link ng.$sce#methods_trustAs $sce.trustAs}.)
+     *     return value of {@link ng.$sce#trustAs $sce.trustAs}.)
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#trustAsResourceUrl
-     * @methodOf ng.$sce
+     * @name $sce#trustAsResourceUrl
      *
      * @description
      * Shorthand method.  `$sce.trustAsResourceUrl(value)` →
-     *     {@link ng.$sceDelegate#methods_trustAs `$sceDelegate.trustAs($sce.RESOURCE_URL, value)`}
+     *     {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs($sce.RESOURCE_URL, value)`}
      *
      * @param {*} value The value to trustAs.
-     * @returns {*} An object that can be passed to {@link ng.$sce#methods_getTrustedResourceUrl
+     * @returns {*} An object that can be passed to {@link ng.$sce#getTrustedResourceUrl
      *     $sce.getTrustedResourceUrl(value)} to obtain the original value.  (privileged directives
      *     only accept expressions that are either literal constants or are the return
-     *     value of {@link ng.$sce#methods_trustAs $sce.trustAs}.)
+     *     value of {@link ng.$sce#trustAs $sce.trustAs}.)
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#trustAsJs
-     * @methodOf ng.$sce
+     * @name $sce#trustAsJs
      *
      * @description
      * Shorthand method.  `$sce.trustAsJs(value)` →
-     *     {@link ng.$sceDelegate#methods_trustAs `$sceDelegate.trustAs($sce.JS, value)`}
+     *     {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs($sce.JS, value)`}
      *
      * @param {*} value The value to trustAs.
-     * @returns {*} An object that can be passed to {@link ng.$sce#methods_getTrustedJs
+     * @returns {*} An object that can be passed to {@link ng.$sce#getTrustedJs
      *     $sce.getTrustedJs(value)} to obtain the original value.  (privileged directives
      *     only accept expressions that are either literal constants or are the
-     *     return value of {@link ng.$sce#methods_trustAs $sce.trustAs}.)
+     *     return value of {@link ng.$sce#trustAs $sce.trustAs}.)
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#getTrusted
-     * @methodOf ng.$sce
+     * @name $sce#getTrusted
      *
      * @description
-     * Delegates to {@link ng.$sceDelegate#methods_getTrusted `$sceDelegate.getTrusted`}.  As such,
-     * takes the result of a {@link ng.$sce#methods_trustAs `$sce.trustAs`}() call and returns the
+     * Delegates to {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted`}.  As such,
+     * takes the result of a {@link ng.$sce#trustAs `$sce.trustAs`}() call and returns the
      * originally supplied value if the queried context type is a supertype of the created type.
      * If this condition isn't satisfied, throws an exception.
      *
      * @param {string} type The kind of context in which this value is to be used.
-     * @param {*} maybeTrusted The result of a prior {@link ng.$sce#methods_trustAs `$sce.trustAs`}
+     * @param {*} maybeTrusted The result of a prior {@link ng.$sce#trustAs `$sce.trustAs`}
      *                         call.
      * @returns {*} The value the was originally provided to
-     *              {@link ng.$sce#methods_trustAs `$sce.trustAs`} if valid in this context.
+     *              {@link ng.$sce#trustAs `$sce.trustAs`} if valid in this context.
      *              Otherwise, throws an exception.
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#getTrustedHtml
-     * @methodOf ng.$sce
+     * @name $sce#getTrustedHtml
      *
      * @description
      * Shorthand method.  `$sce.getTrustedHtml(value)` →
-     *     {@link ng.$sceDelegate#methods_getTrusted `$sceDelegate.getTrusted($sce.HTML, value)`}
+     *     {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted($sce.HTML, value)`}
      *
      * @param {*} value The value to pass to `$sce.getTrusted`.
      * @returns {*} The return value of `$sce.getTrusted($sce.HTML, value)`
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#getTrustedCss
-     * @methodOf ng.$sce
+     * @name $sce#getTrustedCss
      *
      * @description
      * Shorthand method.  `$sce.getTrustedCss(value)` →
-     *     {@link ng.$sceDelegate#methods_getTrusted `$sceDelegate.getTrusted($sce.CSS, value)`}
+     *     {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted($sce.CSS, value)`}
      *
      * @param {*} value The value to pass to `$sce.getTrusted`.
      * @returns {*} The return value of `$sce.getTrusted($sce.CSS, value)`
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#getTrustedUrl
-     * @methodOf ng.$sce
+     * @name $sce#getTrustedUrl
      *
      * @description
      * Shorthand method.  `$sce.getTrustedUrl(value)` →
-     *     {@link ng.$sceDelegate#methods_getTrusted `$sceDelegate.getTrusted($sce.URL, value)`}
+     *     {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted($sce.URL, value)`}
      *
      * @param {*} value The value to pass to `$sce.getTrusted`.
      * @returns {*} The return value of `$sce.getTrusted($sce.URL, value)`
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#getTrustedResourceUrl
-     * @methodOf ng.$sce
+     * @name $sce#getTrustedResourceUrl
      *
      * @description
      * Shorthand method.  `$sce.getTrustedResourceUrl(value)` →
-     *     {@link ng.$sceDelegate#methods_getTrusted `$sceDelegate.getTrusted($sce.RESOURCE_URL, value)`}
+     *     {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted($sce.RESOURCE_URL, value)`}
      *
      * @param {*} value The value to pass to `$sceDelegate.getTrusted`.
      * @returns {*} The return value of `$sce.getTrusted($sce.RESOURCE_URL, value)`
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#getTrustedJs
-     * @methodOf ng.$sce
+     * @name $sce#getTrustedJs
      *
      * @description
      * Shorthand method.  `$sce.getTrustedJs(value)` →
-     *     {@link ng.$sceDelegate#methods_getTrusted `$sceDelegate.getTrusted($sce.JS, value)`}
+     *     {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted($sce.JS, value)`}
      *
      * @param {*} value The value to pass to `$sce.getTrusted`.
      * @returns {*} The return value of `$sce.getTrusted($sce.JS, value)`
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#parseAsHtml
-     * @methodOf ng.$sce
+     * @name $sce#parseAsHtml
      *
      * @description
      * Shorthand method.  `$sce.parseAsHtml(expression string)` →
-     *     {@link ng.$sce#methods_parse `$sce.parseAs($sce.HTML, value)`}
+     *     {@link ng.$sce#parse `$sce.parseAs($sce.HTML, value)`}
      *
      * @param {string} expression String expression to compile.
      * @returns {function(context, locals)} a function which represents the compiled expression:
@@ -20184,12 +20385,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#parseAsCss
-     * @methodOf ng.$sce
+     * @name $sce#parseAsCss
      *
      * @description
      * Shorthand method.  `$sce.parseAsCss(value)` →
-     *     {@link ng.$sce#methods_parse `$sce.parseAs($sce.CSS, value)`}
+     *     {@link ng.$sce#parse `$sce.parseAs($sce.CSS, value)`}
      *
      * @param {string} expression String expression to compile.
      * @returns {function(context, locals)} a function which represents the compiled expression:
@@ -20201,12 +20401,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#parseAsUrl
-     * @methodOf ng.$sce
+     * @name $sce#parseAsUrl
      *
      * @description
      * Shorthand method.  `$sce.parseAsUrl(value)` →
-     *     {@link ng.$sce#methods_parse `$sce.parseAs($sce.URL, value)`}
+     *     {@link ng.$sce#parse `$sce.parseAs($sce.URL, value)`}
      *
      * @param {string} expression String expression to compile.
      * @returns {function(context, locals)} a function which represents the compiled expression:
@@ -20218,12 +20417,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#parseAsResourceUrl
-     * @methodOf ng.$sce
+     * @name $sce#parseAsResourceUrl
      *
      * @description
      * Shorthand method.  `$sce.parseAsResourceUrl(value)` →
-     *     {@link ng.$sce#methods_parse `$sce.parseAs($sce.RESOURCE_URL, value)`}
+     *     {@link ng.$sce#parse `$sce.parseAs($sce.RESOURCE_URL, value)`}
      *
      * @param {string} expression String expression to compile.
      * @returns {function(context, locals)} a function which represents the compiled expression:
@@ -20235,12 +20433,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
      */
         /**
      * @ngdoc method
-     * @name ng.$sce#parseAsJs
-     * @methodOf ng.$sce
+     * @name $sce#parseAsJs
      *
      * @description
      * Shorthand method.  `$sce.parseAsJs(value)` →
-     *     {@link ng.$sce#methods_parse `$sce.parseAs($sce.JS, value)`}
+     *     {@link ng.$sce#parse `$sce.parseAs($sce.JS, value)`}
      *
      * @param {string} expression String expression to compile.
      * @returns {function(context, locals)} a function which represents the compiled expression:
@@ -20271,7 +20468,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   /**
  * !!! This is an undocumented "private" service !!!
  *
- * @name ng.$sniffer
+ * @name $sniffer
  * @requires $window
  * @requires $document
  *
@@ -20342,9 +20539,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       function ($rootScope, $browser, $q, $exceptionHandler) {
         var deferreds = {};
         /**
-      * @ngdoc function
-      * @name ng.$timeout
-      * @requires $browser
+      * @ngdoc service
+      * @name $timeout
       *
       * @description
       * Angular's wrapper for `window.setTimeout`. The `fn` function is wrapped into a try/catch
@@ -20362,10 +20558,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       * @param {function()} fn A function, whose execution should be delayed.
       * @param {number=} [delay=0] Delay in milliseconds.
       * @param {boolean=} [invokeApply=true] If set to `false` skips model dirty checking, otherwise
-      *   will invoke `fn` within the {@link ng.$rootScope.Scope#methods_$apply $apply} block.
+      *   will invoke `fn` within the {@link ng.$rootScope.Scope#$apply $apply} block.
       * @returns {Promise} Promise that will be resolved when the timeout is reached. The value this
       *   promise will be resolved with is the return value of the `fn` function.
-      * 
+      *
       */
         function timeout(fn, delay, invokeApply) {
           var deferred = $q.defer(), promise = deferred.promise, skipApply = isDefined(invokeApply) && !invokeApply, timeoutId;
@@ -20386,9 +20582,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           return promise;
         }
         /**
-      * @ngdoc function
-      * @name ng.$timeout#cancel
-      * @methodOf ng.$timeout
+      * @ngdoc method
+      * @name $timeout#cancel
       *
       * @description
       * Cancels a task associated with the `promise`. As a result of this, the promise will be
@@ -20504,8 +20699,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     return parsed.protocol === originUrl.protocol && parsed.host === originUrl.host;
   }
   /**
- * @ngdoc object
- * @name ng.$window
+ * @ngdoc service
+ * @name $window
  *
  * @description
  * A reference to the browser's `window` object. While `window`
@@ -20519,8 +20714,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * expression.
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
        <script>
          function Ctrl($scope, $window) {
            $scope.greeting = 'Hello, World!';
@@ -20533,29 +20728,29 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          <input type="text" ng-model="greeting" />
          <button ng-click="doGreeting(greeting)">ALERT</button>
        </div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
       it('should display the greeting in the input box', function() {
-       input('greeting').enter('Hello, E2E Tests');
+       element(by.model('greeting')).sendKeys('Hello, E2E Tests');
        // If we click the button it will block the test runner
        // element(':button').click();
       });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  */
   function $WindowProvider() {
     this.$get = valueFn(window);
   }
   /**
- * @ngdoc object
- * @name ng.$filterProvider
+ * @ngdoc provider
+ * @name $filterProvider
  * @description
  *
  * Filters are just functions which transform input to an output. However filters need to be
  * Dependency Injected. To achieve this a filter definition consists of a factory function which is
  * annotated with dependencies and is responsible for creating a filter function.
  *
- * <pre>
+ * ```js
  *   // Filter registration
  *   function MyModule($provide, $filterProvider) {
  *     // create a service to demonstrate injection (not always needed)
@@ -20574,12 +20769,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *       };
  *     });
  *   }
- * </pre>
+ * ```
  *
  * The filter function is registered with the `$injector` under the filter name suffix with
  * `Filter`.
- * 
- * <pre>
+ *
+ * ```js
  *   it('should be the same instance', inject(
  *     function($filterProvider) {
  *       $filterProvider.register('reverse', function(){
@@ -20589,7 +20784,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *     function($filter, reverseFilter) {
  *       expect($filter('reverse')).toBe(reverseFilter);
  *     });
- * </pre>
+ * ```
  *
  *
  * For more information about how angular filters work, and how to create your own filters, see
@@ -20597,17 +20792,16 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc method
- * @name ng.$filterProvider#register
- * @methodOf ng.$filterProvider
+ * @name $filterProvider#register
  * @description
  * Register filter factory function.
  *
  * @param {String} name Name of the filter.
- * @param {function} fn The filter factory function which is injectable.
+ * @param {Function} fn The filter factory function which is injectable.
  */
   /**
- * @ngdoc function
- * @name ng.$filter
+ * @ngdoc service
+ * @name $filter
  * @function
  * @description
  * Filters are used for formatting data displayed to the user.
@@ -20623,9 +20817,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   function $FilterProvider($provide) {
     var suffix = 'Filter';
     /**
-   * @ngdoc function
-   * @name ng.$controllerProvider#register
-   * @methodOf ng.$controllerProvider
+   * @ngdoc method
+   * @name $controllerProvider#register
    * @param {string|Object} name Name of the filter function, or an object map of filters where
    *    the keys are the filter names and the values are the filter factories.
    * @returns {Object} Registered filter instance, or if a map of filters was provided then a map
@@ -20675,7 +20868,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc filter
- * @name ng.filter:filter
+ * @name filter
  * @function
  *
  * @description
@@ -20719,8 +20912,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *       insensitive way.
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
        <div ng-init="friends = [{name:'John', phone:'555-1276'},
                                 {name:'Mary', phone:'800-BIG-MARY'},
                                 {name:'Mike', phone:'555-4321'},
@@ -20743,36 +20936,48 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
        Equality <input type="checkbox" ng-model="strict"><br>
        <table id="searchObjResults">
          <tr><th>Name</th><th>Phone</th></tr>
-         <tr ng-repeat="friend in friends | filter:search:strict">
-           <td>{{friend.name}}</td>
-           <td>{{friend.phone}}</td>
+         <tr ng-repeat="friendObj in friends | filter:search:strict">
+           <td>{{friendObj.name}}</td>
+           <td>{{friendObj.phone}}</td>
          </tr>
        </table>
-     </doc:source>
-     <doc:scenario>
-       it('should search across all fields when filtering with a string', function() {
-         input('searchText').enter('m');
-         expect(repeater('#searchTextResults tr', 'friend in friends').column('friend.name')).
-           toEqual(['Mary', 'Mike', 'Adam']);
+     </file>
+     <file name="protractor.js" type="protractor">
+       var expectFriendNames = function(expectedNames, key) {
+         element.all(by.repeater(key + ' in friends').column(key + '.name')).then(function(arr) {
+           arr.forEach(function(wd, i) {
+             expect(wd.getText()).toMatch(expectedNames[i]);
+           });
+         });
+       };
 
-         input('searchText').enter('76');
-         expect(repeater('#searchTextResults tr', 'friend in friends').column('friend.name')).
-           toEqual(['John', 'Julie']);
+       it('should search across all fields when filtering with a string', function() {
+         var searchText = element(by.model('searchText'));
+         searchText.clear();
+         searchText.sendKeys('m');
+         expectFriendNames(['Mary', 'Mike', 'Adam'], 'friend');
+
+         searchText.clear();
+         searchText.sendKeys('76');
+         expectFriendNames(['John', 'Julie'], 'friend');
        });
 
        it('should search in specific fields when filtering with a predicate object', function() {
-         input('search.$').enter('i');
-         expect(repeater('#searchObjResults tr', 'friend in friends').column('friend.name')).
-           toEqual(['Mary', 'Mike', 'Julie', 'Juliette']);
+         var searchAny = element(by.model('search.$'));
+         searchAny.clear();
+         searchAny.sendKeys('i');
+         expectFriendNames(['Mary', 'Mike', 'Julie', 'Juliette'], 'friendObj');
        });
        it('should use a equal comparison when comparator is true', function() {
-         input('search.name').enter('Julie');
-         input('strict').check();
-         expect(repeater('#searchObjResults tr', 'friend in friends').column('friend.name')).
-           toEqual(['Julie']);
+         var searchName = element(by.model('search.name'));
+         var strict = element(by.model('strict'));
+         searchName.clear();
+         searchName.sendKeys('Julie');
+         strict.click();
+         expectFriendNames(['Julie'], 'friendObj');
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  */
   function filterFilter() {
     return function (array, expression, comparator) {
@@ -20794,6 +20999,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           };
         } else {
           comparator = function (obj, text) {
+            if (obj && text && typeof obj === 'object' && typeof text === 'object') {
+              for (var objKey in obj) {
+                if (objKey.charAt(0) !== '$' && hasOwnProperty.call(obj, objKey) && comparator(obj[objKey], text[objKey])) {
+                  return true;
+                }
+              }
+              return false;
+            }
             text = ('' + text).toLowerCase();
             return ('' + obj).toLowerCase().indexOf(text) > -1;
           };
@@ -20846,7 +21059,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             if (typeof expression[path] == 'undefined')
               return;
             predicates.push(function (value) {
-              return search(path == '$' ? value : getter(value, path), expression[path]);
+              return search(path == '$' ? value : value && value[path], expression[path]);
             });
           }(key));
         }
@@ -20869,7 +21082,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc filter
- * @name ng.filter:currency
+ * @name currency
  * @function
  *
  * @description
@@ -20882,8 +21095,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.amount = 1234.56;
@@ -20891,22 +21104,28 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
        </script>
        <div ng-controller="Ctrl">
          <input type="number" ng-model="amount"> <br>
-         default currency symbol ($): {{amount | currency}}<br>
-         custom currency identifier (USD$): {{amount | currency:"USD$"}}
+         default currency symbol ($): <span id="currency-default">{{amount | currency}}</span><br>
+         custom currency identifier (USD$): <span>{{amount | currency:"USD$"}}</span>
        </div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should init with 1234.56', function() {
-         expect(binding('amount | currency')).toBe('$1,234.56');
-         expect(binding('amount | currency:"USD$"')).toBe('USD$1,234.56');
+         expect(element(by.id('currency-default')).getText()).toBe('$1,234.56');
+         expect(element(by.binding('amount | currency:"USD$"')).getText()).toBe('USD$1,234.56');
        });
        it('should update', function() {
-         input('amount').enter('-1234');
-         expect(binding('amount | currency')).toBe('($1,234.00)');
-         expect(binding('amount | currency:"USD$"')).toBe('(USD$1,234.00)');
+         if (browser.params.browser == 'safari') {
+           // Safari does not understand the minus key. See
+           // https://github.com/angular/protractor/issues/481
+           return;
+         }
+         element(by.model('amount')).clear();
+         element(by.model('amount')).sendKeys('-1234');
+         expect(element(by.id('currency-default')).getText()).toBe('($1,234.00)');
+         expect(element(by.binding('amount | currency:"USD$"')).getText()).toBe('(USD$1,234.00)');
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  */
   currencyFilter.$inject = ['$locale'];
   function currencyFilter($locale) {
@@ -20919,7 +21138,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc filter
- * @name ng.filter:number
+ * @name number
  * @function
  *
  * @description
@@ -20934,8 +21153,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @returns {string} Number rounded to decimalPlaces and places a “,” after each third digit.
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.val = 1234.56789;
@@ -20943,26 +21162,27 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
        </script>
        <div ng-controller="Ctrl">
          Enter number: <input ng-model='val'><br>
-         Default formatting: {{val | number}}<br>
-         No fractions: {{val | number:0}}<br>
-         Negative number: {{-val | number:4}}
+         Default formatting: <span id='number-default'>{{val | number}}</span><br>
+         No fractions: <span>{{val | number:0}}</span><br>
+         Negative number: <span>{{-val | number:4}}</span>
        </div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should format numbers', function() {
-         expect(binding('val | number')).toBe('1,234.568');
-         expect(binding('val | number:0')).toBe('1,235');
-         expect(binding('-val | number:4')).toBe('-1,234.5679');
+         expect(element(by.id('number-default')).getText()).toBe('1,234.568');
+         expect(element(by.binding('val | number:0')).getText()).toBe('1,235');
+         expect(element(by.binding('-val | number:4')).getText()).toBe('-1,234.5679');
        });
 
        it('should update', function() {
-         input('val').enter('3374.333');
-         expect(binding('val | number')).toBe('3,374.333');
-         expect(binding('val | number:0')).toBe('3,374');
-         expect(binding('-val | number:4')).toBe('-3,374.3330');
-       });
-     </doc:scenario>
-   </doc:example>
+         element(by.model('val')).clear();
+         element(by.model('val')).sendKeys('3374.333');
+         expect(element(by.id('number-default')).getText()).toBe('3,374.333');
+         expect(element(by.binding('val | number:0')).getText()).toBe('3,374');
+         expect(element(by.binding('-val | number:4')).getText()).toBe('-3,374.3330');
+      });
+     </file>
+   </example>
  */
   numberFilter.$inject = ['$locale'];
   function numberFilter($locale) {
@@ -20973,7 +21193,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   var DECIMAL_SEP = '.';
   function formatNumber(number, pattern, groupSep, decimalSep, fractionSize) {
-    if (isNaN(number) || !isFinite(number))
+    if (number == null || !isFinite(number) || isObject(number))
       return '';
     var isNegative = number < 0;
     number = Math.abs(number);
@@ -21098,7 +21318,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   var DATE_FORMATS_SPLIT = /((?:[^yMdHhmsaZE']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|d+|H+|h+|m+|s+|a|Z))(.*)/, NUMBER_STRING = /^\-?\d+$/;
   /**
  * @ngdoc filter
- * @name ng.filter:date
+ * @name date
  * @function
  *
  * @description
@@ -21156,26 +21376,26 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @returns {string} Formatted string or the input if input is not recognized as date/millis.
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
        <span ng-non-bindable>{{1288323623006 | date:'medium'}}</span>:
-           {{1288323623006 | date:'medium'}}<br>
+           <span>{{1288323623006 | date:'medium'}}</span><br>
        <span ng-non-bindable>{{1288323623006 | date:'yyyy-MM-dd HH:mm:ss Z'}}</span>:
-          {{1288323623006 | date:'yyyy-MM-dd HH:mm:ss Z'}}<br>
+          <span>{{1288323623006 | date:'yyyy-MM-dd HH:mm:ss Z'}}</span><br>
        <span ng-non-bindable>{{1288323623006 | date:'MM/dd/yyyy @ h:mma'}}</span>:
-          {{'1288323623006' | date:'MM/dd/yyyy @ h:mma'}}<br>
-     </doc:source>
-     <doc:scenario>
+          <span>{{'1288323623006' | date:'MM/dd/yyyy @ h:mma'}}</span><br>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should format date', function() {
-         expect(binding("1288323623006 | date:'medium'")).
+         expect(element(by.binding("1288323623006 | date:'medium'")).getText()).
             toMatch(/Oct 2\d, 2010 \d{1,2}:\d{2}:\d{2} (AM|PM)/);
-         expect(binding("1288323623006 | date:'yyyy-MM-dd HH:mm:ss Z'")).
+         expect(element(by.binding("1288323623006 | date:'yyyy-MM-dd HH:mm:ss Z'")).getText()).
             toMatch(/2010\-10\-2\d \d{2}:\d{2}:\d{2} (\-|\+)?\d{4}/);
-         expect(binding("'1288323623006' | date:'MM/dd/yyyy @ h:mma'")).
+         expect(element(by.binding("'1288323623006' | date:'MM/dd/yyyy @ h:mma'")).getText()).
             toMatch(/10\/2\d\/2010 @ \d{1,2}:\d{2}(AM|PM)/);
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  */
   dateFilter.$inject = ['$locale'];
   function dateFilter($locale) {
@@ -21235,7 +21455,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc filter
- * @name ng.filter:json
+ * @name json
  * @function
  *
  * @description
@@ -21248,17 +21468,17 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @returns {string} JSON string.
  *
  *
- * @example:
-   <doc:example>
-     <doc:source>
+ * @example
+   <example>
+     <file name="index.html">
        <pre>{{ {'name':'value'} | json }}</pre>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should jsonify filtered objects', function() {
-         expect(binding("{'name':'value'}")).toMatch(/\{\n  "name": ?"value"\n}/);
+         expect(element(by.binding("{'name':'value'}")).getText()).toMatch(/\{\n  "name": ?"value"\n}/);
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  *
  */
   function jsonFilter() {
@@ -21268,7 +21488,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc filter
- * @name ng.filter:lowercase
+ * @name lowercase
  * @function
  * @description
  * Converts string to lowercase.
@@ -21277,7 +21497,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   var lowercaseFilter = valueFn(lowercase);
   /**
  * @ngdoc filter
- * @name ng.filter:uppercase
+ * @name uppercase
  * @function
  * @description
  * Converts string to uppercase.
@@ -21285,8 +21505,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   var uppercaseFilter = valueFn(uppercase);
   /**
- * @ngdoc function
- * @name ng.filter:limitTo
+ * @ngdoc filter
+ * @name limitTo
  * @function
  *
  * @description
@@ -21295,16 +21515,16 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * the value and sign (positive or negative) of `limit`.
  *
  * @param {Array|string} input Source array or string to be limited.
- * @param {string|number} limit The length of the returned array or string. If the `limit` number 
+ * @param {string|number} limit The length of the returned array or string. If the `limit` number
  *     is positive, `limit` number of items from the beginning of the source array/string are copied.
- *     If the number is negative, `limit` number  of items from the end of the source array/string 
+ *     If the number is negative, `limit` number  of items from the end of the source array/string
  *     are copied. The `limit` will be trimmed if it exceeds `array.length`
  * @returns {Array|string} A new sub-array or substring of length `limit` or less if input array
  *     had less than `limit` elements.
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.numbers = [1,2,3,4,5,6,7,8,9];
@@ -21319,30 +21539,39 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          Limit {{letters}} to: <input type="integer" ng-model="letterLimit">
          <p>Output letters: {{ letters | limitTo:letterLimit }}</p>
        </div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
+       var numLimitInput = element(by.model('numLimit'));
+       var letterLimitInput = element(by.model('letterLimit'));
+       var limitedNumbers = element(by.binding('numbers | limitTo:numLimit'));
+       var limitedLetters = element(by.binding('letters | limitTo:letterLimit'));
+
        it('should limit the number array to first three items', function() {
-         expect(element('.doc-example-live input[ng-model=numLimit]').val()).toBe('3');
-         expect(element('.doc-example-live input[ng-model=letterLimit]').val()).toBe('3');
-         expect(binding('numbers | limitTo:numLimit')).toEqual('[1,2,3]');
-         expect(binding('letters | limitTo:letterLimit')).toEqual('abc');
+         expect(numLimitInput.getAttribute('value')).toBe('3');
+         expect(letterLimitInput.getAttribute('value')).toBe('3');
+         expect(limitedNumbers.getText()).toEqual('Output numbers: [1,2,3]');
+         expect(limitedLetters.getText()).toEqual('Output letters: abc');
        });
 
        it('should update the output when -3 is entered', function() {
-         input('numLimit').enter(-3);
-         input('letterLimit').enter(-3);
-         expect(binding('numbers | limitTo:numLimit')).toEqual('[7,8,9]');
-         expect(binding('letters | limitTo:letterLimit')).toEqual('ghi');
+         numLimitInput.clear();
+         numLimitInput.sendKeys('-3');
+         letterLimitInput.clear();
+         letterLimitInput.sendKeys('-3');
+         expect(limitedNumbers.getText()).toEqual('Output numbers: [7,8,9]');
+         expect(limitedLetters.getText()).toEqual('Output letters: ghi');
        });
 
        it('should not exceed the maximum size of input array', function() {
-         input('numLimit').enter(100);
-         input('letterLimit').enter(100);
-         expect(binding('numbers | limitTo:numLimit')).toEqual('[1,2,3,4,5,6,7,8,9]');
-         expect(binding('letters | limitTo:letterLimit')).toEqual('abcdefghi');
+         numLimitInput.clear();
+         numLimitInput.sendKeys('100');
+         letterLimitInput.clear();
+         letterLimitInput.sendKeys('100');
+         expect(limitedNumbers.getText()).toEqual('Output numbers: [1,2,3,4,5,6,7,8,9]');
+         expect(limitedLetters.getText()).toEqual('Output letters: abcdefghi');
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  */
   function limitToFilter() {
     return function (input, limit) {
@@ -21377,8 +21606,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     };
   }
   /**
- * @ngdoc function
- * @name ng.filter:orderBy
+ * @ngdoc filter
+ * @name orderBy
  * @function
  *
  * @description
@@ -21402,8 +21631,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @returns {Array} Sorted copy of the source array.
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.friends =
@@ -21433,31 +21662,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
            </tr>
          </table>
        </div>
-     </doc:source>
-     <doc:scenario>
-       it('should be reverse ordered by aged', function() {
-         expect(binding('predicate')).toBe('-age');
-         expect(repeater('table.friend', 'friend in friends').column('friend.age')).
-           toEqual(['35', '29', '21', '19', '10']);
-         expect(repeater('table.friend', 'friend in friends').column('friend.name')).
-           toEqual(['Adam', 'Julie', 'Mike', 'Mary', 'John']);
-       });
-
-       it('should reorder the table when user selects different predicate', function() {
-         element('.doc-example-live a:contains("Name")').click();
-         expect(repeater('table.friend', 'friend in friends').column('friend.name')).
-           toEqual(['Adam', 'John', 'Julie', 'Mary', 'Mike']);
-         expect(repeater('table.friend', 'friend in friends').column('friend.age')).
-           toEqual(['35', '10', '29', '19', '21']);
-
-         element('.doc-example-live a:contains("Phone")').click();
-         expect(repeater('table.friend', 'friend in friends').column('friend.phone')).
-           toEqual(['555-9876', '555-8765', '555-5678', '555-4321', '555-1212']);
-         expect(repeater('table.friend', 'friend in friends').column('friend.name')).
-           toEqual(['Mary', 'Julie', 'Adam', 'Mike', 'John']);
-       });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  */
   orderByFilter.$inject = ['$parse'];
   function orderByFilter($parse) {
@@ -21475,6 +21681,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             predicate = predicate.substring(1);
           }
           get = $parse(predicate);
+          if (get.constant) {
+            var key = get();
+            return reverseComparator(function (a, b) {
+              return compare(a[key], b[key]);
+            }, descending);
+          }
         }
         return reverseComparator(function (a, b) {
           return compare(get(a), get(b));
@@ -21524,7 +21736,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc directive
- * @name ng.directive:a
+ * @name a
  * @restrict E
  *
  * @description
@@ -21550,11 +21762,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           // see issue #1949
           element.append(document.createComment('IE fix'));
         }
-        if (!attr.href && !attr.name) {
+        if (!attr.href && !attr.xlinkHref && !attr.name) {
           return function (scope, element) {
+            // SVGAElement does not use the href attribute, but rather the 'xlinkHref' attribute.
+            var href = toString.call(element.prop('href')) === '[object SVGAnimatedString]' ? 'xlink:href' : 'href';
             element.on('click', function (event) {
               // if we have no href url, then don't navigate anywhere.
-              if (!element.attr('href')) {
+              if (!element.attr(href)) {
                 event.preventDefault();
               }
             });
@@ -21564,7 +21778,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     });
   /**
  * @ngdoc directive
- * @name ng.directive:ngHref
+ * @name ngHref
  * @restrict A
  * @priority 99
  *
@@ -21578,14 +21792,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * The `ngHref` directive solves this problem.
  *
  * The wrong way to write it:
- * <pre>
+ * ```html
  * <a href="http://www.gravatar.com/avatar/{{hash}}"/>
- * </pre>
+ * ```
  *
  * The correct way to write it:
- * <pre>
+ * ```html
  * <a ng-href="http://www.gravatar.com/avatar/{{hash}}"/>
- * </pre>
+ * ```
  *
  * @element A
  * @param {template} ngHref any string which can contain `{{}}` markup.
@@ -21593,8 +21807,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @example
  * This example shows various combinations of `href`, `ng-href` and `ng-click` attributes
  * in links and their different behaviors:
-    <doc:example>
-      <doc:source>
+    <example>
+      <file name="index.html">
         <input ng-model="value" /><br />
         <a id="link-1" href ng-click="value = 1">link 1</a> (link, don't reload)<br />
         <a id="link-2" href="" ng-click="value = 2">link 2</a> (link, don't reload)<br />
@@ -21602,52 +21816,68 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         <a id="link-4" href="" name="xx" ng-click="value = 4">anchor</a> (link, don't reload)<br />
         <a id="link-5" name="xxx" ng-click="value = 5">anchor</a> (no link)<br />
         <a id="link-6" ng-href="{{value}}">link</a> (link, change location)
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
         it('should execute ng-click but not reload when href without value', function() {
-          element('#link-1').click();
-          expect(input('value').val()).toEqual('1');
-          expect(element('#link-1').attr('href')).toBe("");
+          element(by.id('link-1')).click();
+          expect(element(by.model('value')).getAttribute('value')).toEqual('1');
+          expect(element(by.id('link-1')).getAttribute('href')).toBe('');
         });
 
         it('should execute ng-click but not reload when href empty string', function() {
-          element('#link-2').click();
-          expect(input('value').val()).toEqual('2');
-          expect(element('#link-2').attr('href')).toBe("");
+          element(by.id('link-2')).click();
+          expect(element(by.model('value')).getAttribute('value')).toEqual('2');
+          expect(element(by.id('link-2')).getAttribute('href')).toBe('');
         });
 
         it('should execute ng-click and change url when ng-href specified', function() {
-          expect(element('#link-3').attr('href')).toBe("/123");
+          expect(element(by.id('link-3')).getAttribute('href')).toMatch(/\/123$/);
 
-          element('#link-3').click();
-          expect(browser().window().path()).toEqual('/123');
+          element(by.id('link-3')).click();
+
+          // At this point, we navigate away from an Angular page, so we need
+          // to use browser.driver to get the base webdriver.
+
+          browser.wait(function() {
+            return browser.driver.getCurrentUrl().then(function(url) {
+              return url.match(/\/123$/);
+            });
+          }, 1000, 'page should navigate to /123');
         });
 
-        it('should execute ng-click but not reload when href empty string and name specified', function() {
-          element('#link-4').click();
-          expect(input('value').val()).toEqual('4');
-          expect(element('#link-4').attr('href')).toBe('');
+        xit('should execute ng-click but not reload when href empty string and name specified', function() {
+          element(by.id('link-4')).click();
+          expect(element(by.model('value')).getAttribute('value')).toEqual('4');
+          expect(element(by.id('link-4')).getAttribute('href')).toBe('');
         });
 
         it('should execute ng-click but not reload when no href but name specified', function() {
-          element('#link-5').click();
-          expect(input('value').val()).toEqual('5');
-          expect(element('#link-5').attr('href')).toBe(undefined);
+          element(by.id('link-5')).click();
+          expect(element(by.model('value')).getAttribute('value')).toEqual('5');
+          expect(element(by.id('link-5')).getAttribute('href')).toBe(null);
         });
 
         it('should only change url when only ng-href', function() {
-          input('value').enter('6');
-          expect(element('#link-6').attr('href')).toBe('6');
+          element(by.model('value')).clear();
+          element(by.model('value')).sendKeys('6');
+          expect(element(by.id('link-6')).getAttribute('href')).toMatch(/\/6$/);
 
-          element('#link-6').click();
-          expect(browser().location().url()).toEqual('/6');
+          element(by.id('link-6')).click();
+
+          // At this point, we navigate away from an Angular page, so we need
+          // to use browser.driver to get the base webdriver.
+          browser.wait(function() {
+            return browser.driver.getCurrentUrl().then(function(url) {
+              return url.match(/\/6$/);
+            });
+          }, 1000, 'page should navigate to /6');
         });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngSrc
+ * @name ngSrc
  * @restrict A
  * @priority 99
  *
@@ -21658,21 +21888,21 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * `{{hash}}`. The `ngSrc` directive solves this problem.
  *
  * The buggy way to write it:
- * <pre>
+ * ```html
  * <img src="http://www.gravatar.com/avatar/{{hash}}"/>
- * </pre>
+ * ```
  *
  * The correct way to write it:
- * <pre>
+ * ```html
  * <img ng-src="http://www.gravatar.com/avatar/{{hash}}"/>
- * </pre>
+ * ```
  *
  * @element IMG
  * @param {template} ngSrc any string which can contain `{{}}` markup.
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngSrcset
+ * @name ngSrcset
  * @restrict A
  * @priority 99
  *
@@ -21683,32 +21913,32 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * `{{hash}}`. The `ngSrcset` directive solves this problem.
  *
  * The buggy way to write it:
- * <pre>
+ * ```html
  * <img srcset="http://www.gravatar.com/avatar/{{hash}} 2x"/>
- * </pre>
+ * ```
  *
  * The correct way to write it:
- * <pre>
+ * ```html
  * <img ng-srcset="http://www.gravatar.com/avatar/{{hash}} 2x"/>
- * </pre>
+ * ```
  *
  * @element IMG
  * @param {template} ngSrcset any string which can contain `{{}}` markup.
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngDisabled
+ * @name ngDisabled
  * @restrict A
  * @priority 100
  *
  * @description
  *
  * The following markup will make the button enabled on Chrome/Firefox but not on IE8 and older IEs:
- * <pre>
+ * ```html
  * <div ng-init="scope = { isDisabled: false }">
  *  <button disabled="{{scope.isDisabled}}">Disabled</button>
  * </div>
- * </pre>
+ * ```
  *
  * The HTML specification does not require browsers to preserve the values of boolean attributes
  * such as disabled. (Their presence means true and their absence means false.)
@@ -21719,27 +21949,27 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * a permanent reliable place to store the binding information.
  *
  * @example
-    <doc:example>
-      <doc:source>
+    <example>
+      <file name="index.html">
         Click me to toggle: <input type="checkbox" ng-model="checked"><br/>
         <button ng-model="button" ng-disabled="checked">Button</button>
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
         it('should toggle button', function() {
-          expect(element('.doc-example-live :button').prop('disabled')).toBeFalsy();
-          input('checked').check();
-          expect(element('.doc-example-live :button').prop('disabled')).toBeTruthy();
+          expect(element(by.css('button')).getAttribute('disabled')).toBeFalsy();
+          element(by.model('checked')).click();
+          expect(element(by.css('button')).getAttribute('disabled')).toBeTruthy();
         });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
  *
  * @element INPUT
- * @param {expression} ngDisabled If the {@link guide/expression expression} is truthy, 
+ * @param {expression} ngDisabled If the {@link guide/expression expression} is truthy,
  *     then special attribute "disabled" will be set on the element
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngChecked
+ * @name ngChecked
  * @restrict A
  * @priority 100
  *
@@ -21752,27 +21982,27 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * This complementary directive is not removed by the browser and so provides
  * a permanent reliable place to store the binding information.
  * @example
-    <doc:example>
-      <doc:source>
+    <example>
+      <file name="index.html">
         Check me to check both: <input type="checkbox" ng-model="master"><br/>
         <input id="checkSlave" type="checkbox" ng-checked="master">
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
         it('should check both checkBoxes', function() {
-          expect(element('.doc-example-live #checkSlave').prop('checked')).toBeFalsy();
-          input('master').check();
-          expect(element('.doc-example-live #checkSlave').prop('checked')).toBeTruthy();
+          expect(element(by.id('checkSlave')).getAttribute('checked')).toBeFalsy();
+          element(by.model('master')).click();
+          expect(element(by.id('checkSlave')).getAttribute('checked')).toBeTruthy();
         });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
  *
  * @element INPUT
- * @param {expression} ngChecked If the {@link guide/expression expression} is truthy, 
+ * @param {expression} ngChecked If the {@link guide/expression expression} is truthy,
  *     then special attribute "checked" will be set on the element
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngReadonly
+ * @name ngReadonly
  * @restrict A
  * @priority 100
  *
@@ -21785,27 +22015,27 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * This complementary directive is not removed by the browser and so provides
  * a permanent reliable place to store the binding information.
  * @example
-    <doc:example>
-      <doc:source>
+    <example>
+      <file name="index.html">
         Check me to make text readonly: <input type="checkbox" ng-model="checked"><br/>
         <input type="text" ng-readonly="checked" value="I'm Angular"/>
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
         it('should toggle readonly attr', function() {
-          expect(element('.doc-example-live :text').prop('readonly')).toBeFalsy();
-          input('checked').check();
-          expect(element('.doc-example-live :text').prop('readonly')).toBeTruthy();
+          expect(element(by.css('[type="text"]')).getAttribute('readonly')).toBeFalsy();
+          element(by.model('checked')).click();
+          expect(element(by.css('[type="text"]')).getAttribute('readonly')).toBeTruthy();
         });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
  *
  * @element INPUT
- * @param {expression} ngReadonly If the {@link guide/expression expression} is truthy, 
+ * @param {expression} ngReadonly If the {@link guide/expression expression} is truthy,
  *     then special attribute "readonly" will be set on the element
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngSelected
+ * @name ngSelected
  * @restrict A
  * @priority 100
  *
@@ -21814,35 +22044,35 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * such as selected. (Their presence means true and their absence means false.)
  * If we put an Angular interpolation expression into such an attribute then the
  * binding information would be lost when the browser removes the attribute.
- * The `ngSelected` directive solves this problem for the `selected` atttribute.
+ * The `ngSelected` directive solves this problem for the `selected` attribute.
  * This complementary directive is not removed by the browser and so provides
  * a permanent reliable place to store the binding information.
- * 
+ *
  * @example
-    <doc:example>
-      <doc:source>
+    <example>
+      <file name="index.html">
         Check me to select: <input type="checkbox" ng-model="selected"><br/>
         <select>
           <option>Hello!</option>
           <option id="greet" ng-selected="selected">Greetings!</option>
         </select>
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
         it('should select Greetings!', function() {
-          expect(element('.doc-example-live #greet').prop('selected')).toBeFalsy();
-          input('selected').check();
-          expect(element('.doc-example-live #greet').prop('selected')).toBeTruthy();
+          expect(element(by.id('greet')).getAttribute('selected')).toBeFalsy();
+          element(by.model('selected')).click();
+          expect(element(by.id('greet')).getAttribute('selected')).toBeTruthy();
         });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
  *
  * @element OPTION
- * @param {expression} ngSelected If the {@link guide/expression expression} is truthy, 
+ * @param {expression} ngSelected If the {@link guide/expression expression} is truthy,
  *     then special attribute "selected" will be set on the element
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngOpen
+ * @name ngOpen
  * @restrict A
  * @priority 100
  *
@@ -21855,24 +22085,24 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * This complementary directive is not removed by the browser and so provides
  * a permanent reliable place to store the binding information.
  * @example
-     <doc:example>
-       <doc:source>
+     <example>
+       <file name="index.html">
          Check me check multiple: <input type="checkbox" ng-model="open"><br/>
          <details id="details" ng-open="open">
             <summary>Show/Hide me</summary>
          </details>
-       </doc:source>
-       <doc:scenario>
+       </file>
+       <file name="protractor.js" type="protractor">
          it('should toggle open', function() {
-           expect(element('#details').prop('open')).toBeFalsy();
-           input('open').check();
-           expect(element('#details').prop('open')).toBeTruthy();
+           expect(element(by.id('details')).getAttribute('open')).toBeFalsy();
+           element(by.model('open')).click();
+           expect(element(by.id('details')).getAttribute('open')).toBeTruthy();
          });
-       </doc:scenario>
-     </doc:example>
+       </file>
+     </example>
  *
  * @element DETAILS
- * @param {expression} ngOpen If the {@link guide/expression expression} is truthy, 
+ * @param {expression} ngOpen If the {@link guide/expression expression} is truthy,
  *     then special attribute "open" will be set on the element
  */
   var ngAttributeAliasDirectives = {};
@@ -21904,16 +22134,22 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       return {
         priority: 99,
         link: function (scope, element, attr) {
+          var propName = attrName, name = attrName;
+          if (attrName === 'href' && toString.call(element.prop('href')) === '[object SVGAnimatedString]') {
+            name = 'xlinkHref';
+            attr.$attr[name] = 'xlink:href';
+            propName = null;
+          }
           attr.$observe(normalized, function (value) {
             if (!value)
               return;
-            attr.$set(attrName, value);
+            attr.$set(name, value);
             // on IE, if "ng:src" directive declaration is used and "src" attribute doesn't exist
             // then calling element.setAttribute('src', 'foo') doesn't do anything, so we need
             // to set the property as well to achieve the desired effect.
             // we use attr[attrName] value since $set can sanitize the url.
-            if (msie)
-              element.prop(attrName, attr[attrName]);
+            if (msie && propName)
+              element.prop(propName, attr[name]);
           });
         }
       };
@@ -21928,8 +22164,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       $setPristine: noop
     };
   /**
- * @ngdoc object
- * @name ng.directive:form.FormController
+ * @ngdoc type
+ * @name form.FormController
  *
  * @property {boolean} $pristine True if user has not interacted with the form yet.
  * @property {boolean} $dirty True if user has already interacted with the form.
@@ -21954,7 +22190,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *  - `pattern`
  *  - `required`
  *  - `url`
- * 
+ *
  * @description
  * `FormController` keeps track of all its controls and nested forms as well as state of them,
  * such as being valid/invalid or dirty/pristine.
@@ -21967,9 +22203,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   FormController.$inject = [
     '$element',
     '$attrs',
-    '$scope'
+    '$scope',
+    '$animate'
   ];
-  function FormController(element, attrs) {
+  function FormController(element, attrs, $scope, $animate) {
     var form = this, parentForm = element.parent().controller('form') || nullFormCtrl, invalidCount = 0,
       // used to easily determine if we are valid
       errors = form.$error = {}, controls = [];
@@ -21986,12 +22223,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     // convenience method for easy toggling of classes
     function toggleValidCss(isValid, validationErrorKey) {
       validationErrorKey = validationErrorKey ? '-' + snake_case(validationErrorKey, '-') : '';
-      element.removeClass((isValid ? INVALID_CLASS : VALID_CLASS) + validationErrorKey).addClass((isValid ? VALID_CLASS : INVALID_CLASS) + validationErrorKey);
+      $animate.removeClass(element, (isValid ? INVALID_CLASS : VALID_CLASS) + validationErrorKey);
+      $animate.addClass(element, (isValid ? VALID_CLASS : INVALID_CLASS) + validationErrorKey);
     }
     /**
-   * @ngdoc function
-   * @name ng.directive:form.FormController#$addControl
-   * @methodOf ng.directive:form.FormController
+   * @ngdoc method
+   * @name form.FormController#$addControl
    *
    * @description
    * Register a control with the form.
@@ -22008,9 +22245,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       }
     };
     /**
-   * @ngdoc function
-   * @name ng.directive:form.FormController#$removeControl
-   * @methodOf ng.directive:form.FormController
+   * @ngdoc method
+   * @name form.FormController#$removeControl
    *
    * @description
    * Deregister a control from the form.
@@ -22027,9 +22263,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       arrayRemove(controls, control);
     };
     /**
-   * @ngdoc function
-   * @name ng.directive:form.FormController#$setValidity
-   * @methodOf ng.directive:form.FormController
+   * @ngdoc method
+   * @name form.FormController#$setValidity
    *
    * @description
    * Sets the validity of a form control.
@@ -22072,9 +22307,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       }
     };
     /**
-   * @ngdoc function
-   * @name ng.directive:form.FormController#$setDirty
-   * @methodOf ng.directive:form.FormController
+   * @ngdoc method
+   * @name form.FormController#$setDirty
    *
    * @description
    * Sets the form to a dirty state.
@@ -22083,15 +22317,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    * state (ng-dirty class). This method will also propagate to parent forms.
    */
     form.$setDirty = function () {
-      element.removeClass(PRISTINE_CLASS).addClass(DIRTY_CLASS);
+      $animate.removeClass(element, PRISTINE_CLASS);
+      $animate.addClass(element, DIRTY_CLASS);
       form.$dirty = true;
       form.$pristine = false;
       parentForm.$setDirty();
     };
     /**
-   * @ngdoc function
-   * @name ng.directive:form.FormController#$setPristine
-   * @methodOf ng.directive:form.FormController
+   * @ngdoc method
+   * @name form.FormController#$setPristine
    *
    * @description
    * Sets the form to its pristine state.
@@ -22104,7 +22338,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    * saving or resetting it.
    */
     form.$setPristine = function () {
-      element.removeClass(DIRTY_CLASS).addClass(PRISTINE_CLASS);
+      $animate.removeClass(element, DIRTY_CLASS);
+      $animate.addClass(element, PRISTINE_CLASS);
       form.$dirty = false;
       form.$pristine = true;
       forEach(controls, function (control) {
@@ -22114,7 +22349,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc directive
- * @name ng.directive:ngForm
+ * @name ngForm
  * @restrict EAC
  *
  * @description
@@ -22128,12 +22363,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc directive
- * @name ng.directive:form
+ * @name form
  * @restrict E
  *
  * @description
  * Directive that instantiates
- * {@link ng.directive:form.FormController FormController}.
+ * {@link form.FormController FormController}.
  *
  * If the `name` attribute is specified, the form controller is published onto the current scope under
  * this name.
@@ -22155,6 +22390,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *  - `ng-invalid` is set if the form is invalid.
  *  - `ng-pristine` is set if the form is pristine.
  *  - `ng-dirty` is set if the form is dirty.
+ *
+ * Keep in mind that ngAnimate can detect each of these classes when added and removed.
  *
  *
  * # Submitting a form and preventing the default action
@@ -22189,15 +22426,49 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @param {string=} name Name of the form. If specified, the form controller will be published into
  *                       related scope, under this name.
  *
+ * ## Animation Hooks
+ *
+ * Animations in ngForm are triggered when any of the associated CSS classes are added and removed.
+ * These classes are: `.ng-pristine`, `.ng-dirty`, `.ng-invalid` and `.ng-valid` as well as any
+ * other validations that are performed within the form. Animations in ngForm are similar to how
+ * they work in ngClass and animations can be hooked into using CSS transitions, keyframes as well
+ * as JS animations.
+ *
+ * The following example shows a simple way to utilize CSS transitions to style a form element
+ * that has been rendered as invalid after it has been validated:
+ *
+ * <pre>
+ * //be sure to include ngAnimate as a module to hook into more
+ * //advanced animations
+ * .my-form {
+ *   transition:0.5s linear all;
+ *   background: white;
+ * }
+ * .my-form.ng-invalid {
+ *   background: red;
+ *   color:white;
+ * }
+ * </pre>
+ *
  * @example
-    <doc:example>
-      <doc:source>
+    <example deps="angular-animate.js" animations="true" fixBase="true">
+      <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.userType = 'guest';
          }
        </script>
-       <form name="myForm" ng-controller="Ctrl">
+       <style>
+        .my-form {
+          -webkit-transition:all linear 0.5s;
+          transition:all linear 0.5s;
+          background: transparent;
+        }
+        .my-form.ng-invalid {
+          background: red;
+        }
+       </style>
+       <form name="myForm" ng-controller="Ctrl" class="my-form">
          userType: <input name="input" ng-model="userType" required>
          <span class="error" ng-show="myForm.input.$error.required">Required!</span><br>
          <tt>userType = {{userType}}</tt><br>
@@ -22206,20 +22477,30 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          <tt>myForm.$valid = {{myForm.$valid}}</tt><br>
          <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br>
         </form>
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
         it('should initialize to model', function() {
-         expect(binding('userType')).toEqual('guest');
-         expect(binding('myForm.input.$valid')).toEqual('true');
+          var userType = element(by.binding('userType'));
+          var valid = element(by.binding('myForm.input.$valid'));
+
+          expect(userType.getText()).toContain('guest');
+          expect(valid.getText()).toContain('true');
         });
 
         it('should be invalid if empty', function() {
-         input('userType').enter('');
-         expect(binding('userType')).toEqual('');
-         expect(binding('myForm.input.$valid')).toEqual('false');
+          var userType = element(by.binding('userType'));
+          var valid = element(by.binding('myForm.input.$valid'));
+          var userInput = element(by.model('userType'));
+
+          userInput.clear();
+          userInput.sendKeys('');
+
+          expect(userType.getText()).toEqual('userType =');
+          expect(valid.getText()).toContain('false');
         });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
+ *
  */
   var formDirectiveFactory = function (isNgForm) {
     return [
@@ -22282,7 +22563,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     -DIRTY_CLASS
 */
   var URL_REGEXP = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
-  var EMAIL_REGEXP = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/;
+  var EMAIL_REGEXP = /^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)*$/i;
   var NUMBER_REGEXP = /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))\s*$/;
   var inputType = {
       'text': textInputType,
@@ -22294,7 +22575,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       'hidden': noop,
       'button': noop,
       'submit': noop,
-      'reset': noop
+      'reset': noop,
+      'file': noop
     };
   // A helper function to call $setValidity and return the value / undefined,
   // a pattern that is repeated a lot in the input validation logic.
@@ -22302,7 +22584,24 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ctrl.$setValidity(validatorName, validity);
     return validity ? value : undefined;
   }
+  function addNativeHtml5Validators(ctrl, validatorName, element) {
+    var validity = element.prop('validity');
+    if (isObject(validity)) {
+      var validator = function (value) {
+        // Don't overwrite previous validation, don't consider valueMissing to apply (ng-required can
+        // perform the required validation)
+        if (!ctrl.$error[validatorName] && (validity.badInput || validity.customError || validity.typeMismatch) && !validity.valueMissing) {
+          ctrl.$setValidity(validatorName, false);
+          return;
+        }
+        return value;
+      };
+      ctrl.$parsers.push(validator);
+      ctrl.$formatters.push(validator);
+    }
+  }
   function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
+    var validity = element.prop('validity');
     // In composition mode, users are still inputing intermediate text buffer,
     // hold the listener until composition is done.
     // More about composition events: https://developer.mozilla.org/en-US/docs/Web/API/CompositionEvent
@@ -22313,6 +22612,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       });
       element.on('compositionend', function () {
         composing = false;
+        listener();
       });
     }
     var listener = function () {
@@ -22325,7 +22625,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       if (toBoolean(attr.ngTrim || 'T')) {
         value = trim(value);
       }
-      if (ctrl.$viewValue !== value) {
+      if (ctrl.$viewValue !== value || validity && value === '' && !validity.valueMissing) {
         if (scope.$$phase) {
           ctrl.$setViewValue(value);
         } else {
@@ -22423,6 +22723,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         return undefined;
       }
     });
+    addNativeHtml5Validators(ctrl, 'number', element);
     ctrl.$formatters.push(function (value) {
       return ctrl.$isEmpty(value) ? '' : '' + value;
     });
@@ -22507,7 +22808,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc directive
- * @name ng.directive:textarea
+ * @name textarea
  * @restrict E
  *
  * @description
@@ -22533,7 +22834,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc directive
- * @name ng.directive:input
+ * @name input
  * @restrict E
  *
  * @description
@@ -22555,8 +22856,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *    interaction with the input element.
  *
  * @example
-    <doc:example>
-      <doc:source>
+    <example name="input-directive">
+      <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.user = {name: 'guest', last: 'visitor'};
@@ -22585,46 +22886,61 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          <tt>myForm.$error.minlength = {{!!myForm.$error.minlength}}</tt><br>
          <tt>myForm.$error.maxlength = {{!!myForm.$error.maxlength}}</tt><br>
        </div>
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
+        var user = element(by.binding('{{user}}'));
+        var userNameValid = element(by.binding('myForm.userName.$valid'));
+        var lastNameValid = element(by.binding('myForm.lastName.$valid'));
+        var lastNameError = element(by.binding('myForm.lastName.$error'));
+        var formValid = element(by.binding('myForm.$valid'));
+        var userNameInput = element(by.model('user.name'));
+        var userLastInput = element(by.model('user.last'));
+
         it('should initialize to model', function() {
-          expect(binding('user')).toEqual('{"name":"guest","last":"visitor"}');
-          expect(binding('myForm.userName.$valid')).toEqual('true');
-          expect(binding('myForm.$valid')).toEqual('true');
+          expect(user.getText()).toContain('{"name":"guest","last":"visitor"}');
+          expect(userNameValid.getText()).toContain('true');
+          expect(formValid.getText()).toContain('true');
         });
 
         it('should be invalid if empty when required', function() {
-          input('user.name').enter('');
-          expect(binding('user')).toEqual('{"last":"visitor"}');
-          expect(binding('myForm.userName.$valid')).toEqual('false');
-          expect(binding('myForm.$valid')).toEqual('false');
+          userNameInput.clear();
+          userNameInput.sendKeys('');
+
+          expect(user.getText()).toContain('{"last":"visitor"}');
+          expect(userNameValid.getText()).toContain('false');
+          expect(formValid.getText()).toContain('false');
         });
 
         it('should be valid if empty when min length is set', function() {
-          input('user.last').enter('');
-          expect(binding('user')).toEqual('{"name":"guest","last":""}');
-          expect(binding('myForm.lastName.$valid')).toEqual('true');
-          expect(binding('myForm.$valid')).toEqual('true');
+          userLastInput.clear();
+          userLastInput.sendKeys('');
+
+          expect(user.getText()).toContain('{"name":"guest","last":""}');
+          expect(lastNameValid.getText()).toContain('true');
+          expect(formValid.getText()).toContain('true');
         });
 
         it('should be invalid if less than required min length', function() {
-          input('user.last').enter('xx');
-          expect(binding('user')).toEqual('{"name":"guest"}');
-          expect(binding('myForm.lastName.$valid')).toEqual('false');
-          expect(binding('myForm.lastName.$error')).toMatch(/minlength/);
-          expect(binding('myForm.$valid')).toEqual('false');
+          userLastInput.clear();
+          userLastInput.sendKeys('xx');
+
+          expect(user.getText()).toContain('{"name":"guest"}');
+          expect(lastNameValid.getText()).toContain('false');
+          expect(lastNameError.getText()).toContain('minlength');
+          expect(formValid.getText()).toContain('false');
         });
 
         it('should be invalid if longer than max length', function() {
-          input('user.last').enter('some ridiculously long name');
-          expect(binding('user'))
-            .toEqual('{"name":"guest"}');
-          expect(binding('myForm.lastName.$valid')).toEqual('false');
-          expect(binding('myForm.lastName.$error')).toMatch(/maxlength/);
-          expect(binding('myForm.$valid')).toEqual('false');
+          userLastInput.clear();
+          userLastInput.sendKeys('some ridiculously long name');
+
+          expect(user.getText()).toContain('{"name":"guest"}');
+          expect(lastNameValid.getText()).toContain('false');
+          expect(lastNameError.getText()).toContain('maxlength');
+          expect(formValid.getText()).toContain('false');
         });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
  */
   var inputDirective = [
       '$browser',
@@ -22643,30 +22959,31 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   var VALID_CLASS = 'ng-valid', INVALID_CLASS = 'ng-invalid', PRISTINE_CLASS = 'ng-pristine', DIRTY_CLASS = 'ng-dirty';
   /**
- * @ngdoc object
- * @name ng.directive:ngModel.NgModelController
+ * @ngdoc type
+ * @name ngModel.NgModelController
  *
  * @property {string} $viewValue Actual string value in the view.
  * @property {*} $modelValue The value in the model, that the control is bound to.
  * @property {Array.<Function>} $parsers Array of functions to execute, as a pipeline, whenever
        the control reads value from the DOM.  Each function is called, in turn, passing the value
-       through to the next. Used to sanitize / convert the value as well as validation.
-       For validation, the parsers should update the validity state using
-       {@link ng.directive:ngModel.NgModelController#methods_$setValidity $setValidity()},
+       through to the next. The last return value is used to populate the model.
+       Used to sanitize / convert the value as well as validation. For validation,
+       the parsers should update the validity state using
+       {@link ngModel.NgModelController#$setValidity $setValidity()},
        and return `undefined` for invalid values.
 
  *
  * @property {Array.<Function>} $formatters Array of functions to execute, as a pipeline, whenever
        the model value changes. Each function is called, in turn, passing the value through to the
        next. Used to format / convert values for display in the control and validation.
- *      <pre>
+ *      ```js
  *      function formatter(value) {
  *        if (value) {
  *          return value.toUpperCase();
  *        }
  *      }
  *      ngModel.$formatters.push(formatter);
- *      </pre>
+ *      ```
  *
  * @property {Array.<Function>} $viewChangeListeners Array of functions to execute whenever the
  *     view value has changed. It is called with no arguments, and its return value is ignored.
@@ -22695,7 +23012,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * Note that `contenteditable` is an HTML5 attribute, which tells the browser to let the element
  * contents be edited in place by the user.  This will not work on older browsers.
  *
- * <example module="customControl">
+ * <example name="NgModelController" module="customControl">
     <file name="style.css">
       [contenteditable] {
         border: 1px solid black;
@@ -22753,15 +23070,23 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
        <textarea ng-model="userContent"></textarea>
       </form>
     </file>
-    <file name="scenario.js">
-      it('should data-bind and become invalid', function() {
-        var contentEditable = element('[contenteditable]');
+    <file name="protractor.js" type="protractor">
+    it('should data-bind and become invalid', function() {
+      if (browser.params.browser == 'safari' || browser.params.browser == 'firefox') {
+        // SafariDriver can't handle contenteditable
+        // and Firefox driver can't clear contenteditables very well
+        return;
+      }
+      var contentEditable = element(by.css('[contenteditable]'));
+      var content = 'Change me!';
 
-        expect(contentEditable.text()).toEqual('Change me!');
-        input('userContent').enter('');
-        expect(contentEditable.text()).toEqual('');
-        expect(contentEditable.prop('className')).toMatch(/ng-invalid-required/);
-      });
+      expect(contentEditable.getText()).toEqual(content);
+
+      contentEditable.clear();
+      contentEditable.sendKeys(protractor.Key.BACK_SPACE);
+      expect(contentEditable.getText()).toEqual('');
+      expect(contentEditable.getAttribute('class')).toMatch(/ng-invalid-required/);
+    });
     </file>
  * </example>
  *
@@ -22773,7 +23098,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       '$attrs',
       '$element',
       '$parse',
-      function ($scope, $exceptionHandler, $attr, $element, $parse) {
+      '$animate',
+      function ($scope, $exceptionHandler, $attr, $element, $parse, $animate) {
         this.$viewValue = Number.NaN;
         this.$modelValue = Number.NaN;
         this.$parsers = [];
@@ -22789,9 +23115,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           throw minErr('ngModel')('nonassign', 'Expression \'{0}\' is non-assignable. Element: {1}', $attr.ngModel, startingTag($element));
         }
         /**
-   * @ngdoc function
-   * @name ng.directive:ngModel.NgModelController#$render
-   * @methodOf ng.directive:ngModel.NgModelController
+   * @ngdoc method
+   * @name ngModel.NgModelController#$render
    *
    * @description
    * Called when the view needs to be updated. It is expected that the user of the ng-model
@@ -22799,9 +23124,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    */
         this.$render = noop;
         /**
-   * @ngdoc function
-   * @name { ng.directive:ngModel.NgModelController#$isEmpty
-   * @methodOf ng.directive:ngModel.NgModelController
+   * @ngdoc method
+   * @name ngModel.NgModelController#$isEmpty
    *
    * @description
    * This is called when we need to determine if the value of the input is empty.
@@ -22812,6 +23136,9 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    * You can override this for input directives whose concept of being empty is different to the
    * default. The `checkboxInputType` directive does this because in its case a value of `false`
    * implies empty.
+   *
+   * @param {*} value Reference to check.
+   * @returns {boolean} True if `value` is empty.
    */
         this.$isEmpty = function (value) {
           return isUndefined(value) || value === '' || value === null || value !== value;
@@ -22826,12 +23153,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         // convenience method for easy toggling of classes
         function toggleValidCss(isValid, validationErrorKey) {
           validationErrorKey = validationErrorKey ? '-' + snake_case(validationErrorKey, '-') : '';
-          $element.removeClass((isValid ? INVALID_CLASS : VALID_CLASS) + validationErrorKey).addClass((isValid ? VALID_CLASS : INVALID_CLASS) + validationErrorKey);
+          $animate.removeClass($element, (isValid ? INVALID_CLASS : VALID_CLASS) + validationErrorKey);
+          $animate.addClass($element, (isValid ? VALID_CLASS : INVALID_CLASS) + validationErrorKey);
         }
         /**
-   * @ngdoc function
-   * @name ng.directive:ngModel.NgModelController#$setValidity
-   * @methodOf ng.directive:ngModel.NgModelController
+   * @ngdoc method
+   * @name ngModel.NgModelController#$setValidity
    *
    * @description
    * Change the validity state, and notifies the form when the control changes validity. (i.e. it
@@ -22871,9 +23198,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           parentForm.$setValidity(validationErrorKey, isValid, this);
         };
         /**
-   * @ngdoc function
-   * @name ng.directive:ngModel.NgModelController#$setPristine
-   * @methodOf ng.directive:ngModel.NgModelController
+   * @ngdoc method
+   * @name ngModel.NgModelController#$setPristine
    *
    * @description
    * Sets the control to its pristine state.
@@ -22884,12 +23210,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         this.$setPristine = function () {
           this.$dirty = false;
           this.$pristine = true;
-          $element.removeClass(DIRTY_CLASS).addClass(PRISTINE_CLASS);
+          $animate.removeClass($element, DIRTY_CLASS);
+          $animate.addClass($element, PRISTINE_CLASS);
         };
         /**
-   * @ngdoc function
-   * @name ng.directive:ngModel.NgModelController#$setViewValue
-   * @methodOf ng.directive:ngModel.NgModelController
+   * @ngdoc method
+   * @name ngModel.NgModelController#$setViewValue
    *
    * @description
    * Update the view value.
@@ -22914,7 +23240,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           if (this.$pristine) {
             this.$dirty = true;
             this.$pristine = false;
-            $element.removeClass(PRISTINE_CLASS).addClass(DIRTY_CLASS);
+            $animate.removeClass($element, PRISTINE_CLASS);
+            $animate.addClass($element, DIRTY_CLASS);
             parentForm.$setDirty();
           }
           forEach(this.$parsers, function (fn) {
@@ -22954,13 +23281,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   /**
  * @ngdoc directive
- * @name ng.directive:ngModel
+ * @name ngModel
  *
  * @element input
  *
  * @description
  * The `ngModel` directive binds an `input`,`select`, `textarea` (or custom form control) to a
- * property on the scope using {@link ng.directive:ngModel.NgModelController NgModelController},
+ * property on the scope using {@link ngModel.NgModelController NgModelController},
  * which is created and exposed by this directive.
  *
  * `ngModel` is responsible for:
@@ -22969,7 +23296,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   require.
  * - Providing validation behavior (i.e. required, number, email, url).
  * - Keeping the state of the control (valid/invalid, dirty/pristine, validation errors).
- * - Setting related css classes on the element (`ng-valid`, `ng-invalid`, `ng-dirty`, `ng-pristine`).
+ * - Setting related css classes on the element (`ng-valid`, `ng-invalid`, `ng-dirty`, `ng-pristine`) including animations.
  * - Registering the control with its parent {@link ng.directive:form form}.
  *
  * Note: `ngModel` will try to bind to the property given by evaluating the expression on the
@@ -22978,20 +23305,81 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * For best practices on using `ngModel`, see:
  *
- *  - {@link https://github.com/angular/angular.js/wiki/Understanding-Scopes}
+ *  - [https://github.com/angular/angular.js/wiki/Understanding-Scopes]
  *
  * For basic examples, how to use `ngModel`, see:
  *
  *  - {@link ng.directive:input input}
- *    - {@link ng.directive:input.text text}
- *    - {@link ng.directive:input.checkbox checkbox}
- *    - {@link ng.directive:input.radio radio}
- *    - {@link ng.directive:input.number number}
- *    - {@link ng.directive:input.email email}
- *    - {@link ng.directive:input.url url}
+ *    - {@link input[text] text}
+ *    - {@link input[checkbox] checkbox}
+ *    - {@link input[radio] radio}
+ *    - {@link input[number] number}
+ *    - {@link input[email] email}
+ *    - {@link input[url] url}
  *  - {@link ng.directive:select select}
  *  - {@link ng.directive:textarea textarea}
  *
+ * # CSS classes
+ * The following CSS classes are added and removed on the associated input/select/textarea element
+ * depending on the validity of the model.
+ *
+ *  - `ng-valid` is set if the model is valid.
+ *  - `ng-invalid` is set if the model is invalid.
+ *  - `ng-pristine` is set if the model is pristine.
+ *  - `ng-dirty` is set if the model is dirty.
+ *
+ * Keep in mind that ngAnimate can detect each of these classes when added and removed.
+ *
+ * ## Animation Hooks
+ *
+ * Animations within models are triggered when any of the associated CSS classes are added and removed
+ * on the input element which is attached to the model. These classes are: `.ng-pristine`, `.ng-dirty`,
+ * `.ng-invalid` and `.ng-valid` as well as any other validations that are performed on the model itself.
+ * The animations that are triggered within ngModel are similar to how they work in ngClass and
+ * animations can be hooked into using CSS transitions, keyframes as well as JS animations.
+ *
+ * The following example shows a simple way to utilize CSS transitions to style an input element
+ * that has been rendered as invalid after it has been validated:
+ *
+ * <pre>
+ * //be sure to include ngAnimate as a module to hook into more
+ * //advanced animations
+ * .my-input {
+ *   transition:0.5s linear all;
+ *   background: white;
+ * }
+ * .my-input.ng-invalid {
+ *   background: red;
+ *   color:white;
+ * }
+ * </pre>
+ *
+ * @example
+ * <example deps="angular-animate.js" animations="true" fixBase="true">
+     <file name="index.html">
+       <script>
+        function Ctrl($scope) {
+          $scope.val = '1';
+        }
+       </script>
+       <style>
+         .my-input {
+           -webkit-transition:all linear 0.5s;
+           transition:all linear 0.5s;
+           background: transparent;
+         }
+         .my-input.ng-invalid {
+           color:white;
+           background: red;
+         }
+       </style>
+       Update input to see transitions when valid/invalid.
+       Integer is a valid value.
+       <form name="testForm" ng-controller="Ctrl">
+         <input ng-model="val" ng-pattern="/^\d+$/" name="anim" class="my-input" />
+       </form>
+     </file>
+ * </example>
  */
   var ngModelDirective = function () {
     return {
@@ -23012,10 +23400,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   };
   /**
  * @ngdoc directive
- * @name ng.directive:ngChange
+ * @name ngChange
  *
  * @description
- * Evaluate given expression when user changes the input.
+ * Evaluate the given expression when the user changes the input.
+ * The expression is evaluated immediately, unlike the JavaScript onchange event
+ * which only triggers at the end of a change (usually, when the user leaves the
+ * form element or presses the return key).
  * The expression is not evaluated when the value change is coming from the model.
  *
  * Note, this directive requires `ngModel` to be present.
@@ -23025,8 +23416,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * in input value.
  *
  * @example
- * <doc:example>
- *   <doc:source>
+ * <example name="ngChange-directive">
+ *   <file name="index.html">
  *     <script>
  *       function Controller($scope) {
  *         $scope.counter = 0;
@@ -23039,25 +23430,31 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *       <input type="checkbox" ng-model="confirmed" ng-change="change()" id="ng-change-example1" />
  *       <input type="checkbox" ng-model="confirmed" id="ng-change-example2" />
  *       <label for="ng-change-example2">Confirmed</label><br />
- *       debug = {{confirmed}}<br />
- *       counter = {{counter}}
+ *       <tt>debug = {{confirmed}}</tt><br/>
+ *       <tt>counter = {{counter}}</tt><br/>
  *     </div>
- *   </doc:source>
- *   <doc:scenario>
+ *   </file>
+ *   <file name="protractor.js" type="protractor">
+ *     var counter = element(by.binding('counter'));
+ *     var debug = element(by.binding('confirmed'));
+ *
  *     it('should evaluate the expression if changing from view', function() {
- *       expect(binding('counter')).toEqual('0');
- *       element('#ng-change-example1').click();
- *       expect(binding('counter')).toEqual('1');
- *       expect(binding('confirmed')).toEqual('true');
+ *       expect(counter.getText()).toContain('0');
+ *
+ *       element(by.id('ng-change-example1')).click();
+ *
+ *       expect(counter.getText()).toContain('1');
+ *       expect(debug.getText()).toContain('true');
  *     });
  *
  *     it('should not evaluate the expression if changing from model', function() {
- *       element('#ng-change-example2').click();
- *       expect(binding('counter')).toEqual('0');
- *       expect(binding('confirmed')).toEqual('true');
+ *       element(by.id('ng-change-example2')).click();
+
+ *       expect(counter.getText()).toContain('0');
+ *       expect(debug.getText()).toContain('true');
  *     });
- *   </doc:scenario>
- * </doc:example>
+ *   </file>
+ * </example>
  */
   var ngChangeDirective = valueFn({
       require: 'ngModel',
@@ -23094,7 +23491,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   };
   /**
  * @ngdoc directive
- * @name ng.directive:ngList
+ * @name ngList
  *
  * @description
  * Text input that converts between a delimited string and an array of strings. The delimiter
@@ -23105,8 +23502,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   specified in form `/something/` then the value will be converted into a regular expression.
  *
  * @example
-    <doc:example>
-      <doc:source>
+    <example name="ngList-directive">
+      <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.names = ['igor', 'misko', 'vojta'];
@@ -23123,22 +23520,28 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
          <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
         </form>
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
+        var listInput = element(by.model('names'));
+        var names = element(by.binding('{{names}}'));
+        var valid = element(by.binding('myForm.namesInput.$valid'));
+        var error = element(by.css('span.error'));
+
         it('should initialize to model', function() {
-          expect(binding('names')).toEqual('["igor","misko","vojta"]');
-          expect(binding('myForm.namesInput.$valid')).toEqual('true');
-          expect(element('span.error').css('display')).toBe('none');
+          expect(names.getText()).toContain('["igor","misko","vojta"]');
+          expect(valid.getText()).toContain('true');
+          expect(error.getCssValue('display')).toBe('none');
         });
 
         it('should be invalid if empty', function() {
-          input('names').enter('');
-          expect(binding('names')).toEqual('');
-          expect(binding('myForm.namesInput.$valid')).toEqual('false');
-          expect(element('span.error').css('display')).not().toBe('none');
-        });
-      </doc:scenario>
-    </doc:example>
+          listInput.clear();
+          listInput.sendKeys('');
+
+          expect(names.getText()).toContain('');
+          expect(valid.getText()).toContain('false');
+          expect(error.getCssValue('display')).not.toBe('none');        });
+      </file>
+    </example>
  */
   var ngListDirective = function () {
     return {
@@ -23175,7 +23578,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   var CONSTANT_VALUE_REGEXP = /^(true|false|\d+)$/;
   /**
  * @ngdoc directive
- * @name ng.directive:ngValue
+ * @name ngValue
  *
  * @description
  * Binds the given expression to the value of `input[select]` or `input[radio]`, so
@@ -23190,8 +23593,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   of the `input` element
  *
  * @example
-    <doc:example>
-      <doc:source>
+    <example name="ngValue-directive">
+      <file name="index.html">
        <script>
           function Ctrl($scope) {
             $scope.names = ['pizza', 'unicorns', 'robots'];
@@ -23210,17 +23613,19 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             </label>
           <div>You chose {{my.favorite}}</div>
         </form>
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
+        var favorite = element(by.binding('my.favorite'));
+
         it('should initialize to model', function() {
-          expect(binding('my.favorite')).toEqual('unicorns');
+          expect(favorite.getText()).toContain('unicorns');
         });
         it('should bind the values to the inputs', function() {
-          input('my.favorite').select('pizza');
-          expect(binding('my.favorite')).toEqual('pizza');
+          element.all(by.model('my.favorite')).get(0).click();
+          expect(favorite.getText()).toContain('pizza');
         });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
  */
   var ngValueDirective = function () {
     return {
@@ -23242,7 +23647,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   };
   /**
  * @ngdoc directive
- * @name ng.directive:ngBind
+ * @name ngBind
  * @restrict AC
  *
  * @description
@@ -23253,7 +23658,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * Typically, you don't use `ngBind` directly, but instead you use the double curly markup like
  * `{{ expression }}` which is similar but less verbose.
  *
- * It is preferrable to use `ngBind` instead of `{{ expression }}` when a template is momentarily
+ * It is preferable to use `ngBind` instead of `{{ expression }}` when a template is momentarily
  * displayed by the browser in its raw state before Angular compiles it. Since `ngBind` is an
  * element attribute, it makes the bindings invisible to the user while the page is loading.
  *
@@ -23266,8 +23671,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @example
  * Enter a name in the Live Preview text box; the greeting below the text box changes instantly.
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.name = 'Whirled';
@@ -23277,15 +23682,18 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          Enter name: <input type="text" ng-model="name"><br>
          Hello <span ng-bind="name"></span>!
        </div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should check ng-bind', function() {
-         expect(using('.doc-example-live').binding('name')).toBe('Whirled');
-         using('.doc-example-live').input('name').enter('world');
-         expect(using('.doc-example-live').binding('name')).toBe('world');
+         var nameInput = element(by.model('name'));
+
+         expect(element(by.binding('name')).getText()).toBe('Whirled');
+         nameInput.clear();
+         nameInput.sendKeys('world');
+         expect(element(by.binding('name')).getText()).toBe('world');
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  */
   var ngBindDirective = ngDirective(function (scope, element, attr) {
       element.addClass('ng-binding').data('$binding', attr.ngBind);
@@ -23298,7 +23706,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     });
   /**
  * @ngdoc directive
- * @name ng.directive:ngBindTemplate
+ * @name ngBindTemplate
  *
  * @description
  * The `ngBindTemplate` directive specifies that the element
@@ -23314,8 +23722,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @example
  * Try it here: enter text in text box and watch the greeting change.
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.salutation = 'Hello';
@@ -23327,22 +23735,24 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         Name: <input type="text" ng-model="name"><br>
         <pre ng-bind-template="{{salutation}} {{name}}!"></pre>
        </div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should check ng-bind', function() {
-         expect(using('.doc-example-live').binding('salutation')).
-           toBe('Hello');
-         expect(using('.doc-example-live').binding('name')).
-           toBe('World');
-         using('.doc-example-live').input('salutation').enter('Greetings');
-         using('.doc-example-live').input('name').enter('user');
-         expect(using('.doc-example-live').binding('salutation')).
-           toBe('Greetings');
-         expect(using('.doc-example-live').binding('name')).
-           toBe('user');
+         var salutationElem = element(by.binding('salutation'));
+         var salutationInput = element(by.model('salutation'));
+         var nameInput = element(by.model('name'));
+
+         expect(salutationElem.getText()).toBe('Hello World!');
+
+         salutationInput.clear();
+         salutationInput.sendKeys('Greetings');
+         nameInput.clear();
+         nameInput.sendKeys('user');
+
+         expect(salutationElem.getText()).toBe('Greetings user!');
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  */
   var ngBindTemplateDirective = [
       '$interpolate',
@@ -23359,7 +23769,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   /**
  * @ngdoc directive
- * @name ng.directive:ngBindHtml
+ * @name ngBindHtml
  *
  * @description
  * Creates a binding that will innerHTML the result of evaluating the `expression` into the current
@@ -23367,7 +23777,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * ngSanitize.$sanitize $sanitize} service.  To utilize this functionality, ensure that `$sanitize`
  * is available, for example, by including {@link ngSanitize} in your module's dependencies (not in
  * core Angular.)  You may also bypass sanitization for values you know are safe. To do so, bind to
- * an explicitly trusted value via {@link ng.$sce#methods_trustAsHtml $sce.trustAsHtml}.  See the example
+ * an explicitly trusted value via {@link ng.$sce#trustAsHtml $sce.trustAsHtml}.  See the example
  * under {@link ng.$sce#Example Strict Contextual Escaping (SCE)}.
  *
  * Note: If a `$sanitize` service is unavailable and the bound value isn't explicitly trusted, you
@@ -23378,14 +23788,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @example
    Try it here: enter text in text box and watch the greeting change.
- 
+
    <example module="ngBindHtmlExample" deps="angular-sanitize.js">
      <file name="index.html">
        <div ng-controller="ngBindHtmlCtrl">
         <p ng-bind-html="myHTML"></p>
        </div>
      </file>
-     
+
      <file name="script.js">
        angular.module('ngBindHtmlExample', ['ngSanitize'])
 
@@ -23395,12 +23805,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
        }]);
      </file>
 
-     <file name="scenario.js">
+     <file name="protractor.js" type="protractor">
        it('should check ng-bind-html', function() {
-         expect(using('.doc-example-live').binding('myHTML')).
-           toBe(
-           'I am an <code>HTML</code>string with <a href="#">links!</a> and other <em>stuff</em>'
-           );
+         expect(element(by.binding('myHTML')).getText()).toBe(
+             'I am an HTMLstring with links! and other stuff');
        });
      </file>
    </example>
@@ -23473,12 +23881,24 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   }
   /**
  * @ngdoc directive
- * @name ng.directive:ngClass
+ * @name ngClass
  * @restrict AC
  *
  * @description
  * The `ngClass` directive allows you to dynamically set CSS classes on an HTML element by databinding
  * an expression that represents all classes to be added.
+ *
+ * The directive operates in three different ways, depending on which of three types the expression
+ * evaluates to:
+ *
+ * 1. If the expression evaluates to a string, the string should be one or more space-delimited class
+ * names.
+ *
+ * 2. If the expression evaluates to an array, each element of the array should be a string that is
+ * one or more space-delimited class names.
+ *
+ * 3. If the expression evaluates to an object, then for each key-value pair of the
+ * object with a truthy value the corresponding key is used as a class name.
  *
  * The directive won't add duplicate classes if a particular class was already set.
  *
@@ -23523,31 +23943,34 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
            color: red;
        }
      </file>
-     <file name="scenario.js">
+     <file name="protractor.js" type="protractor">
+       var ps = element.all(by.css('p'));
+
        it('should let you toggle the class', function() {
 
-         expect(element('.doc-example-live p:first').prop('className')).not().toMatch(/bold/);
-         expect(element('.doc-example-live p:first').prop('className')).not().toMatch(/red/);
+         expect(ps.first().getAttribute('class')).not.toMatch(/bold/);
+         expect(ps.first().getAttribute('class')).not.toMatch(/red/);
 
-         input('important').check();
-         expect(element('.doc-example-live p:first').prop('className')).toMatch(/bold/);
+         element(by.model('important')).click();
+         expect(ps.first().getAttribute('class')).toMatch(/bold/);
 
-         input('error').check();
-         expect(element('.doc-example-live p:first').prop('className')).toMatch(/red/);
+         element(by.model('error')).click();
+         expect(ps.first().getAttribute('class')).toMatch(/red/);
        });
 
        it('should let you toggle string example', function() {
-         expect(element('.doc-example-live p:nth-of-type(2)').prop('className')).toBe('');
-         input('style').enter('red');
-         expect(element('.doc-example-live p:nth-of-type(2)').prop('className')).toBe('red');
+         expect(ps.get(1).getAttribute('class')).toBe('');
+         element(by.model('style')).clear();
+         element(by.model('style')).sendKeys('red');
+         expect(ps.get(1).getAttribute('class')).toBe('red');
        });
 
        it('array example should have 3 classes', function() {
-         expect(element('.doc-example-live p:last').prop('className')).toBe('');
-         input('style1').enter('bold');
-         input('style2').enter('strike');
-         input('style3').enter('red');
-         expect(element('.doc-example-live p:last').prop('className')).toBe('bold strike red');
+         expect(ps.last().getAttribute('class')).toBe('');
+         element(by.model('style1')).sendKeys('bold');
+         element(by.model('style2')).sendKeys('strike');
+         element(by.model('style3')).sendKeys('red');
+         expect(ps.last().getAttribute('class')).toBe('bold strike red');
        });
      </file>
    </example>
@@ -23556,10 +23979,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
 
    The example below demonstrates how to perform animations using ngClass.
 
-   <example animations="true">
+   <example module="ngAnimate" deps="angular-animate.js" animations="true">
      <file name="index.html">
-      <input type="button" value="set" ng-click="myVar='my-class'">
-      <input type="button" value="clear" ng-click="myVar=''">
+      <input id="setbtn" type="button" value="set" ng-click="myVar='my-class'">
+      <input id="clearbtn" type="button" value="clear" ng-click="myVar=''">
       <br>
       <span class="base-class" ng-class="myVar">Sample Text</span>
      </file>
@@ -23574,19 +23997,19 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          font-size:3em;
        }
      </file>
-     <file name="scenario.js">
+     <file name="protractor.js" type="protractor">
        it('should check ng-class', function() {
-         expect(element('.doc-example-live span').prop('className')).not().
+         expect(element(by.css('.base-class')).getAttribute('class')).not.
            toMatch(/my-class/);
 
-         using('.doc-example-live').element(':button:first').click();
+         element(by.id('setbtn')).click();
 
-         expect(element('.doc-example-live span').prop('className')).
+         expect(element(by.css('.base-class')).getAttribute('class')).
            toMatch(/my-class/);
 
-         using('.doc-example-live').element(':button:last').click();
+         element(by.id('clearbtn')).click();
 
-         expect(element('.doc-example-live span').prop('className')).not().
+         expect(element(by.css('.base-class')).getAttribute('class')).not.
            toMatch(/my-class/);
        });
      </file>
@@ -23597,13 +24020,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
    The ngClass directive still supports CSS3 Transitions/Animations even if they do not follow the ngAnimate CSS naming structure.
    Upon animation ngAnimate will apply supplementary CSS classes to track the start and end of an animation, but this will not hinder
    any pre-existing CSS transitions already on the element. To get an idea of what happens during a class-based animation, be sure
-   to view the step by step details of {@link ngAnimate.$animate#methods_addclass $animate.addClass} and
-   {@link ngAnimate.$animate#methods_removeclass $animate.removeClass}.
+   to view the step by step details of {@link ngAnimate.$animate#addclass $animate.addClass} and
+   {@link ngAnimate.$animate#removeclass $animate.removeClass}.
  */
   var ngClassDirective = classDirective('', true);
   /**
  * @ngdoc directive
- * @name ng.directive:ngClassOdd
+ * @name ngClassOdd
  * @restrict AC
  *
  * @description
@@ -23637,11 +24060,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          color: blue;
        }
      </file>
-     <file name="scenario.js">
+     <file name="protractor.js" type="protractor">
        it('should check ng-class-odd and ng-class-even', function() {
-         expect(element('.doc-example-live li:first span').prop('className')).
+         expect(element(by.repeater('name in names').row(0).column('name')).getAttribute('class')).
            toMatch(/odd/);
-         expect(element('.doc-example-live li:last span').prop('className')).
+         expect(element(by.repeater('name in names').row(1).column('name')).getAttribute('class')).
            toMatch(/even/);
        });
      </file>
@@ -23650,7 +24073,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   var ngClassOddDirective = classDirective('Odd', 0);
   /**
  * @ngdoc directive
- * @name ng.directive:ngClassEven
+ * @name ngClassEven
  * @restrict AC
  *
  * @description
@@ -23684,11 +24107,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          color: blue;
        }
      </file>
-     <file name="scenario.js">
+     <file name="protractor.js" type="protractor">
        it('should check ng-class-odd and ng-class-even', function() {
-         expect(element('.doc-example-live li:first span').prop('className')).
+         expect(element(by.repeater('name in names').row(0).column('name')).getAttribute('class')).
            toMatch(/odd/);
-         expect(element('.doc-example-live li:last span').prop('className')).
+         expect(element(by.repeater('name in names').row(1).column('name')).getAttribute('class')).
            toMatch(/even/);
        });
      </file>
@@ -23697,7 +24120,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   var ngClassEvenDirective = classDirective('Even', 1);
   /**
  * @ngdoc directive
- * @name ng.directive:ngCloak
+ * @name ngCloak
  * @restrict AC
  *
  * @description
@@ -23713,11 +24136,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * `angular.min.js`.
  * For CSP mode please add `angular-csp.css` to your html file (see {@link ng.directive:ngCsp ngCsp}).
  *
- * <pre>
+ * ```css
  * [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
  *   display: none !important;
  * }
- * </pre>
+ * ```
  *
  * When this css rule is loaded by the browser, all html elements (including their children) that
  * are tagged with the `ngCloak` directive are hidden. When Angular encounters this directive
@@ -23735,20 +24158,20 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element ANY
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
         <div id="template1" ng-cloak>{{ 'hello' }}</div>
         <div id="template2" ng-cloak class="ng-cloak">{{ 'hello IE7' }}</div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should remove the template directive and css class', function() {
-         expect(element('.doc-example-live #template1').attr('ng-cloak')).
-           not().toBeDefined();
-         expect(element('.doc-example-live #template2').attr('ng-cloak')).
-           not().toBeDefined();
+         expect($('#template1').getAttribute('ng-cloak')).
+           toBeNull();
+         expect($('#template2').getAttribute('ng-cloak')).
+           toBeNull();
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  *
  */
   var ngCloakDirective = ngDirective({
@@ -23759,7 +24182,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     });
   /**
  * @ngdoc directive
- * @name ng.directive:ngController
+ * @name ngController
  *
  * @description
  * The `ngController` directive attaches a controller class to the view. This is a key aspect of how angular
@@ -23793,8 +24216,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * notice that any changes to the data are automatically reflected in the View without the need
  * for a manual update. The example is shown in two different declaration styles you may use
  * according to preference.
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <script>
         function SettingsController1() {
           this.name = "John Smith";
@@ -23838,26 +24261,40 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           <li>[ <a href="" ng-click="settings.addContact()">add</a> ]</li>
        </ul>
       </div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should check controller as', function() {
-         expect(element('#ctrl-as-exmpl>:input').val()).toBe('John Smith');
-         expect(element('#ctrl-as-exmpl li:nth-child(1) input').val())
-           .toBe('408 555 1212');
-         expect(element('#ctrl-as-exmpl li:nth-child(2) input').val())
-           .toBe('john.smith@example.org');
+         var container = element(by.id('ctrl-as-exmpl'));
 
-         element('#ctrl-as-exmpl li:first a:contains("clear")').click();
-         expect(element('#ctrl-as-exmpl li:first input').val()).toBe('');
+         expect(container.findElement(by.model('settings.name'))
+             .getAttribute('value')).toBe('John Smith');
 
-         element('#ctrl-as-exmpl li:last a:contains("add")').click();
-         expect(element('#ctrl-as-exmpl li:nth-child(3) input').val())
-           .toBe('yourname@example.org');
+         var firstRepeat =
+             container.findElement(by.repeater('contact in settings.contacts').row(0));
+         var secondRepeat =
+             container.findElement(by.repeater('contact in settings.contacts').row(1));
+
+         expect(firstRepeat.findElement(by.model('contact.value')).getAttribute('value'))
+             .toBe('408 555 1212');
+         expect(secondRepeat.findElement(by.model('contact.value')).getAttribute('value'))
+             .toBe('john.smith@example.org');
+
+         firstRepeat.findElement(by.linkText('clear')).click();
+
+         expect(firstRepeat.findElement(by.model('contact.value')).getAttribute('value'))
+             .toBe('');
+
+         container.findElement(by.linkText('add')).click();
+
+         expect(container.findElement(by.repeater('contact in settings.contacts').row(2))
+             .findElement(by.model('contact.value'))
+             .getAttribute('value'))
+             .toBe('yourname@example.org');
        });
-     </doc:scenario>
-   </doc:example>
-    <doc:example>
-     <doc:source>
+     </file>
+   </example>
+    <example>
+     <file name="index.html">
       <script>
         function SettingsController2($scope) {
           $scope.name = "John Smith";
@@ -23901,24 +24338,38 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           <li>[ <a href="" ng-click="addContact()">add</a> ]</li>
        </ul>
       </div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should check controller', function() {
-         expect(element('#ctrl-exmpl>:input').val()).toBe('John Smith');
-         expect(element('#ctrl-exmpl li:nth-child(1) input').val())
-           .toBe('408 555 1212');
-         expect(element('#ctrl-exmpl li:nth-child(2) input').val())
-           .toBe('john.smith@example.org');
+         var container = element(by.id('ctrl-exmpl'));
 
-         element('#ctrl-exmpl li:first a:contains("clear")').click();
-         expect(element('#ctrl-exmpl li:first input').val()).toBe('');
+         expect(container.findElement(by.model('name'))
+             .getAttribute('value')).toBe('John Smith');
 
-         element('#ctrl-exmpl li:last a:contains("add")').click();
-         expect(element('#ctrl-exmpl li:nth-child(3) input').val())
-           .toBe('yourname@example.org');
+         var firstRepeat =
+             container.findElement(by.repeater('contact in contacts').row(0));
+         var secondRepeat =
+             container.findElement(by.repeater('contact in contacts').row(1));
+
+         expect(firstRepeat.findElement(by.model('contact.value')).getAttribute('value'))
+             .toBe('408 555 1212');
+         expect(secondRepeat.findElement(by.model('contact.value')).getAttribute('value'))
+             .toBe('john.smith@example.org');
+
+         firstRepeat.findElement(by.linkText('clear')).click();
+
+         expect(firstRepeat.findElement(by.model('contact.value')).getAttribute('value'))
+             .toBe('');
+
+         container.findElement(by.linkText('add')).click();
+
+         expect(container.findElement(by.repeater('contact in contacts').row(2))
+             .findElement(by.model('contact.value'))
+             .getAttribute('value'))
+             .toBe('yourname@example.org');
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
 
  */
   var ngControllerDirective = [function () {
@@ -23930,7 +24381,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       }];
   /**
  * @ngdoc directive
- * @name ng.directive:ngCsp
+ * @name ngCsp
  *
  * @element html
  * @description
@@ -23957,45 +24408,46 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * @example
  * This example shows how to apply the `ngCsp` directive to the `html` tag.
-   <pre>
+   ```html
      <!doctype html>
      <html ng-app ng-csp>
      ...
      ...
      </html>
-   </pre>
+   ```
  */
   // ngCsp is not implemented as a proper directive any more, because we need it be processed while we bootstrap
   // the system (before $parse is instantiated), for this reason we just have a csp() fn that looks for ng-csp attribute
   // anywhere in the current doc
   /**
  * @ngdoc directive
- * @name ng.directive:ngClick
+ * @name ngClick
  *
  * @description
  * The ngClick directive allows you to specify custom behavior when
  * an element is clicked.
  *
  * @element ANY
+ * @priority 0
  * @param {expression} ngClick {@link guide/expression Expression} to evaluate upon
  * click. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <button ng-click="count = count + 1" ng-init="count=0">
         Increment
       </button>
       count: {{count}}
-     </doc:source>
-     <doc:protractor>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should check ng-click', function() {
          expect(element(by.binding('count')).getText()).toMatch('0');
-         element(by.css('.doc-example-live button')).click();
+         element(by.css('button')).click();
          expect(element(by.binding('count')).getText()).toMatch('1');
        });
-     </doc:protractor>
-   </doc:example>
+     </file>
+   </example>
  */
   /*
  * A directive that allows creation of custom onclick handlers that are defined as angular
@@ -24026,192 +24478,201 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   });
   /**
  * @ngdoc directive
- * @name ng.directive:ngDblclick
+ * @name ngDblclick
  *
  * @description
  * The `ngDblclick` directive allows you to specify custom behavior on a dblclick event.
  *
  * @element ANY
+ * @priority 0
  * @param {expression} ngDblclick {@link guide/expression Expression} to evaluate upon
  * a dblclick. (The Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <button ng-dblclick="count = count + 1" ng-init="count=0">
         Increment (on double click)
       </button>
       count: {{count}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngMousedown
+ * @name ngMousedown
  *
  * @description
  * The ngMousedown directive allows you to specify custom behavior on mousedown event.
  *
  * @element ANY
+ * @priority 0
  * @param {expression} ngMousedown {@link guide/expression Expression} to evaluate upon
  * mousedown. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <button ng-mousedown="count = count + 1" ng-init="count=0">
         Increment (on mouse down)
       </button>
       count: {{count}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngMouseup
+ * @name ngMouseup
  *
  * @description
  * Specify custom behavior on mouseup event.
  *
  * @element ANY
+ * @priority 0
  * @param {expression} ngMouseup {@link guide/expression Expression} to evaluate upon
  * mouseup. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <button ng-mouseup="count = count + 1" ng-init="count=0">
         Increment (on mouse up)
       </button>
       count: {{count}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngMouseover
+ * @name ngMouseover
  *
  * @description
  * Specify custom behavior on mouseover event.
  *
  * @element ANY
+ * @priority 0
  * @param {expression} ngMouseover {@link guide/expression Expression} to evaluate upon
  * mouseover. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <button ng-mouseover="count = count + 1" ng-init="count=0">
         Increment (when mouse is over)
       </button>
       count: {{count}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngMouseenter
+ * @name ngMouseenter
  *
  * @description
  * Specify custom behavior on mouseenter event.
  *
  * @element ANY
+ * @priority 0
  * @param {expression} ngMouseenter {@link guide/expression Expression} to evaluate upon
  * mouseenter. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <button ng-mouseenter="count = count + 1" ng-init="count=0">
         Increment (when mouse enters)
       </button>
       count: {{count}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngMouseleave
+ * @name ngMouseleave
  *
  * @description
  * Specify custom behavior on mouseleave event.
  *
  * @element ANY
+ * @priority 0
  * @param {expression} ngMouseleave {@link guide/expression Expression} to evaluate upon
  * mouseleave. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <button ng-mouseleave="count = count + 1" ng-init="count=0">
         Increment (when mouse leaves)
       </button>
       count: {{count}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngMousemove
+ * @name ngMousemove
  *
  * @description
  * Specify custom behavior on mousemove event.
  *
  * @element ANY
+ * @priority 0
  * @param {expression} ngMousemove {@link guide/expression Expression} to evaluate upon
  * mousemove. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <button ng-mousemove="count = count + 1" ng-init="count=0">
         Increment (when mouse moves)
       </button>
       count: {{count}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngKeydown
+ * @name ngKeydown
  *
  * @description
  * Specify custom behavior on keydown event.
  *
  * @element ANY
+ * @priority 0
  * @param {expression} ngKeydown {@link guide/expression Expression} to evaluate upon
  * keydown. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <input ng-keydown="count = count + 1" ng-init="count=0">
       key down count: {{count}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngKeyup
+ * @name ngKeyup
  *
  * @description
  * Specify custom behavior on keyup event.
  *
  * @element ANY
+ * @priority 0
  * @param {expression} ngKeyup {@link guide/expression Expression} to evaluate upon
  * keyup. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <input ng-keyup="count = count + 1" ng-init="count=0">
       key up count: {{count}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngKeypress
+ * @name ngKeypress
  *
  * @description
  * Specify custom behavior on keypress event.
@@ -24221,38 +24682,39 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * keypress. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <input ng-keypress="count = count + 1" ng-init="count=0">
       key press count: {{count}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngSubmit
+ * @name ngSubmit
  *
  * @description
  * Enables binding angular expressions to onsubmit events.
  *
  * Additionally it prevents the default action (which for form means sending the request to the
- * server and reloading the current page) **but only if the form does not contain an `action`
- * attribute**.
+ * server and reloading the current page), but only if the form does not contain `action`,
+ * `data-action`, or `x-action` attributes.
  *
  * @element form
+ * @priority 0
  * @param {expression} ngSubmit {@link guide/expression Expression} to eval. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <script>
         function Ctrl($scope) {
           $scope.list = [];
           $scope.text = 'hello';
           $scope.submit = function() {
-            if (this.text) {
-              this.list.push(this.text);
-              this.text = '';
+            if ($scope.text) {
+              $scope.list.push(this.text);
+              $scope.text = '';
             }
           };
         }
@@ -24263,31 +24725,32 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         <input type="submit" id="submit" value="Submit" />
         <pre>list={{list}}</pre>
       </form>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should check ng-submit', function() {
-         expect(binding('list')).toBe('[]');
-         element('.doc-example-live #submit').click();
-         expect(binding('list')).toBe('["hello"]');
-         expect(input('text').val()).toBe('');
+         expect(element(by.binding('list')).getText()).toBe('list=[]');
+         element(by.css('#submit')).click();
+         expect(element(by.binding('list')).getText()).toContain('hello');
+         expect(element(by.input('text')).getAttribute('value')).toBe('');
        });
        it('should ignore empty strings', function() {
-         expect(binding('list')).toBe('[]');
-         element('.doc-example-live #submit').click();
-         element('.doc-example-live #submit').click();
-         expect(binding('list')).toBe('["hello"]');
-       });
-     </doc:scenario>
-   </doc:example>
+         expect(element(by.binding('list')).getText()).toBe('list=[]');
+         element(by.css('#submit')).click();
+         element(by.css('#submit')).click();
+         expect(element(by.binding('list')).getText()).toContain('hello');
+        });
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngFocus
+ * @name ngFocus
  *
  * @description
  * Specify custom behavior on focus event.
  *
  * @element window, input, select, textarea, a
+ * @priority 0
  * @param {expression} ngFocus {@link guide/expression Expression} to evaluate upon
  * focus. (Event object is available as `$event`)
  *
@@ -24296,12 +24759,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngBlur
+ * @name ngBlur
  *
  * @description
  * Specify custom behavior on blur event.
  *
  * @element window, input, select, textarea, a
+ * @priority 0
  * @param {expression} ngBlur {@link guide/expression Expression} to evaluate upon
  * blur. (Event object is available as `$event`)
  *
@@ -24310,64 +24774,67 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngCopy
+ * @name ngCopy
  *
  * @description
  * Specify custom behavior on copy event.
  *
  * @element window, input, select, textarea, a
+ * @priority 0
  * @param {expression} ngCopy {@link guide/expression Expression} to evaluate upon
  * copy. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <input ng-copy="copied=true" ng-init="copied=false; value='copy me'" ng-model="value">
       copied: {{copied}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngCut
+ * @name ngCut
  *
  * @description
  * Specify custom behavior on cut event.
  *
  * @element window, input, select, textarea, a
+ * @priority 0
  * @param {expression} ngCut {@link guide/expression Expression} to evaluate upon
  * cut. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <input ng-cut="cut=true" ng-init="cut=false; value='cut me'" ng-model="value">
       cut: {{cut}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngPaste
+ * @name ngPaste
  *
  * @description
  * Specify custom behavior on paste event.
  *
  * @element window, input, select, textarea, a
+ * @priority 0
  * @param {expression} ngPaste {@link guide/expression Expression} to evaluate upon
  * paste. (Event object is available as `$event`)
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
       <input ng-paste="paste=true" ng-init="paste=false" placeholder='paste here'>
       pasted: {{paste}}
-     </doc:source>
-   </doc:example>
+     </file>
+   </example>
  */
   /**
  * @ngdoc directive
- * @name ng.directive:ngIf
+ * @name ngIf
  * @restrict A
  *
  * @description
@@ -24384,7 +24851,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * Note that when an element is removed using `ngIf` its scope is destroyed and a new scope
  * is created when the element is restored.  The scope created within `ngIf` inherits from
  * its parent scope using
- * {@link https://github.com/angular/angular.js/wiki/The-Nuances-of-Scope-Prototypal-Inheritance prototypal inheritance}.
+ * [prototypal inheritance](https://github.com/angular/angular.js/wiki/The-Nuances-of-Scope-Prototypal-Inheritance).
  * An important implication of this is if `ngModel` is used within `ngIf` to bind to
  * a javascript primitive defined in the parent scope. In this case any modifications made to the
  * variable within the child scope will override (hide) the value in the parent scope.
@@ -24409,7 +24876,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *     element is added to the DOM tree.
  *
  * @example
-  <example animations="true">
+  <example module="ngAnimate" deps="angular-animate.js" animations="true">
     <file name="index.html">
       Click me: <input type="checkbox" ng-model="checked" ng-init="checked=true" /><br/>
       Show when checked:
@@ -24451,7 +24918,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           restrict: 'A',
           $$tlb: true,
           link: function ($scope, $element, $attr, ctrl, $transclude) {
-            var block, childScope;
+            var block, childScope, previousElements;
             $scope.$watch($attr.ngIf, function ngIfWatchAction(value) {
               if (toBoolean(value)) {
                 if (!childScope) {
@@ -24466,12 +24933,19 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
                   });
                 }
               } else {
+                if (previousElements) {
+                  previousElements.remove();
+                  previousElements = null;
+                }
                 if (childScope) {
                   childScope.$destroy();
                   childScope = null;
                 }
                 if (block) {
-                  $animate.leave(getBlockElements(block.clone));
+                  previousElements = getBlockElements(block.clone);
+                  $animate.leave(previousElements, function () {
+                    previousElements = null;
+                  });
                   block = null;
                 }
               }
@@ -24482,23 +24956,23 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   /**
  * @ngdoc directive
- * @name ng.directive:ngInclude
+ * @name ngInclude
  * @restrict ECA
  *
  * @description
  * Fetches, compiles and includes an external HTML fragment.
  *
  * By default, the template URL is restricted to the same domain and protocol as the
- * application document. This is done by calling {@link ng.$sce#methods_getTrustedResourceUrl
+ * application document. This is done by calling {@link ng.$sce#getTrustedResourceUrl
  * $sce.getTrustedResourceUrl} on it. To load templates from other domains or protocols
- * you may either {@link ng.$sceDelegateProvider#methods_resourceUrlWhitelist whitelist them} or
- * {@link ng.$sce#methods_trustAsResourceUrl wrap them} as trusted values. Refer to Angular's {@link
+ * you may either {@link ng.$sceDelegateProvider#resourceUrlWhitelist whitelist them} or
+ * [wrap them](ng.$sce#trustAsResourceUrl) as trusted values. Refer to Angular's {@link
  * ng.$sce Strict Contextual Escaping}.
  *
  * In addition, the browser's
- * {@link https://code.google.com/p/browsersec/wiki/Part2#Same-origin_policy_for_XMLHttpRequest
- * Same Origin Policy} and {@link http://www.w3.org/TR/cors/ Cross-Origin Resource Sharing
- * (CORS)} policy may further restrict whether the template is successfully loaded.
+ * [Same Origin Policy](https://code.google.com/p/browsersec/wiki/Part2#Same-origin_policy_for_XMLHttpRequest)
+ * and [Cross-Origin Resource Sharing (CORS)](http://www.w3.org/TR/cors/)
+ * policy may further restrict whether the template is successfully loaded.
  * For example, `ngInclude` won't work for cross-domain requests on all browsers and for `file://`
  * access on some browsers.
  *
@@ -24512,7 +24986,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @priority 400
  *
  * @param {string} ngInclude|src angular expression evaluating to URL. If the source is a string constant,
- *                 make sure you wrap it in quotes, e.g. `src="'myPartialTemplate.html'"`.
+ *                 make sure you wrap it in **single** quotes, e.g. `src="'myPartialTemplate.html'"`.
  * @param {string=} onload Expression to evaluate when a new partial is loaded.
  *
  * @param {string=} autoscroll Whether `ngInclude` should call {@link ng.$anchorScroll
@@ -24523,7 +24997,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *                  - Otherwise enable scrolling only if the expression evaluates to truthy value.
  *
  * @example
-  <example animations="true">
+  <example module="ngAnimate" deps="angular-animate.js" animations="true">
     <file name="index.html">
      <div ng-controller="Ctrl">
        <select ng-model="template" ng-options="t.name for t in templates">
@@ -24539,8 +25013,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     <file name="script.js">
       function Ctrl($scope) {
         $scope.templates =
-          [ { name: 'template1.html', url: 'template1.html'}
-          , { name: 'template2.html', url: 'template2.html'} ];
+          [ { name: 'template1.html', url: 'template1.html'},
+            { name: 'template2.html', url: 'template2.html'} ];
         $scope.template = $scope.templates[0];
       }
      </file>
@@ -24590,35 +25064,47 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         top:50px;
       }
     </file>
-    <file name="scenario.js">
+    <file name="protractor.js" type="protractor">
+      var templateSelect = element(by.model('template'));
+      var includeElem = element(by.css('[ng-include]'));
+
       it('should load template1.html', function() {
-       expect(element('.doc-example-live [ng-include]').text()).
-         toMatch(/Content of template1.html/);
+        expect(includeElem.getText()).toMatch(/Content of template1.html/);
       });
+
       it('should load template2.html', function() {
-       select('template').option('1');
-       expect(element('.doc-example-live [ng-include]').text()).
-         toMatch(/Content of template2.html/);
+        if (browser.params.browser == 'firefox') {
+          // Firefox can't handle using selects
+          // See https://github.com/angular/protractor/issues/480
+          return;
+        }
+        templateSelect.click();
+        templateSelect.element.all(by.css('option')).get(2).click();
+        expect(includeElem.getText()).toMatch(/Content of template2.html/);
       });
+
       it('should change to blank', function() {
-       select('template').option('');
-       expect(element('.doc-example-live [ng-include]')).toBe(undefined);
+        if (browser.params.browser == 'firefox') {
+          // Firefox can't handle using selects
+          return;
+        }
+        templateSelect.click();
+        templateSelect.element.all(by.css('option')).get(0).click();
+        expect(includeElem.isPresent()).toBe(false);
       });
     </file>
   </example>
  */
   /**
  * @ngdoc event
- * @name ng.directive:ngInclude#$includeContentRequested
- * @eventOf ng.directive:ngInclude
+ * @name ngInclude#$includeContentRequested
  * @eventType emit on the scope ngInclude was declared in
  * @description
  * Emitted every time the ngInclude content is requested.
  */
   /**
  * @ngdoc event
- * @name ng.directive:ngInclude#$includeContentLoaded
- * @eventOf ng.directive:ngInclude
+ * @name ngInclude#$includeContentLoaded
  * @eventType emit on the current ngInclude scope
  * @description
  * Emitted every time the ngInclude content is reloaded.
@@ -24639,14 +25125,21 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
           compile: function (element, attr) {
             var srcExp = attr.ngInclude || attr.src, onloadExp = attr.onload || '', autoScrollExp = attr.autoscroll;
             return function (scope, $element, $attr, ctrl, $transclude) {
-              var changeCounter = 0, currentScope, currentElement;
+              var changeCounter = 0, currentScope, previousElement, currentElement;
               var cleanupLastIncludeContent = function () {
+                if (previousElement) {
+                  previousElement.remove();
+                  previousElement = null;
+                }
                 if (currentScope) {
                   currentScope.$destroy();
                   currentScope = null;
                 }
                 if (currentElement) {
-                  $animate.leave(currentElement);
+                  $animate.leave(currentElement, function () {
+                    previousElement = null;
+                  });
+                  previousElement = currentElement;
                   currentElement = null;
                 }
               };
@@ -24713,7 +25206,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   /**
  * @ngdoc directive
- * @name ng.directive:ngInit
+ * @name ngInit
  * @restrict AC
  *
  * @description
@@ -24722,9 +25215,16 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * <div class="alert alert-error">
  * The only appropriate use of `ngInit` is for aliasing special properties of
- * {@link api/ng.directive:ngRepeat `ngRepeat`}, as seen in the demo below. Besides this case, you
+ * {@link ng.directive:ngRepeat `ngRepeat`}, as seen in the demo below. Besides this case, you
  * should use {@link guide/controller controllers} rather than `ngInit`
  * to initialize values on a scope.
+ * </div>
+ * <div class="alert alert-warning">
+ * **Note**: If you have assignment in `ngInit` along with {@link ng.$filter `$filter`}, make
+ * sure you have parenthesis for correct precedence:
+ * <pre class="prettyprint">
+ *   <div ng-init="test1 = (data | orderBy:'name')"></div>
+ * </pre>
  * </div>
  *
  * @priority 450
@@ -24733,8 +25233,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @param {expression} ngInit {@link guide/expression Expression} to eval.
  *
  * @example
-   <doc:example>
-     <doc:source>
+   <example>
+     <file name="index.html">
    <script>
      function Ctrl($scope) {
        $scope.list = [['a', 'b'], ['c', 'd']];
@@ -24747,17 +25247,17 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
        </div>
      </div>
    </div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
        it('should alias index positions', function() {
-         expect(element('.example-init').text())
-           .toBe('list[ 0 ][ 0 ] = a;' +
-                 'list[ 0 ][ 1 ] = b;' +
-                 'list[ 1 ][ 0 ] = c;' +
-                 'list[ 1 ][ 1 ] = d;');
+         var elements = element.all(by.css('.example-init'));
+         expect(elements.get(0).getText()).toBe('list[ 0 ][ 0 ] = a;');
+         expect(elements.get(1).getText()).toBe('list[ 0 ][ 1 ] = b;');
+         expect(elements.get(2).getText()).toBe('list[ 1 ][ 0 ] = c;');
+         expect(elements.get(3).getText()).toBe('list[ 1 ][ 1 ] = d;');
        });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  */
   var ngInitDirective = ngDirective({
       priority: 450,
@@ -24771,7 +25271,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     });
   /**
  * @ngdoc directive
- * @name ng.directive:ngNonBindable
+ * @name ngNonBindable
  * @restrict AC
  * @priority 1000
  *
@@ -24788,19 +25288,18 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * but the one wrapped in `ngNonBindable` is left alone.
  *
  * @example
-    <doc:example>
-      <doc:source>
+    <example>
+      <file name="index.html">
         <div>Normal: {{1 + 2}}</div>
         <div ng-non-bindable>Ignored: {{1 + 2}}</div>
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
        it('should check ng-non-bindable', function() {
-         expect(using('.doc-example-live').binding('1 + 2')).toBe('3');
-         expect(using('.doc-example-live').element('div:last').text()).
-           toMatch(/1 \+ 2/);
+         expect(element(by.binding('1 + 2')).getText()).toContain('3');
+         expect(element.all(by.css('div')).last().getText()).toMatch(/1 \+ 2/);
        });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
  */
   var ngNonBindableDirective = ngDirective({
       terminal: true,
@@ -24808,22 +25307,21 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     });
   /**
  * @ngdoc directive
- * @name ng.directive:ngPluralize
+ * @name ngPluralize
  * @restrict EA
  *
  * @description
- * # Overview
  * `ngPluralize` is a directive that displays messages according to en-US localization rules.
  * These rules are bundled with angular.js, but can be overridden
  * (see {@link guide/i18n Angular i18n} dev guide). You configure ngPluralize directive
  * by specifying the mappings between
- * {@link http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
- * plural categories} and the strings to be displayed.
+ * [plural categories](http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html)
+ * and the strings to be displayed.
  *
  * # Plural categories and explicit number rules
  * There are two
- * {@link http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
- * plural categories} in Angular's default en-US locale: "one" and "other".
+ * [plural categories](http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html)
+ * in Angular's default en-US locale: "one" and "other".
  *
  * While a plural category may match many numbers (for example, in en-US locale, "other" can match
  * any number that is not 1), an explicit number rule can only match one number. For example, the
@@ -24842,13 +25340,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * The following example shows how to configure ngPluralize:
  *
- * <pre>
+ * ```html
  * <ng-pluralize count="personCount"
                  when="{'0': 'Nobody is viewing.',
  *                      'one': '1 person is viewing.',
  *                      'other': '{} people are viewing.'}">
  * </ng-pluralize>
- *</pre>
+ *```
  *
  * In the example, `"0: Nobody is viewing."` is an explicit number rule. If you did not
  * specify this rule, 0 would be matched to the "other" category and "0 people are viewing"
@@ -24868,7 +25366,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * The offset attribute allows you to offset a number by any desired value.
  * Let's take a look at an example:
  *
- * <pre>
+ * ```html
  * <ng-pluralize count="personCount" offset=2
  *               when="{'0': 'Nobody is viewing.',
  *                      '1': '{{person1}} is viewing.',
@@ -24876,7 +25374,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *                      'one': '{{person1}}, {{person2}} and one other person are viewing.',
  *                      'other': '{{person1}}, {{person2}} and {} other people are viewing.'}">
  * </ng-pluralize>
- * </pre>
+ * ```
  *
  * Notice that we are still using two plural categories(one, other), but we added
  * three explicit number rules 0, 1 and 2.
@@ -24891,13 +25389,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * you must provide explicit number rules for 0, 1, 2 and 3. You must also provide plural strings for
  * plural categories "one" and "other".
  *
- * @param {string|expression} count The variable to be bounded to.
+ * @param {string|expression} count The variable to be bound to.
  * @param {string} when The mapping between plural category to its corresponding strings.
  * @param {number=} offset Offset to deduct from the total number.
  *
  * @example
-    <doc:example>
-      <doc:source>
+    <example>
+      <file name="index.html">
         <script>
           function Ctrl($scope) {
             $scope.person1 = 'Igor';
@@ -24928,51 +25426,55 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
                                'other': '{{person1}}, {{person2}} and {} other people are viewing.'}">
           </ng-pluralize>
         </div>
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
         it('should show correct pluralized string', function() {
-          expect(element('.doc-example-live ng-pluralize:first').text()).
-                                             toBe('1 person is viewing.');
-          expect(element('.doc-example-live ng-pluralize:last').text()).
-                                                toBe('Igor is viewing.');
+          var withoutOffset = element.all(by.css('ng-pluralize')).get(0);
+          var withOffset = element.all(by.css('ng-pluralize')).get(1);
+          var countInput = element(by.model('personCount'));
 
-          using('.doc-example-live').input('personCount').enter('0');
-          expect(element('.doc-example-live ng-pluralize:first').text()).
-                                               toBe('Nobody is viewing.');
-          expect(element('.doc-example-live ng-pluralize:last').text()).
-                                              toBe('Nobody is viewing.');
+          expect(withoutOffset.getText()).toEqual('1 person is viewing.');
+          expect(withOffset.getText()).toEqual('Igor is viewing.');
 
-          using('.doc-example-live').input('personCount').enter('2');
-          expect(element('.doc-example-live ng-pluralize:first').text()).
-                                            toBe('2 people are viewing.');
-          expect(element('.doc-example-live ng-pluralize:last').text()).
-                              toBe('Igor and Misko are viewing.');
+          countInput.clear();
+          countInput.sendKeys('0');
 
-          using('.doc-example-live').input('personCount').enter('3');
-          expect(element('.doc-example-live ng-pluralize:first').text()).
-                                            toBe('3 people are viewing.');
-          expect(element('.doc-example-live ng-pluralize:last').text()).
-                              toBe('Igor, Misko and one other person are viewing.');
+          expect(withoutOffset.getText()).toEqual('Nobody is viewing.');
+          expect(withOffset.getText()).toEqual('Nobody is viewing.');
 
-          using('.doc-example-live').input('personCount').enter('4');
-          expect(element('.doc-example-live ng-pluralize:first').text()).
-                                            toBe('4 people are viewing.');
-          expect(element('.doc-example-live ng-pluralize:last').text()).
-                              toBe('Igor, Misko and 2 other people are viewing.');
+          countInput.clear();
+          countInput.sendKeys('2');
+
+          expect(withoutOffset.getText()).toEqual('2 people are viewing.');
+          expect(withOffset.getText()).toEqual('Igor and Misko are viewing.');
+
+          countInput.clear();
+          countInput.sendKeys('3');
+
+          expect(withoutOffset.getText()).toEqual('3 people are viewing.');
+          expect(withOffset.getText()).toEqual('Igor, Misko and one other person are viewing.');
+
+          countInput.clear();
+          countInput.sendKeys('4');
+
+          expect(withoutOffset.getText()).toEqual('4 people are viewing.');
+          expect(withOffset.getText()).toEqual('Igor, Misko and 2 other people are viewing.');
         });
-
-        it('should show data-binded names', function() {
-          using('.doc-example-live').input('personCount').enter('4');
-          expect(element('.doc-example-live ng-pluralize:last').text()).
-              toBe('Igor, Misko and 2 other people are viewing.');
-
-          using('.doc-example-live').input('person1').enter('Di');
-          using('.doc-example-live').input('person2').enter('Vojta');
-          expect(element('.doc-example-live ng-pluralize:last').text()).
-              toBe('Di, Vojta and 2 other people are viewing.');
+        it('should show data-bound names', function() {
+          var withOffset = element.all(by.css('ng-pluralize')).get(1);
+          var personCount = element(by.model('personCount'));
+          var person1 = element(by.model('person1'));
+          var person2 = element(by.model('person2'));
+          personCount.clear();
+          personCount.sendKeys('4');
+          person1.clear();
+          person1.sendKeys('Di');
+          person2.clear();
+          person2.sendKeys('Vojta');
+          expect(withOffset.getText()).toEqual('Di, Vojta and 2 other people are viewing.');
         });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
  */
   var ngPluralizeDirective = [
       '$locale',
@@ -25013,7 +25515,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   /**
  * @ngdoc directive
- * @name ng.directive:ngRepeat
+ * @name ngRepeat
  *
  * @description
  * The `ngRepeat` directive instantiates a template once per item from a collection. Each template
@@ -25031,7 +25533,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * | `$even`   | {@type boolean} | true if the iterator position `$index` is even (otherwise false).           |
  * | `$odd`    | {@type boolean} | true if the iterator position `$index` is odd (otherwise false).            |
  *
- * Creating aliases for these properties is possible with {@link api/ng.directive:ngInit `ngInit`}.
+ * Creating aliases for these properties is possible with {@link ng.directive:ngInit `ngInit`}.
  * This may be useful when, for instance, nesting ngRepeats.
  *
  * # Special repeat start and end points
@@ -25041,7 +25543,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * up to and including the ending HTML tag where **ng-repeat-end** is placed.
  *
  * The example below makes use of this feature:
- * <pre>
+ * ```html
  *   <header ng-repeat-start="item in items">
  *     Header {{ item }}
  *   </header>
@@ -25051,10 +25553,10 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   <footer ng-repeat-end>
  *     Footer {{ item }}
  *   </footer>
- * </pre>
+ * ```
  *
  * And with an input of {@type ['A','B']} for the items variable in the example above, the output will evaluate to:
- * <pre>
+ * ```html
  *   <header>
  *     Header A
  *   </header>
@@ -25073,15 +25575,17 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   <footer>
  *     Footer B
  *   </footer>
- * </pre>
+ * ```
  *
  * The custom start and end points for ngRepeat also support all other HTML directive syntax flavors provided in AngularJS (such
  * as **data-ng-repeat-start**, **x-ng-repeat-start** and **ng:repeat-start**).
  *
  * @animations
- * enter - when a new item is added to the list or when an item is revealed after a filter
- * leave - when an item is removed from the list or when an item is filtered out
- * move - when an adjacent item is filtered out causing a reorder or when the item contents are reordered
+ * **.enter** - when a new item is added to the list or when an item is revealed after a filter
+ *
+ * **.leave** - when an item is removed from the list or when an item is filtered out
+ *
+ * **.move** - when an adjacent item is filtered out causing a reorder or when the item contents are reordered
  *
  * @element ANY
  * @scope
@@ -25124,7 +25628,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @example
  * This example initializes the scope to a list of names and
  * then uses `ngRepeat` to display every person:
-  <example animations="true">
+  <example module="ngAnimate" deps="angular-animate.js" animations="true">
     <file name="index.html">
       <div ng-init="friends = [
         {name:'John', age:25, gender:'boy'},
@@ -25183,25 +25687,26 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         max-height:40px;
       }
     </file>
-    <file name="scenario.js">
-       it('should render initial data set', function() {
-         var r = using('.doc-example-live').repeater('ul li');
-         expect(r.count()).toBe(10);
-         expect(r.row(0)).toEqual(["1","John","25"]);
-         expect(r.row(1)).toEqual(["2","Jessie","30"]);
-         expect(r.row(9)).toEqual(["10","Samantha","60"]);
-         expect(binding('friends.length')).toBe("10");
-       });
+    <file name="protractor.js" type="protractor">
+      var friends = element.all(by.repeater('friend in friends'));
+
+      it('should render initial data set', function() {
+        expect(friends.count()).toBe(10);
+        expect(friends.get(0).getText()).toEqual('[1] John who is 25 years old.');
+        expect(friends.get(1).getText()).toEqual('[2] Jessie who is 30 years old.');
+        expect(friends.last().getText()).toEqual('[10] Samantha who is 60 years old.');
+        expect(element(by.binding('friends.length')).getText())
+            .toMatch("I have 10 friends. They are:");
+      });
 
        it('should update repeater when filter predicate changes', function() {
-         var r = using('.doc-example-live').repeater('ul li');
-         expect(r.count()).toBe(10);
+         expect(friends.count()).toBe(10);
 
-         input('q').enter('ma');
+         element(by.model('q')).sendKeys('ma');
 
-         expect(r.count()).toBe(2);
-         expect(r.row(0)).toEqual(["1","Mary","28"]);
-         expect(r.row(1)).toEqual(["2","Samantha","60"]);
+         expect(friends.count()).toBe(2);
+         expect(friends.get(0).getText()).toEqual('[1] Mary who is 28 years old.');
+         expect(friends.last().getText()).toEqual('[2] Samantha who is 60 years old.');
        });
       </file>
     </example>
@@ -25384,7 +25889,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   /**
  * @ngdoc directive
- * @name ng.directive:ngShow
+ * @name ngShow
  *
  * @description
  * The `ngShow` directive shows or hides the given HTML element based on the expression
@@ -25393,13 +25898,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * in AngularJS and sets the display style to none (using an !important flag).
  * For CSP mode please add `angular-csp.css` to your html file (see {@link ng.directive:ngCsp ngCsp}).
  *
- * <pre>
+ * ```html
  * <!-- when $scope.myValue is truthy (element is visible) -->
  * <div ng-show="myValue"></div>
  *
  * <!-- when $scope.myValue is falsy (element is hidden) -->
  * <div ng-show="myValue" class="ng-hide"></div>
- * </pre>
+ * ```
  *
  * When the ngShow expression evaluates to false then the ng-hide CSS class is added to the class attribute
  * on the element causing it to become hidden. When true, the ng-hide CSS class is removed
@@ -25420,7 +25925,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * If you wish to change the hide behavior with ngShow/ngHide then this can be achieved by
  * restating the styles for the .ng-hide class in CSS:
- * <pre>
+ * ```css
  * .ng-hide {
  *   //!annotate CSS Specificity|Not to worry, this will override the AngularJS default...
  *   display:block!important;
@@ -25430,9 +25935,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   top:-9999px;
  *   left:-9999px;
  * }
- * </pre>
+ * ```
  *
  * Just remember to include the important flag so the CSS override will function.
+ *
+ * <div class="alert alert-warning">
+ * **Note:** Here is a list of values that ngShow will consider as a falsy value (case insensitive):<br />
+ * "f" / "0" / "false" / "no" / "n" / "[]"
+ * </div>
  *
  * ## A note about animations with ngShow
  *
@@ -25441,7 +25951,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * you must also include the !important flag to override the display property
  * so that you can perform an animation when the element is hidden during the time of the animation.
  *
- * <pre>
+ * ```css
  * //
  * //a working example can be found at the bottom of this page
  * //
@@ -25454,7 +25964,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * .my-element.ng-hide-add.ng-hide-add-active { ... }
  * .my-element.ng-hide-remove { ... }
  * .my-element.ng-hide-remove.ng-hide-remove-active { ... }
- * </pre>
+ * ```
  *
  * @animations
  * addClass: .ng-hide - happens after the ngShow expression evaluates to a truthy value and the just before contents are set to visible
@@ -25465,21 +25975,24 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *     then the element is shown or hidden respectively.
  *
  * @example
-  <example animations="true">
+  <example module="ngAnimate" deps="angular-animate.js" animations="true">
     <file name="index.html">
       Click me: <input type="checkbox" ng-model="checked"><br/>
       <div>
         Show:
         <div class="check-element animate-show" ng-show="checked">
-          <span class="icon-thumbs-up"></span> I show up when your checkbox is checked.
+          <span class="glyphicon glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
         </div>
       </div>
       <div>
         Hide:
         <div class="check-element animate-show" ng-hide="checked">
-          <span class="icon-thumbs-down"></span> I hide when your checkbox is checked.
+          <span class="glyphicon glyphicon-thumbs-down"></span> I hide when your checkbox is checked.
         </div>
       </div>
+    </file>
+    <file name="glyphicons.css">
+      @import url(//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css);
     </file>
     <file name="animations.css">
       .animate-show {
@@ -25509,16 +26022,19 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         background:white;
       }
     </file>
-    <file name="scenario.js">
-       it('should check ng-show / ng-hide', function() {
-         expect(element('.doc-example-live span:first:hidden').count()).toEqual(1);
-         expect(element('.doc-example-live span:last:visible').count()).toEqual(1);
+    <file name="protractor.js" type="protractor">
+      var thumbsUp = element(by.css('span.glyphicon-thumbs-up'));
+      var thumbsDown = element(by.css('span.glyphicon-thumbs-down'));
 
-         input('checked').check();
+      it('should check ng-show / ng-hide', function() {
+        expect(thumbsUp.isDisplayed()).toBeFalsy();
+        expect(thumbsDown.isDisplayed()).toBeTruthy();
 
-         expect(element('.doc-example-live span:first:visible').count()).toEqual(1);
-         expect(element('.doc-example-live span:last:hidden').count()).toEqual(1);
-       });
+        element(by.model('checked')).click();
+
+        expect(thumbsUp.isDisplayed()).toBeTruthy();
+        expect(thumbsDown.isDisplayed()).toBeFalsy();
+      });
     </file>
   </example>
  */
@@ -25534,7 +26050,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   /**
  * @ngdoc directive
- * @name ng.directive:ngHide
+ * @name ngHide
  *
  * @description
  * The `ngHide` directive shows or hides the given HTML element based on the expression
@@ -25543,13 +26059,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * in AngularJS and sets the display style to none (using an !important flag).
  * For CSP mode please add `angular-csp.css` to your html file (see {@link ng.directive:ngCsp ngCsp}).
  *
- * <pre>
+ * ```hrml
  * <!-- when $scope.myValue is truthy (element is hidden) -->
  * <div ng-hide="myValue"></div>
  *
  * <!-- when $scope.myValue is falsy (element is visible) -->
  * <div ng-hide="myValue" class="ng-hide"></div>
- * </pre>
+ * ```
  *
  * When the ngHide expression evaluates to true then the .ng-hide CSS class is added to the class attribute
  * on the element causing it to become hidden. When false, the ng-hide CSS class is removed
@@ -25570,7 +26086,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  * If you wish to change the hide behavior with ngShow/ngHide then this can be achieved by
  * restating the styles for the .ng-hide class in CSS:
- * <pre>
+ * ```css
  * .ng-hide {
  *   //!annotate CSS Specificity|Not to worry, this will override the AngularJS default...
  *   display:block!important;
@@ -25580,9 +26096,14 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *   top:-9999px;
  *   left:-9999px;
  * }
- * </pre>
+ * ```
  *
  * Just remember to include the important flag so the CSS override will function.
+ *
+ * <div class="alert alert-warning">
+ * **Note:** Here is a list of values that ngHide will consider as a falsy value (case insensitive):<br />
+ * "f" / "0" / "false" / "no" / "n" / "[]"
+ * </div>
  *
  * ## A note about animations with ngHide
  *
@@ -25591,7 +26112,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * you must also include the !important flag to override the display property so
  * that you can perform an animation when the element is hidden during the time of the animation.
  *
- * <pre>
+ * ```css
  * //
  * //a working example can be found at the bottom of this page
  * //
@@ -25604,7 +26125,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * .my-element.ng-hide-add.ng-hide-add-active { ... }
  * .my-element.ng-hide-remove { ... }
  * .my-element.ng-hide-remove.ng-hide-remove-active { ... }
- * </pre>
+ * ```
  *
  * @animations
  * removeClass: .ng-hide - happens after the ngHide expression evaluates to a truthy value and just before the contents are set to hidden
@@ -25615,21 +26136,24 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *     the element is shown or hidden respectively.
  *
  * @example
-  <example animations="true">
+  <example module="ngAnimate" deps="angular-animate.js" animations="true">
     <file name="index.html">
       Click me: <input type="checkbox" ng-model="checked"><br/>
       <div>
         Show:
         <div class="check-element animate-hide" ng-show="checked">
-          <span class="icon-thumbs-up"></span> I show up when your checkbox is checked.
+          <span class="glyphicon glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
         </div>
       </div>
       <div>
         Hide:
         <div class="check-element animate-hide" ng-hide="checked">
-          <span class="icon-thumbs-down"></span> I hide when your checkbox is checked.
+          <span class="glyphicon glyphicon-thumbs-down"></span> I hide when your checkbox is checked.
         </div>
       </div>
+    </file>
+    <file name="glyphicons.css">
+      @import url(//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css);
     </file>
     <file name="animations.css">
       .animate-hide {
@@ -25659,16 +26183,19 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         background:white;
       }
     </file>
-    <file name="scenario.js">
-       it('should check ng-show / ng-hide', function() {
-         expect(element('.doc-example-live .check-element:first:hidden').count()).toEqual(1);
-         expect(element('.doc-example-live .check-element:last:visible').count()).toEqual(1);
+    <file name="protractor.js" type="protractor">
+      var thumbsUp = element(by.css('span.glyphicon-thumbs-up'));
+      var thumbsDown = element(by.css('span.glyphicon-thumbs-down'));
 
-         input('checked').check();
+      it('should check ng-show / ng-hide', function() {
+        expect(thumbsUp.isDisplayed()).toBeFalsy();
+        expect(thumbsDown.isDisplayed()).toBeTruthy();
 
-         expect(element('.doc-example-live .check-element:first:visible').count()).toEqual(1);
-         expect(element('.doc-example-live .check-element:last:hidden').count()).toEqual(1);
-       });
+        element(by.model('checked')).click();
+
+        expect(thumbsUp.isDisplayed()).toBeTruthy();
+        expect(thumbsDown.isDisplayed()).toBeFalsy();
+      });
     </file>
   </example>
  */
@@ -25684,7 +26211,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     ];
   /**
  * @ngdoc directive
- * @name ng.directive:ngStyle
+ * @name ngStyle
  * @restrict AC
  *
  * @description
@@ -25709,13 +26236,15 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          color: black;
        }
      </file>
-     <file name="scenario.js">
+     <file name="protractor.js" type="protractor">
+       var colorSpan = element(by.css('span'));
+
        it('should check ng-style', function() {
-         expect(element('.doc-example-live span').css('color')).toBe('rgb(0, 0, 0)');
-         element('.doc-example-live :button[value=set]').click();
-         expect(element('.doc-example-live span').css('color')).toBe('rgb(255, 0, 0)');
-         element('.doc-example-live :button[value=clear]').click();
-         expect(element('.doc-example-live span').css('color')).toBe('rgb(0, 0, 0)');
+         expect(colorSpan.getCssValue('color')).toBe('rgba(0, 0, 0, 1)');
+         element(by.css('input[value=set]')).click();
+         expect(colorSpan.getCssValue('color')).toBe('rgba(255, 0, 0, 1)');
+         element(by.css('input[value=clear]')).click();
+         expect(colorSpan.getCssValue('color')).toBe('rgba(0, 0, 0, 1)');
        });
      </file>
    </example>
@@ -25733,7 +26262,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     });
   /**
  * @ngdoc directive
- * @name ng.directive:ngSwitch
+ * @name ngSwitch
  * @restrict EA
  *
  * @description
@@ -25742,7 +26271,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * as specified in the template.
  *
  * The directive itself works similar to ngInclude, however, instead of downloading template code (or loading it
- * from the template cache), `ngSwitch` simply choses one of the nested elements and makes it visible based on which element
+ * from the template cache), `ngSwitch` simply chooses one of the nested elements and makes it visible based on which element
  * matches the value obtained from the evaluated expression. In other words, you define a container element
  * (where you place the directive), place an expression on the **`on="..."` attribute**
  * (or the **`ng-switch="..."` attribute**), define any inner elements inside of the directive and place
@@ -25772,7 +26301,6 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @scope
  * @priority 800
  * @param {*} ngSwitch|on expression to match against <tt>ng-switch-when</tt>.
- * @paramDescription
  * On child elements add:
  *
  * * `ngSwitchWhen`: the case statement to match against. If match then this
@@ -25784,7 +26312,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *
  *
  * @example
-  <example animations="true">
+  <example module="ngAnimate" deps="angular-animate.js" animations="true">
     <file name="index.html">
       <div ng-controller="Ctrl">
         <select ng-model="selection" ng-options="item for item in items">
@@ -25838,17 +26366,20 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
         top:0;
       }
     </file>
-    <file name="scenario.js">
+    <file name="protractor.js" type="protractor">
+      var switchElem = element(by.css('[ng-switch]'));
+      var select = element(by.model('selection'));
+
       it('should start in settings', function() {
-        expect(element('.doc-example-live [ng-switch]').text()).toMatch(/Settings Div/);
+        expect(switchElem.getText()).toMatch(/Settings Div/);
       });
       it('should change to home', function() {
-        select('selection').option('home');
-        expect(element('.doc-example-live [ng-switch]').text()).toMatch(/Home Span/);
+        select.element.all(by.css('option')).get(1).click();
+        expect(switchElem.getText()).toMatch(/Home Span/);
       });
       it('should select default', function() {
-        select('selection').option('other');
-        expect(element('.doc-example-live [ng-switch]').text()).toMatch(/default/);
+        select.element.all(by.css('option')).get(2).click();
+        expect(switchElem.getText()).toMatch(/default/);
       });
     </file>
   </example>
@@ -25866,11 +26397,28 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
             }
           ],
           link: function (scope, element, attr, ngSwitchController) {
-            var watchExpr = attr.ngSwitch || attr.on, selectedTranscludes, selectedElements, selectedScopes = [];
+            var watchExpr = attr.ngSwitch || attr.on, selectedTranscludes, selectedElements, previousElements, selectedScopes = [];
             scope.$watch(watchExpr, function ngSwitchWatchAction(value) {
-              for (var i = 0, ii = selectedScopes.length; i < ii; i++) {
-                selectedScopes[i].$destroy();
-                $animate.leave(selectedElements[i]);
+              var i, ii = selectedScopes.length;
+              if (ii > 0) {
+                if (previousElements) {
+                  for (i = 0; i < ii; i++) {
+                    previousElements[i].remove();
+                  }
+                  previousElements = null;
+                }
+                previousElements = [];
+                for (i = 0; i < ii; i++) {
+                  var selected = selectedElements[i];
+                  selectedScopes[i].$destroy();
+                  previousElements[i] = selected;
+                  $animate.leave(selected, function () {
+                    previousElements.splice(i, 1);
+                    if (previousElements.length === 0) {
+                      previousElements = null;
+                    }
+                  });
+                }
               }
               selectedElements = [];
               selectedScopes = [];
@@ -25917,7 +26465,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     });
   /**
  * @ngdoc directive
- * @name ng.directive:ngTransclude
+ * @name ngTransclude
  * @restrict AC
  *
  * @description
@@ -25928,8 +26476,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * @element ANY
  *
  * @example
-   <doc:example module="transclude">
-     <doc:source>
+   <example module="transclude">
+     <file name="index.html">
        <script>
          function Ctrl($scope) {
            $scope.title = 'Lorem Ipsum';
@@ -25954,34 +26502,28 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
          <textarea ng-model="text"></textarea> <br/>
          <pane title="{{title}}">{{text}}</pane>
        </div>
-     </doc:source>
-     <doc:scenario>
+     </file>
+     <file name="protractor.js" type="protractor">
         it('should have transcluded', function() {
-          input('title').enter('TITLE');
-          input('text').enter('TEXT');
-          expect(binding('title')).toEqual('TITLE');
-          expect(binding('text')).toEqual('TEXT');
+          var titleElement = element(by.model('title'));
+          titleElement.clear();
+          titleElement.sendKeys('TITLE');
+          var textElement = element(by.model('text'));
+          textElement.clear();
+          textElement.sendKeys('TEXT');
+          expect(element(by.binding('title')).getText()).toEqual('TITLE');
+          expect(element(by.binding('text')).getText()).toEqual('TEXT');
         });
-     </doc:scenario>
-   </doc:example>
+     </file>
+   </example>
  *
  */
   var ngTranscludeDirective = ngDirective({
-      controller: [
-        '$element',
-        '$transclude',
-        function ($element, $transclude) {
-          if (!$transclude) {
-            throw minErr('ngTransclude')('orphan', 'Illegal use of ngTransclude directive in the template! ' + 'No parent directive that requires a transclusion found. ' + 'Element: {0}', startingTag($element));
-          }
-          // remember the transclusion fn but call it during linking so that we don't process transclusion before directives on
-          // the parent element even when the transclusion replaces the current element. (we can't use priority here because
-          // that applies only to compile fns and not controllers
-          this.$transclude = $transclude;
+      link: function ($scope, $element, $attrs, controller, $transclude) {
+        if (!$transclude) {
+          throw minErr('ngTransclude')('orphan', 'Illegal use of ngTransclude directive in the template! ' + 'No parent directive that requires a transclusion found. ' + 'Element: {0}', startingTag($element));
         }
-      ],
-      link: function ($scope, $element, $attrs, controller) {
-        controller.$transclude(function (clone) {
+        $transclude(function (clone) {
           $element.empty();
           $element.append(clone);
         });
@@ -25989,36 +26531,36 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     });
   /**
  * @ngdoc directive
- * @name ng.directive:script
+ * @name script
  * @restrict E
  *
  * @description
- * Load the content of a `<script>` element into {@link api/ng.$templateCache `$templateCache`}, so that the
- * template can be used by {@link api/ng.directive:ngInclude `ngInclude`},
- * {@link api/ngRoute.directive:ngView `ngView`}, or {@link guide/directive directives}. The type of the
+ * Load the content of a `<script>` element into {@link ng.$templateCache `$templateCache`}, so that the
+ * template can be used by {@link ng.directive:ngInclude `ngInclude`},
+ * {@link ngRoute.directive:ngView `ngView`}, or {@link guide/directive directives}. The type of the
  * `<script>` element must be specified as `text/ng-template`, and a cache name for the template must be
  * assigned through the element's `id`, which can then be used as a directive's `templateUrl`.
  *
- * @param {'text/ng-template'} type Must be set to `'text/ng-template'`.
+ * @param {string} type Must be set to `'text/ng-template'`.
  * @param {string} id Cache name of the template.
  *
  * @example
-  <doc:example>
-    <doc:source>
+  <example>
+    <file name="index.html">
       <script type="text/ng-template" id="/tpl.html">
         Content of the template.
       </script>
 
       <a ng-click="currentTpl='/tpl.html'" id="tpl-link">Load inlined template</a>
       <div id="tpl-content" ng-include src="currentTpl"></div>
-    </doc:source>
-    <doc:scenario>
+    </file>
+    <file name="protractor.js" type="protractor">
       it('should load template defined inside script tag', function() {
-        element('#tpl-link').click();
-        expect(element('#tpl-content').text()).toMatch(/Content of the template/);
+        element(by.css('#tpl-link')).click();
+        expect(element(by.css('#tpl-content')).getText()).toMatch(/Content of the template/);
       });
-    </doc:scenario>
-  </doc:example>
+    </file>
+  </example>
  */
   var scriptDirective = [
       '$templateCache',
@@ -26040,7 +26582,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
   var ngOptionsMinErr = minErr('ngOptions');
   /**
  * @ngdoc directive
- * @name ng.directive:select
+ * @name select
  * @restrict E
  *
  * @description
@@ -26056,14 +26598,21 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  * represented by the selected option will be bound to the model identified by the `ngModel`
  * directive.
  *
+ * <div class="alert alert-warning">
+ * **Note:** `ngModel` compares by reference, not value. This is important when binding to an
+ * array of objects. See an example [in this jsfiddle](http://jsfiddle.net/qWzTb/).
+ * </div>
+ *
  * Optionally, a single hard-coded `<option>` element, with the value set to an empty string, can
  * be nested into the `<select>` element. This element will then represent the `null` or "not selected"
  * option. See example below for demonstration.
  *
- * Note: `ngOptions` provides iterator facility for `<option>` element which should be used instead
+ * <div class="alert alert-warning">
+ * **Note:** `ngOptions` provides an iterator facility for the `<option>` element which should be used instead
  * of {@link ng.directive:ngRepeat ngRepeat} when you want the
  * `select` model to be bound to a non-string value. This is because an option element can only
  * be bound to string values at present.
+ * </div>
  *
  * @param {string} ngModel Assignable angular expression to data-bind to.
  * @param {string=} name Property name of the form under which the control is published.
@@ -26102,8 +26651,8 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
  *     `value` variable (e.g. `value.propertyName`).
  *
  * @example
-    <doc:example>
-      <doc:source>
+    <example>
+      <file name="index.html">
         <script>
         function MyCntrl($scope) {
           $scope.colors = [
@@ -26149,17 +26698,19 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
                ng-style="{'background-color':color.name}">
           </div>
         </div>
-      </doc:source>
-      <doc:scenario>
+      </file>
+      <file name="protractor.js" type="protractor">
          it('should check ng-options', function() {
-           expect(binding('{selected_color:color}')).toMatch('red');
-           select('color').option('0');
-           expect(binding('{selected_color:color}')).toMatch('black');
-           using('.nullable').select('color').option('');
-           expect(binding('{selected_color:color}')).toMatch('null');
+           expect(element(by.binding('{selected_color:color}')).getText()).toMatch('red');
+           element.all(by.select('color')).first().click();
+           element.all(by.css('select[ng-model="color"] option')).first().click();
+           expect(element(by.binding('{selected_color:color}')).getText()).toMatch('black');
+           element(by.css('.nullable select[ng-model="color"]')).click();
+           element.all(by.css('.nullable select[ng-model="color"] option')).first().click();
+           expect(element(by.binding('{selected_color:color}')).getText()).toMatch('null');
          });
-      </doc:scenario>
-    </doc:example>
+      </file>
+    </example>
  */
   var ngOptionsDirective = valueFn({ terminal: true });
   // jshint maxlen: false
@@ -26379,6 +26930,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
                         value = valueFn(scope, locals);
                       }
                     }
+                    // Update the null option's selected property here so $render cleans it up correctly
+                    if (optionGroupsCache[0].length > 1) {
+                      if (optionGroupsCache[0][1].id !== key) {
+                        optionGroupsCache[0][1].selected = false;
+                      }
+                    }
                   }
                   ctrl.$setViewValue(value);
                 });
@@ -26494,7 +27051,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
                         lastElement.val(existingOption.id = option.id);
                       }
                       // lastElement.prop('selected') provided by jQuery has side-effects
-                      if (lastElement[0].selected !== option.selected) {
+                      if (existingOption.selected !== option.selected) {
                         lastElement.prop('selected', existingOption.selected = option.selected);
                       }
                     } else {
@@ -26589,6 +27146,11 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
       restrict: 'E',
       terminal: true
     });
+  if (window.angular.bootstrap) {
+    //AngularJS is already loaded, so we can return here...
+    console.log('WARNING: Tried to load angular more than once.');
+    return;
+  }
   //try to bind to jquery now so that one can write angular.element().read()
   //but we will rebind on bootstrap again.
   bindJQuery();
@@ -26597,7 +27159,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     angularInit(document, bootstrap);
   });
 }(window, document));
-!angular.$$csp() && angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\\:form{display:block;}</style>');
+!angular.$$csp() && angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}</style>');
 /**
  * @license AngularJS v1.2.9
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -27773,6 +28335,13 @@ if (!CodeMirror.mimeModes.hasOwnProperty('text/html'))
     }
   ]);
 }(window, window.angular));
+/*
+ * angular-ui-bootstrap
+ * http://angular-ui.github.io/bootstrap/
+
+ * Version: 0.10.0 - 2014-01-13
+ * License: MIT
+ */
 angular.module('ui.bootstrap', [
   'ui.bootstrap.tpls',
   'ui.bootstrap.transition',
@@ -27812,9 +28381,9 @@ angular.module('ui.bootstrap.tpls', [
   'template/popover/popover.html',
   'template/progressbar/bar.html',
   'template/progressbar/progress.html',
+  'template/progressbar/progressbar.html',
   'template/rating/rating.html',
   'template/tabs/tab.html',
-  'template/tabs/tabset-titles.html',
   'template/tabs/tabset.html',
   'template/timepicker/timepicker.html',
   'template/typeahead/typeahead-match.html',
@@ -27891,75 +28460,65 @@ angular.module('ui.bootstrap.transition', []).factory('$transition', [
 ]);
 angular.module('ui.bootstrap.collapse', ['ui.bootstrap.transition']).directive('collapse', [
   '$transition',
-  function ($transition) {
-    // CSS transitions don't work with height: auto, so we have to manually change the height to a
-    // specific value and then once the animation completes, we can reset the height to auto.
-    // Unfortunately if you do this while the CSS transitions are specified (i.e. in the CSS class
-    // "collapse") then you trigger a change to height 0 in between.
-    // The fix is to remove the "collapse" CSS class while changing the height back to auto - phew!
-    var fixUpHeight = function (scope, element, height) {
-      // We remove the collapse CSS class to prevent a transition when we change to height: auto
-      element.removeClass('collapse');
-      element.css({ height: height });
-      // It appears that  reading offsetWidth makes the browser realise that we have changed the
-      // height already :-/
-      var x = element[0].offsetWidth;
-      element.addClass('collapse');
-    };
+  function ($transition, $timeout) {
     return {
       link: function (scope, element, attrs) {
-        var isCollapsed;
         var initialAnimSkip = true;
-        scope.$watch(attrs.collapse, function (value) {
-          if (value) {
+        var currentTransition;
+        function doTransition(change) {
+          var newTransition = $transition(element, change);
+          if (currentTransition) {
+            currentTransition.cancel();
+          }
+          currentTransition = newTransition;
+          newTransition.then(newTransitionDone, newTransitionDone);
+          return newTransition;
+          function newTransitionDone() {
+            // Make sure it's this transition, otherwise, leave it alone.
+            if (currentTransition === newTransition) {
+              currentTransition = undefined;
+            }
+          }
+        }
+        function expand() {
+          if (initialAnimSkip) {
+            initialAnimSkip = false;
+            expandDone();
+          } else {
+            element.removeClass('collapse').addClass('collapsing');
+            doTransition({ height: element[0].scrollHeight + 'px' }).then(expandDone);
+          }
+        }
+        function expandDone() {
+          element.removeClass('collapsing');
+          element.addClass('collapse in');
+          element.css({ height: 'auto' });
+        }
+        function collapse() {
+          if (initialAnimSkip) {
+            initialAnimSkip = false;
+            collapseDone();
+            element.css({ height: 0 });
+          } else {
+            // CSS transitions don't work with height: auto, so we have to manually change the height to a specific value
+            element.css({ height: element[0].scrollHeight + 'px' });
+            //trigger reflow so a browser realizes that height was updated from auto to a specific value
+            var x = element[0].offsetWidth;
+            element.removeClass('collapse in').addClass('collapsing');
+            doTransition({ height: 0 }).then(collapseDone);
+          }
+        }
+        function collapseDone() {
+          element.removeClass('collapsing');
+          element.addClass('collapse');
+        }
+        scope.$watch(attrs.collapse, function (shouldCollapse) {
+          if (shouldCollapse) {
             collapse();
           } else {
             expand();
           }
         });
-        var currentTransition;
-        var doTransition = function (change) {
-          if (currentTransition) {
-            currentTransition.cancel();
-          }
-          currentTransition = $transition(element, change);
-          currentTransition.then(function () {
-            currentTransition = undefined;
-          }, function () {
-            currentTransition = undefined;
-          });
-          return currentTransition;
-        };
-        var expand = function () {
-          if (initialAnimSkip) {
-            initialAnimSkip = false;
-            if (!isCollapsed) {
-              fixUpHeight(scope, element, 'auto');
-              element.addClass('in');
-            }
-          } else {
-            doTransition({ height: element[0].scrollHeight + 'px' }).then(function () {
-              // This check ensures that we don't accidentally update the height if the user has closed
-              // the group while the animation was still running
-              if (!isCollapsed) {
-                fixUpHeight(scope, element, 'auto');
-                element.addClass('in');
-              }
-            });
-          }
-          isCollapsed = false;
-        };
-        var collapse = function () {
-          isCollapsed = true;
-          element.removeClass('in');
-          if (initialAnimSkip) {
-            initialAnimSkip = false;
-            fixUpHeight(scope, element, 0);
-          } else {
-            fixUpHeight(scope, element, element[0].scrollHeight + 'px');
-            doTransition({ 'height': '0' });
-          }
-        };
       }
     };
   }
@@ -27971,8 +28530,6 @@ angular.module('ui.bootstrap.accordion', ['ui.bootstrap.collapse']).constant('ac
   function ($scope, $attrs, accordionConfig) {
     // This array keeps track of the accordion groups
     this.groups = [];
-    // Keep reference to user's scope to properly assign `is-open`
-    this.scope = $scope;
     // Ensure that all the groups in this accordion are closed, unless close-others explicitly says not to
     this.closeOthers = function (openGroup) {
       var closeOthers = angular.isDefined($attrs.closeOthers) ? $scope.$eval($attrs.closeOthers) : accordionConfig.closeOthers;
@@ -28010,9 +28567,7 @@ angular.module('ui.bootstrap.accordion', ['ui.bootstrap.collapse']).constant('ac
   };
 }).directive('accordionGroup', [
   '$parse',
-  '$transition',
-  '$timeout',
-  function ($parse, $transition, $timeout) {
+  function ($parse) {
     return {
       require: '^accordion',
       restrict: 'EA',
@@ -28020,14 +28575,11 @@ angular.module('ui.bootstrap.accordion', ['ui.bootstrap.collapse']).constant('ac
       replace: true,
       templateUrl: 'template/accordion/accordion-group.html',
       scope: { heading: '@' },
-      controller: [
-        '$scope',
-        function ($scope) {
-          this.setHeading = function (element) {
-            this.heading = element;
-          };
-        }
-      ],
+      controller: function () {
+        this.setHeading = function (element) {
+          this.heading = element;
+        };
+      },
       link: function (scope, element, attrs, accordionCtrl) {
         var getIsOpen, setIsOpen;
         accordionCtrl.addGroup(scope);
@@ -28035,7 +28587,7 @@ angular.module('ui.bootstrap.accordion', ['ui.bootstrap.collapse']).constant('ac
         if (attrs.isOpen) {
           getIsOpen = $parse(attrs.isOpen);
           setIsOpen = getIsOpen.assign;
-          accordionCtrl.scope.$watch(getIsOpen, function (value) {
+          scope.$parent.$watch(getIsOpen, function (value) {
             scope.isOpen = !!value;
           });
         }
@@ -28044,7 +28596,7 @@ angular.module('ui.bootstrap.accordion', ['ui.bootstrap.collapse']).constant('ac
             accordionCtrl.closeOthers(scope);
           }
           if (setIsOpen) {
-            setIsOpen(accordionCtrl.scope, value);
+            setIsOpen(scope.$parent, value);
           }
         });
       }
@@ -28082,18 +28634,22 @@ angular.module('ui.bootstrap.accordion', ['ui.bootstrap.collapse']).constant('ac
     }
   };
 });
-angular.module('ui.bootstrap.alert', []).directive('alert', function () {
+angular.module('ui.bootstrap.alert', []).controller('AlertController', [
+  '$scope',
+  '$attrs',
+  function ($scope, $attrs) {
+    $scope.closeable = 'close' in $attrs;
+  }
+]).directive('alert', function () {
   return {
     restrict: 'EA',
+    controller: 'AlertController',
     templateUrl: 'template/alert/alert.html',
     transclude: true,
     replace: true,
     scope: {
       type: '=',
       close: '&'
-    },
-    link: function (scope, iElement, iAttrs) {
-      scope.closeable = 'close' in iAttrs;
     }
   };
 });
@@ -28108,61 +28664,69 @@ angular.module('ui.bootstrap.bindHtml', []).directive('bindHtmlUnsafe', function
 angular.module('ui.bootstrap.buttons', []).constant('buttonConfig', {
   activeClass: 'active',
   toggleEvent: 'click'
-}).directive('btnRadio', [
+}).controller('ButtonsController', [
   'buttonConfig',
   function (buttonConfig) {
-    var activeClass = buttonConfig.activeClass || 'active';
-    var toggleEvent = buttonConfig.toggleEvent || 'click';
-    return {
-      require: 'ngModel',
-      link: function (scope, element, attrs, ngModelCtrl) {
-        //model -> UI
-        ngModelCtrl.$render = function () {
-          element.toggleClass(activeClass, angular.equals(ngModelCtrl.$modelValue, scope.$eval(attrs.btnRadio)));
-        };
-        //ui->model
-        element.bind(toggleEvent, function () {
-          if (!element.hasClass(activeClass)) {
-            scope.$apply(function () {
-              ngModelCtrl.$setViewValue(scope.$eval(attrs.btnRadio));
-              ngModelCtrl.$render();
-            });
-          }
-        });
-      }
-    };
+    this.activeClass = buttonConfig.activeClass || 'active';
+    this.toggleEvent = buttonConfig.toggleEvent || 'click';
   }
-]).directive('btnCheckbox', [
-  'buttonConfig',
-  function (buttonConfig) {
-    var activeClass = buttonConfig.activeClass || 'active';
-    var toggleEvent = buttonConfig.toggleEvent || 'click';
-    return {
-      require: 'ngModel',
-      link: function (scope, element, attrs, ngModelCtrl) {
-        function getTrueValue() {
-          var trueValue = scope.$eval(attrs.btnCheckboxTrue);
-          return angular.isDefined(trueValue) ? trueValue : true;
-        }
-        function getFalseValue() {
-          var falseValue = scope.$eval(attrs.btnCheckboxFalse);
-          return angular.isDefined(falseValue) ? falseValue : false;
-        }
-        //model -> UI
-        ngModelCtrl.$render = function () {
-          element.toggleClass(activeClass, angular.equals(ngModelCtrl.$modelValue, getTrueValue()));
-        };
-        //ui->model
-        element.bind(toggleEvent, function () {
+]).directive('btnRadio', function () {
+  return {
+    require: [
+      'btnRadio',
+      'ngModel'
+    ],
+    controller: 'ButtonsController',
+    link: function (scope, element, attrs, ctrls) {
+      var buttonsCtrl = ctrls[0], ngModelCtrl = ctrls[1];
+      //model -> UI
+      ngModelCtrl.$render = function () {
+        element.toggleClass(buttonsCtrl.activeClass, angular.equals(ngModelCtrl.$modelValue, scope.$eval(attrs.btnRadio)));
+      };
+      //ui->model
+      element.bind(buttonsCtrl.toggleEvent, function () {
+        if (!element.hasClass(buttonsCtrl.activeClass)) {
           scope.$apply(function () {
-            ngModelCtrl.$setViewValue(element.hasClass(activeClass) ? getFalseValue() : getTrueValue());
+            ngModelCtrl.$setViewValue(scope.$eval(attrs.btnRadio));
             ngModelCtrl.$render();
           });
-        });
+        }
+      });
+    }
+  };
+}).directive('btnCheckbox', function () {
+  return {
+    require: [
+      'btnCheckbox',
+      'ngModel'
+    ],
+    controller: 'ButtonsController',
+    link: function (scope, element, attrs, ctrls) {
+      var buttonsCtrl = ctrls[0], ngModelCtrl = ctrls[1];
+      function getTrueValue() {
+        return getCheckboxValue(attrs.btnCheckboxTrue, true);
       }
-    };
-  }
-]);
+      function getFalseValue() {
+        return getCheckboxValue(attrs.btnCheckboxFalse, false);
+      }
+      function getCheckboxValue(attributeValue, defaultValue) {
+        var val = scope.$eval(attributeValue);
+        return angular.isDefined(val) ? val : defaultValue;
+      }
+      //model -> UI
+      ngModelCtrl.$render = function () {
+        element.toggleClass(buttonsCtrl.activeClass, angular.equals(ngModelCtrl.$modelValue, getTrueValue()));
+      };
+      //ui->model
+      element.bind(buttonsCtrl.toggleEvent, function () {
+        scope.$apply(function () {
+          ngModelCtrl.$setViewValue(element.hasClass(buttonsCtrl.activeClass) ? getFalseValue() : getTrueValue());
+          ngModelCtrl.$render();
+        });
+      });
+    }
+  };
+});
 /**
 * @ngdoc overview
 * @name ui.bootstrap.carousel
@@ -28179,6 +28743,7 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition']).controller(
   function ($scope, $timeout, $transition, $q) {
     var self = this, slides = self.slides = [], currentIndex = -1, currentTimeout, isPlaying;
     self.currentSlide = null;
+    var destroyed = false;
     /* direction: "prev" or "next" */
     self.select = function (nextSlide, direction) {
       var nextIndex = slides.indexOf(nextSlide);
@@ -28196,6 +28761,10 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition']).controller(
         }
       }
       function goNext() {
+        // Scope has been destroyed, stop here.
+        if (destroyed) {
+          return;
+        }
         //If we have a slide to transition from and we have a transition type and we're allowed, go
         if (self.currentSlide && angular.isString(direction) && !$scope.noTransition && nextSlide.$element) {
           //We shouldn't do class manip in here, but it's the same weird thing bootstrap does. need to fix sometime
@@ -28253,6 +28822,9 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition']).controller(
         $scope.$currentTransition = null;
       }
     };
+    $scope.$on('$destroy', function () {
+      destroyed = true;
+    });
     /* Allow outside people to call indexOf on slides array */
     self.indexOfSlide = function (slide) {
       return slides.indexOf(slide);
@@ -28281,21 +28853,26 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition']).controller(
       return slides;
     };
     $scope.$watch('interval', restartTimer);
+    $scope.$on('$destroy', resetTimer);
     function restartTimer() {
-      if (currentTimeout) {
-        $timeout.cancel(currentTimeout);
-      }
-      function go() {
-        if (isPlaying) {
-          $scope.next();
-          restartTimer();
-        } else {
-          $scope.pause();
-        }
-      }
+      resetTimer();
       var interval = +$scope.interval;
       if (!isNaN(interval) && interval >= 0) {
-        currentTimeout = $timeout(go, interval);
+        currentTimeout = $timeout(timerFn, interval);
+      }
+    }
+    function resetTimer() {
+      if (currentTimeout) {
+        $timeout.cancel(currentTimeout);
+        currentTimeout = null;
+      }
+    }
+    function timerFn() {
+      if (isPlaying) {
+        $scope.next();
+        restartTimer();
+      } else {
+        $scope.pause();
       }
     }
     $scope.play = function () {
@@ -28307,9 +28884,7 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition']).controller(
     $scope.pause = function () {
       if (!$scope.noPause) {
         isPlaying = false;
-        if (currentTimeout) {
-          $timeout.cancel(currentTimeout);
-        }
+        resetTimer();
       }
     };
     self.addSlide = function (slide, element) {
@@ -28685,7 +29260,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.position']).constant('d
         };
         scope.select = function (date) {
           if (mode === 0) {
-            var dt = new Date(ngModel.$modelValue);
+            var dt = ngModel.$modelValue ? new Date(ngModel.$modelValue) : new Date(0, 0, 0, 0, 0, 0, 0);
             dt.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
             ngModel.$setViewValue(dt);
             refill(true);
@@ -28726,7 +29301,8 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.position']).constant('d
   clearText: 'Clear',
   closeText: 'Done',
   closeOnDateSelection: true,
-  appendToBody: false
+  appendToBody: false,
+  showButtonBar: true
 }).directive('datepickerPopup', [
   '$compile',
   '$parse',
@@ -28740,16 +29316,16 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.position']).constant('d
       restrict: 'EA',
       require: 'ngModel',
       link: function (originalScope, element, attrs, ngModel) {
-        var dateFormat;
+        var scope = originalScope.$new(),
+          // create a child scope so we are not polluting original one
+          dateFormat, closeOnDateSelection = angular.isDefined(attrs.closeOnDateSelection) ? originalScope.$eval(attrs.closeOnDateSelection) : datepickerPopupConfig.closeOnDateSelection, appendToBody = angular.isDefined(attrs.datepickerAppendToBody) ? originalScope.$eval(attrs.datepickerAppendToBody) : datepickerPopupConfig.appendToBody;
         attrs.$observe('datepickerPopup', function (value) {
           dateFormat = value || datepickerPopupConfig.dateFormat;
           ngModel.$render();
         });
-        var closeOnDateSelection = angular.isDefined(attrs.closeOnDateSelection) ? originalScope.$eval(attrs.closeOnDateSelection) : datepickerPopupConfig.closeOnDateSelection;
-        var appendToBody = angular.isDefined(attrs.datepickerAppendToBody) ? originalScope.$eval(attrs.datepickerAppendToBody) : datepickerPopupConfig.appendToBody;
-        // create a child scope for the datepicker directive so we are not polluting original scope
-        var scope = originalScope.$new();
+        scope.showButtonBar = angular.isDefined(attrs.showButtonBar) ? originalScope.$eval(attrs.showButtonBar) : datepickerPopupConfig.showButtonBar;
         originalScope.$on('$destroy', function () {
+          $popup.remove();
           scope.$destroy();
         });
         attrs.$observe('currentText', function (text) {
@@ -28799,9 +29375,10 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.position']).constant('d
           'ng-model': 'date',
           'ng-change': 'dateSelection()'
         });
-        var datepickerEl = angular.element(popupEl.children()[0]);
+        var datepickerEl = angular.element(popupEl.children()[0]), datepickerOptions = {};
         if (attrs.datepickerOptions) {
-          datepickerEl.attr(angular.extend({}, originalScope.$eval(attrs.datepickerOptions)));
+          datepickerOptions = originalScope.$eval(attrs.datepickerOptions);
+          datepickerEl.attr(angular.extend({}, datepickerOptions));
         }
         // TODO: reverse from dateFilter string to Date object
         function parseDate(viewValue) {
@@ -28827,7 +29404,10 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.position']).constant('d
         }
         ngModel.$parsers.unshift(parseDate);
         // Inner change
-        scope.dateSelection = function () {
+        scope.dateSelection = function (dt) {
+          if (angular.isDefined(dt)) {
+            scope.date = dt;
+          }
           ngModel.$setViewValue(scope.date);
           ngModel.$render();
           if (closeOnDateSelection) {
@@ -28836,19 +29416,15 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.position']).constant('d
         };
         element.bind('input change keyup', function () {
           scope.$apply(function () {
-            updateCalendar();
+            scope.date = ngModel.$modelValue;
           });
         });
         // Outter change
         ngModel.$render = function () {
           var date = ngModel.$viewValue ? dateFilter(ngModel.$viewValue, dateFormat) : '';
           element.val(date);
-          updateCalendar();
-        };
-        function updateCalendar() {
           scope.date = ngModel.$modelValue;
-          updatePosition();
-        }
+        };
         function addWatchableAttribute(attribute, scopeProperty, datepickerAttribute) {
           if (attribute) {
             originalScope.$watch($parse(attribute), function (value) {
@@ -28862,7 +29438,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.position']).constant('d
         if (attrs.showWeeks) {
           addWatchableAttribute(attrs.showWeeks, 'showWeeks', 'show-weeks');
         } else {
-          scope.showWeeks = datepickerConfig.showWeeks;
+          scope.showWeeks = 'show-weeks' in datepickerOptions ? datepickerOptions['show-weeks'] : datepickerConfig.showWeeks;
           datepickerEl.attr('show-weeks', 'showWeeks');
         }
         if (attrs.dateDisabled) {
@@ -28893,12 +29469,11 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.position']).constant('d
             setIsOpen(originalScope, value);
           }
         });
-        var $setModelValue = $parse(attrs.ngModel).assign;
         scope.today = function () {
-          $setModelValue(originalScope, new Date());
+          scope.dateSelection(new Date());
         };
         scope.clear = function () {
-          $setModelValue(originalScope, null);
+          scope.dateSelection(null);
         };
         var $popup = $compile(popupEl)(scope);
         if (appendToBody) {
@@ -28977,7 +29552,7 @@ angular.module('ui.bootstrap.dropdownToggle', []).directive('dropdownToggle', [
     };
   }
 ]);
-angular.module('ui.bootstrap.modal', []).factory('$$stackedMap', function () {
+angular.module('ui.bootstrap.modal', ['ui.bootstrap.transition']).factory('$$stackedMap', function () {
   return {
     createNew: function () {
       var stack = [];
@@ -29025,21 +29600,45 @@ angular.module('ui.bootstrap.modal', []).factory('$$stackedMap', function () {
     }
   };
 }).directive('modalBackdrop', [
+  '$timeout',
+  function ($timeout) {
+    return {
+      restrict: 'EA',
+      replace: true,
+      templateUrl: 'template/modal/backdrop.html',
+      link: function (scope) {
+        scope.animate = false;
+        //trigger CSS transitions
+        $timeout(function () {
+          scope.animate = true;
+        });
+      }
+    };
+  }
+]).directive('modalWindow', [
   '$modalStack',
   '$timeout',
   function ($modalStack, $timeout) {
     return {
       restrict: 'EA',
+      scope: {
+        index: '@',
+        animate: '='
+      },
       replace: true,
-      templateUrl: 'template/modal/backdrop.html',
+      transclude: true,
+      templateUrl: 'template/modal/window.html',
       link: function (scope, element, attrs) {
-        //trigger CSS transitions
+        scope.windowClass = attrs.windowClass || '';
         $timeout(function () {
+          // trigger CSS transitions
           scope.animate = true;
+          // focus a freshly-opened modal
+          element[0].focus();
         });
         scope.close = function (evt) {
           var modal = $modalStack.getTop();
-          if (modal && modal.value.backdrop && modal.value.backdrop != 'static') {
+          if (modal && modal.value.backdrop && modal.value.backdrop != 'static' && evt.target === evt.currentTarget) {
             evt.preventDefault();
             evt.stopPropagation();
             $modalStack.dismiss(modal.key, 'backdrop click');
@@ -29048,33 +29647,16 @@ angular.module('ui.bootstrap.modal', []).factory('$$stackedMap', function () {
       }
     };
   }
-]).directive('modalWindow', [
-  '$timeout',
-  function ($timeout) {
-    return {
-      restrict: 'EA',
-      scope: { index: '@' },
-      replace: true,
-      transclude: true,
-      templateUrl: 'template/modal/window.html',
-      link: function (scope, element, attrs) {
-        scope.windowClass = attrs.windowClass || '';
-        //trigger CSS transitions
-        $timeout(function () {
-          scope.animate = true;
-        });
-      }
-    };
-  }
 ]).factory('$modalStack', [
+  '$transition',
+  '$timeout',
   '$document',
   '$compile',
   '$rootScope',
   '$$stackedMap',
-  function ($document, $compile, $rootScope, $$stackedMap) {
-    var backdropjqLiteEl, backdropDomEl;
-    var backdropScope = $rootScope.$new(true);
-    var body = $document.find('body').eq(0);
+  function ($transition, $timeout, $document, $compile, $rootScope, $$stackedMap) {
+    var OPENED_MODAL_CLASS = 'modal-open';
+    var backdropDomEl, backdropScope;
     var openedWindows = $$stackedMap.createNew();
     var $modalStack = {};
     function backdropIndex() {
@@ -29088,21 +29670,57 @@ angular.module('ui.bootstrap.modal', []).factory('$$stackedMap', function () {
       return topBackdropIndex;
     }
     $rootScope.$watch(backdropIndex, function (newBackdropIndex) {
-      backdropScope.index = newBackdropIndex;
+      if (backdropScope) {
+        backdropScope.index = newBackdropIndex;
+      }
     });
     function removeModalWindow(modalInstance) {
+      var body = $document.find('body').eq(0);
       var modalWindow = openedWindows.get(modalInstance).value;
       //clean up the stack
       openedWindows.remove(modalInstance);
       //remove window DOM element
-      modalWindow.modalDomEl.remove();
+      removeAfterAnimate(modalWindow.modalDomEl, modalWindow.modalScope, 300, checkRemoveBackdrop);
+      body.toggleClass(OPENED_MODAL_CLASS, openedWindows.length() > 0);
+    }
+    function checkRemoveBackdrop() {
       //remove backdrop if no longer needed
       if (backdropDomEl && backdropIndex() == -1) {
-        backdropDomEl.remove();
+        var backdropScopeRef = backdropScope;
+        removeAfterAnimate(backdropDomEl, backdropScope, 150, function () {
+          backdropScopeRef.$destroy();
+          backdropScopeRef = null;
+        });
         backdropDomEl = undefined;
+        backdropScope = undefined;
       }
-      //destroy scope
-      modalWindow.modalScope.$destroy();
+    }
+    function removeAfterAnimate(domEl, scope, emulateTime, done) {
+      // Closing animation
+      scope.animate = false;
+      var transitionEndEventName = $transition.transitionEndEventName;
+      if (transitionEndEventName) {
+        // transition out
+        var timeout = $timeout(afterAnimating, emulateTime);
+        domEl.bind(transitionEndEventName, function () {
+          $timeout.cancel(timeout);
+          afterAnimating();
+          scope.$apply();
+        });
+      } else {
+        // Ensure this call is async
+        $timeout(afterAnimating, 0);
+      }
+      function afterAnimating() {
+        if (afterAnimating.done) {
+          return;
+        }
+        afterAnimating.done = true;
+        domEl.remove();
+        if (done) {
+          done();
+        }
+      }
     }
     $document.bind('keydown', function (evt) {
       var modal;
@@ -29122,23 +29740,27 @@ angular.module('ui.bootstrap.modal', []).factory('$$stackedMap', function () {
         backdrop: modal.backdrop,
         keyboard: modal.keyboard
       });
+      var body = $document.find('body').eq(0), currBackdropIndex = backdropIndex();
+      if (currBackdropIndex >= 0 && !backdropDomEl) {
+        backdropScope = $rootScope.$new(true);
+        backdropScope.index = currBackdropIndex;
+        backdropDomEl = $compile('<div modal-backdrop></div>')(backdropScope);
+        body.append(backdropDomEl);
+      }
       var angularDomEl = angular.element('<div modal-window></div>');
       angularDomEl.attr('window-class', modal.windowClass);
       angularDomEl.attr('index', openedWindows.length() - 1);
+      angularDomEl.attr('animate', 'animate');
       angularDomEl.html(modal.content);
       var modalDomEl = $compile(angularDomEl)(modal.scope);
       openedWindows.top().value.modalDomEl = modalDomEl;
       body.append(modalDomEl);
-      if (backdropIndex() >= 0 && !backdropDomEl) {
-        backdropjqLiteEl = angular.element('<div modal-backdrop></div>');
-        backdropDomEl = $compile(backdropjqLiteEl)(backdropScope);
-        body.append(backdropDomEl);
-      }
+      body.addClass(OPENED_MODAL_CLASS);
     };
     $modalStack.close = function (modalInstance, result) {
-      var modal = openedWindows.get(modalInstance);
-      if (modal) {
-        modal.value.deferred.resolve(result);
+      var modalWindow = openedWindows.get(modalInstance).value;
+      if (modalWindow) {
+        modalWindow.deferred.resolve(result);
         removeModalWindow(modalInstance);
       }
     };
@@ -29147,6 +29769,13 @@ angular.module('ui.bootstrap.modal', []).factory('$$stackedMap', function () {
       if (modalWindow) {
         modalWindow.deferred.reject(reason);
         removeModalWindow(modalInstance);
+      }
+    };
+    $modalStack.dismissAll = function (reason) {
+      var topModal = this.getTop();
+      while (topModal) {
+        this.dismiss(topModal.key, reason);
+        topModal = this.getTop();
       }
     };
     $modalStack.getTop = function () {
@@ -29541,187 +30170,213 @@ angular.module('ui.bootstrap.tooltip', [
         var directiveName = snake_case(type);
         var startSym = $interpolate.startSymbol();
         var endSym = $interpolate.endSymbol();
-        var template = '<' + directiveName + '-popup ' + 'title="' + startSym + 'tt_title' + endSym + '" ' + 'content="' + startSym + 'tt_content' + endSym + '" ' + 'placement="' + startSym + 'tt_placement' + endSym + '" ' + 'animation="tt_animation" ' + 'is-open="tt_isOpen"' + '>' + '</' + directiveName + '-popup>';
+        var template = '<div ' + directiveName + '-popup ' + 'title="' + startSym + 'tt_title' + endSym + '" ' + 'content="' + startSym + 'tt_content' + endSym + '" ' + 'placement="' + startSym + 'tt_placement' + endSym + '" ' + 'animation="tt_animation" ' + 'is-open="tt_isOpen"' + '>' + '</div>';
         return {
           restrict: 'EA',
           scope: true,
-          link: function link(scope, element, attrs) {
-            var tooltip = $compile(template)(scope);
-            var transitionTimeout;
-            var popupTimeout;
-            var $body = $document.find('body');
-            var appendToBody = angular.isDefined(options.appendToBody) ? options.appendToBody : false;
-            var triggers = getTriggers(undefined);
-            var hasRegisteredTriggers = false;
-            var hasEnableExp = angular.isDefined(attrs[prefix + 'Enable']);
-            // By default, the tooltip is not open.
-            // TODO add ability to start tooltip opened
-            scope.tt_isOpen = false;
-            function toggleTooltipBind() {
-              if (!scope.tt_isOpen) {
-                showTooltipBind();
-              } else {
-                hideTooltipBind();
-              }
-            }
-            // Show the tooltip with delay if specified, otherwise show it immediately
-            function showTooltipBind() {
-              if (hasEnableExp && !scope.$eval(attrs[prefix + 'Enable'])) {
-                return;
-              }
-              if (scope.tt_popupDelay) {
-                popupTimeout = $timeout(show, scope.tt_popupDelay);
-              } else {
-                scope.$apply(show);
-              }
-            }
-            function hideTooltipBind() {
-              scope.$apply(function () {
-                hide();
-              });
-            }
-            // Show the tooltip popup element.
-            function show() {
-              var position, ttWidth, ttHeight, ttPosition;
-              // Don't show empty tooltips.
-              if (!scope.tt_content) {
-                return;
-              }
-              // If there is a pending remove transition, we must cancel it, lest the
-              // tooltip be mysteriously removed.
-              if (transitionTimeout) {
-                $timeout.cancel(transitionTimeout);
-              }
-              // Set the initial positioning.
-              tooltip.css({
-                top: 0,
-                left: 0,
-                display: 'block'
-              });
-              // Now we add it to the DOM because need some info about it. But it's not 
-              // visible yet anyway.
-              if (appendToBody) {
-                $body.append(tooltip);
-              } else {
-                element.after(tooltip);
-              }
-              // Get the position of the directive element.
-              position = appendToBody ? $position.offset(element) : $position.position(element);
-              // Get the height and width of the tooltip so we can center it.
-              ttWidth = tooltip.prop('offsetWidth');
-              ttHeight = tooltip.prop('offsetHeight');
-              // Calculate the tooltip's top and left coordinates to center it with
-              // this directive.
-              switch (scope.tt_placement) {
-              case 'right':
-                ttPosition = {
-                  top: position.top + position.height / 2 - ttHeight / 2,
-                  left: position.left + position.width
-                };
-                break;
-              case 'bottom':
-                ttPosition = {
-                  top: position.top + position.height,
-                  left: position.left + position.width / 2 - ttWidth / 2
-                };
-                break;
-              case 'left':
-                ttPosition = {
-                  top: position.top + position.height / 2 - ttHeight / 2,
-                  left: position.left - ttWidth
-                };
-                break;
-              default:
-                ttPosition = {
-                  top: position.top - ttHeight,
-                  left: position.left + position.width / 2 - ttWidth / 2
-                };
-                break;
-              }
-              ttPosition.top += 'px';
-              ttPosition.left += 'px';
-              // Now set the calculated positioning.
-              tooltip.css(ttPosition);
-              // And show the tooltip.
-              scope.tt_isOpen = true;
-            }
-            // Hide the tooltip popup element.
-            function hide() {
-              // First things first: we don't show it anymore.
+          compile: function (tElem, tAttrs) {
+            var tooltipLinker = $compile(template);
+            return function link(scope, element, attrs) {
+              var tooltip;
+              var transitionTimeout;
+              var popupTimeout;
+              var appendToBody = angular.isDefined(options.appendToBody) ? options.appendToBody : false;
+              var triggers = getTriggers(undefined);
+              var hasRegisteredTriggers = false;
+              var hasEnableExp = angular.isDefined(attrs[prefix + 'Enable']);
+              var positionTooltip = function () {
+                var position, ttWidth, ttHeight, ttPosition;
+                // Get the position of the directive element.
+                position = appendToBody ? $position.offset(element) : $position.position(element);
+                // Get the height and width of the tooltip so we can center it.
+                ttWidth = tooltip.prop('offsetWidth');
+                ttHeight = tooltip.prop('offsetHeight');
+                // Calculate the tooltip's top and left coordinates to center it with
+                // this directive.
+                switch (scope.tt_placement) {
+                case 'right':
+                  ttPosition = {
+                    top: position.top + position.height / 2 - ttHeight / 2,
+                    left: position.left + position.width
+                  };
+                  break;
+                case 'bottom':
+                  ttPosition = {
+                    top: position.top + position.height,
+                    left: position.left + position.width / 2 - ttWidth / 2
+                  };
+                  break;
+                case 'left':
+                  ttPosition = {
+                    top: position.top + position.height / 2 - ttHeight / 2,
+                    left: position.left - ttWidth
+                  };
+                  break;
+                default:
+                  ttPosition = {
+                    top: position.top - ttHeight,
+                    left: position.left + position.width / 2 - ttWidth / 2
+                  };
+                  break;
+                }
+                ttPosition.top += 'px';
+                ttPosition.left += 'px';
+                // Now set the calculated positioning.
+                tooltip.css(ttPosition);
+              };
+              // By default, the tooltip is not open.
+              // TODO add ability to start tooltip opened
               scope.tt_isOpen = false;
-              //if tooltip is going to be shown after delay, we must cancel this
-              $timeout.cancel(popupTimeout);
-              // And now we remove it from the DOM. However, if we have animation, we 
-              // need to wait for it to expire beforehand.
-              // FIXME: this is a placeholder for a port of the transitions library.
-              if (scope.tt_animation) {
-                transitionTimeout = $timeout(function () {
-                  tooltip.remove();
-                }, 500);
-              } else {
-                tooltip.remove();
-              }
-            }
-            /**
-           * Observe the relevant attributes.
-           */
-            attrs.$observe(type, function (val) {
-              if (val) {
-                scope.tt_content = val;
-              } else {
-                if (scope.tt_isOpen) {
-                  hide();
+              function toggleTooltipBind() {
+                if (!scope.tt_isOpen) {
+                  showTooltipBind();
+                } else {
+                  hideTooltipBind();
                 }
               }
-            });
-            attrs.$observe(prefix + 'Title', function (val) {
-              scope.tt_title = val;
-            });
-            attrs.$observe(prefix + 'Placement', function (val) {
-              scope.tt_placement = angular.isDefined(val) ? val : options.placement;
-            });
-            attrs.$observe(prefix + 'Animation', function (val) {
-              scope.tt_animation = angular.isDefined(val) ? !!val : options.animation;
-            });
-            attrs.$observe(prefix + 'PopupDelay', function (val) {
-              var delay = parseInt(val, 10);
-              scope.tt_popupDelay = !isNaN(delay) ? delay : options.popupDelay;
-            });
-            attrs.$observe(prefix + 'Trigger', function (val) {
-              if (hasRegisteredTriggers) {
-                element.unbind(triggers.show, showTooltipBind);
-                element.unbind(triggers.hide, hideTooltipBind);
+              // Show the tooltip with delay if specified, otherwise show it immediately
+              function showTooltipBind() {
+                if (hasEnableExp && !scope.$eval(attrs[prefix + 'Enable'])) {
+                  return;
+                }
+                if (scope.tt_popupDelay) {
+                  popupTimeout = $timeout(show, scope.tt_popupDelay, false);
+                  popupTimeout.then(function (reposition) {
+                    reposition();
+                  });
+                } else {
+                  show()();
+                }
               }
-              triggers = getTriggers(val);
-              if (triggers.show === triggers.hide) {
-                element.bind(triggers.show, toggleTooltipBind);
-              } else {
-                element.bind(triggers.show, showTooltipBind);
-                element.bind(triggers.hide, hideTooltipBind);
+              function hideTooltipBind() {
+                scope.$apply(function () {
+                  hide();
+                });
               }
-              hasRegisteredTriggers = true;
-            });
-            attrs.$observe(prefix + 'AppendToBody', function (val) {
-              appendToBody = angular.isDefined(val) ? $parse(val)(scope) : appendToBody;
-            });
-            // if a tooltip is attached to <body> we need to remove it on
-            // location change as its parent scope will probably not be destroyed
-            // by the change.
-            if (appendToBody) {
-              scope.$on('$locationChangeSuccess', function closeTooltipOnLocationChangeSuccess() {
-                if (scope.tt_isOpen) {
+              // Show the tooltip popup element.
+              function show() {
+                // Don't show empty tooltips.
+                if (!scope.tt_content) {
+                  return angular.noop;
+                }
+                createTooltip();
+                // If there is a pending remove transition, we must cancel it, lest the
+                // tooltip be mysteriously removed.
+                if (transitionTimeout) {
+                  $timeout.cancel(transitionTimeout);
+                }
+                // Set the initial positioning.
+                tooltip.css({
+                  top: 0,
+                  left: 0,
+                  display: 'block'
+                });
+                // Now we add it to the DOM because need some info about it. But it's not 
+                // visible yet anyway.
+                if (appendToBody) {
+                  $document.find('body').append(tooltip);
+                } else {
+                  element.after(tooltip);
+                }
+                positionTooltip();
+                // And show the tooltip.
+                scope.tt_isOpen = true;
+                scope.$digest();
+                // digest required as $apply is not called
+                // Return positioning function as promise callback for correct
+                // positioning after draw.
+                return positionTooltip;
+              }
+              // Hide the tooltip popup element.
+              function hide() {
+                // First things first: we don't show it anymore.
+                scope.tt_isOpen = false;
+                //if tooltip is going to be shown after delay, we must cancel this
+                $timeout.cancel(popupTimeout);
+                // And now we remove it from the DOM. However, if we have animation, we 
+                // need to wait for it to expire beforehand.
+                // FIXME: this is a placeholder for a port of the transitions library.
+                if (scope.tt_animation) {
+                  transitionTimeout = $timeout(removeTooltip, 500);
+                } else {
+                  removeTooltip();
+                }
+              }
+              function createTooltip() {
+                // There can only be one tooltip element per directive shown at once.
+                if (tooltip) {
+                  removeTooltip();
+                }
+                tooltip = tooltipLinker(scope, function () {
+                });
+                // Get contents rendered into the tooltip
+                scope.$digest();
+              }
+              function removeTooltip() {
+                if (tooltip) {
+                  tooltip.remove();
+                  tooltip = null;
+                }
+              }
+              /**
+             * Observe the relevant attributes.
+             */
+              attrs.$observe(type, function (val) {
+                scope.tt_content = val;
+                if (!val && scope.tt_isOpen) {
                   hide();
                 }
               });
-            }
-            // Make sure tooltip is destroyed and removed.
-            scope.$on('$destroy', function onDestroyTooltip() {
-              $timeout.cancel(popupTimeout);
-              tooltip.remove();
-              tooltip.unbind();
-              tooltip = null;
-              $body = null;
-            });
+              attrs.$observe(prefix + 'Title', function (val) {
+                scope.tt_title = val;
+              });
+              attrs.$observe(prefix + 'Placement', function (val) {
+                scope.tt_placement = angular.isDefined(val) ? val : options.placement;
+              });
+              attrs.$observe(prefix + 'PopupDelay', function (val) {
+                var delay = parseInt(val, 10);
+                scope.tt_popupDelay = !isNaN(delay) ? delay : options.popupDelay;
+              });
+              var unregisterTriggers = function () {
+                if (hasRegisteredTriggers) {
+                  element.unbind(triggers.show, showTooltipBind);
+                  element.unbind(triggers.hide, hideTooltipBind);
+                }
+              };
+              attrs.$observe(prefix + 'Trigger', function (val) {
+                unregisterTriggers();
+                triggers = getTriggers(val);
+                if (triggers.show === triggers.hide) {
+                  element.bind(triggers.show, toggleTooltipBind);
+                } else {
+                  element.bind(triggers.show, showTooltipBind);
+                  element.bind(triggers.hide, hideTooltipBind);
+                }
+                hasRegisteredTriggers = true;
+              });
+              var animation = scope.$eval(attrs[prefix + 'Animation']);
+              scope.tt_animation = angular.isDefined(animation) ? !!animation : options.animation;
+              attrs.$observe(prefix + 'AppendToBody', function (val) {
+                appendToBody = angular.isDefined(val) ? $parse(val)(scope) : appendToBody;
+              });
+              // if a tooltip is attached to <body> we need to remove it on
+              // location change as its parent scope will probably not be destroyed
+              // by the change.
+              if (appendToBody) {
+                scope.$on('$locationChangeSuccess', function closeTooltipOnLocationChangeSuccess() {
+                  if (scope.tt_isOpen) {
+                    hide();
+                  }
+                });
+              }
+              // Make sure tooltip is destroyed and removed.
+              scope.$on('$destroy', function onDestroyTooltip() {
+                $timeout.cancel(transitionTimeout);
+                $timeout.cancel(popupTimeout);
+                unregisterTriggers();
+                removeTooltip();
+              });
+            };
           }
         };
       };
@@ -29729,7 +30384,7 @@ angular.module('ui.bootstrap.tooltip', [
   ];
 }).directive('tooltipPopup', function () {
   return {
-    restrict: 'E',
+    restrict: 'EA',
     replace: true,
     scope: {
       content: '@',
@@ -29746,7 +30401,7 @@ angular.module('ui.bootstrap.tooltip', [
   }
 ]).directive('tooltipHtmlUnsafePopup', function () {
   return {
-    restrict: 'E',
+    restrict: 'EA',
     replace: true,
     scope: {
       content: '@',
@@ -29781,118 +30436,98 @@ angular.module('ui.bootstrap.popover', ['ui.bootstrap.tooltip']).directive('popo
     templateUrl: 'template/popover/popover.html'
   };
 }).directive('popover', [
-  '$compile',
-  '$timeout',
-  '$parse',
-  '$window',
   '$tooltip',
-  function ($compile, $timeout, $parse, $window, $tooltip) {
+  function ($tooltip) {
     return $tooltip('popover', 'popover', 'click');
   }
 ]);
 angular.module('ui.bootstrap.progressbar', ['ui.bootstrap.transition']).constant('progressConfig', {
   animate: true,
-  autoType: false,
-  stackedTypes: [
-    'success',
-    'info',
-    'warning',
-    'danger'
-  ]
-}).controller('ProgressBarController', [
+  max: 100
+}).controller('ProgressController', [
   '$scope',
   '$attrs',
   'progressConfig',
-  function ($scope, $attrs, progressConfig) {
-    // Whether bar transitions should be animated
-    var animate = angular.isDefined($attrs.animate) ? $scope.$eval($attrs.animate) : progressConfig.animate;
-    var autoType = angular.isDefined($attrs.autoType) ? $scope.$eval($attrs.autoType) : progressConfig.autoType;
-    var stackedTypes = angular.isDefined($attrs.stackedTypes) ? $scope.$eval('[' + $attrs.stackedTypes + ']') : progressConfig.stackedTypes;
-    // Create bar object
-    this.makeBar = function (newBar, oldBar, index) {
-      var newValue = angular.isObject(newBar) ? newBar.value : newBar || 0;
-      var oldValue = angular.isObject(oldBar) ? oldBar.value : oldBar || 0;
-      var type = angular.isObject(newBar) && angular.isDefined(newBar.type) ? newBar.type : autoType ? getStackedType(index || 0) : null;
-      return {
-        from: oldValue,
-        to: newValue,
-        type: type,
-        animate: animate
-      };
+  '$transition',
+  function ($scope, $attrs, progressConfig, $transition) {
+    var self = this, bars = [], max = angular.isDefined($attrs.max) ? $scope.$parent.$eval($attrs.max) : progressConfig.max, animate = angular.isDefined($attrs.animate) ? $scope.$parent.$eval($attrs.animate) : progressConfig.animate;
+    this.addBar = function (bar, element) {
+      var oldValue = 0, index = bar.$parent.$index;
+      if (angular.isDefined(index) && bars[index]) {
+        oldValue = bars[index].value;
+      }
+      bars.push(bar);
+      this.update(element, bar.value, oldValue);
+      bar.$watch('value', function (value, oldValue) {
+        if (value !== oldValue) {
+          self.update(element, value, oldValue);
+        }
+      });
+      bar.$on('$destroy', function () {
+        self.removeBar(bar);
+      });
     };
-    function getStackedType(index) {
-      return stackedTypes[index];
-    }
-    this.addBar = function (bar) {
-      $scope.bars.push(bar);
-      $scope.totalPercent += bar.to;
+    // Update bar element width
+    this.update = function (element, newValue, oldValue) {
+      var percent = this.getPercentage(newValue);
+      if (animate) {
+        element.css('width', this.getPercentage(oldValue) + '%');
+        $transition(element, { width: percent + '%' });
+      } else {
+        element.css({
+          'transition': 'none',
+          'width': percent + '%'
+        });
+      }
     };
-    this.clearBars = function () {
-      $scope.bars = [];
-      $scope.totalPercent = 0;
+    this.removeBar = function (bar) {
+      bars.splice(bars.indexOf(bar), 1);
     };
-    this.clearBars();
+    this.getPercentage = function (value) {
+      return Math.round(100 * value / max);
+    };
   }
 ]).directive('progress', function () {
   return {
     restrict: 'EA',
     replace: true,
-    controller: 'ProgressBarController',
+    transclude: true,
+    controller: 'ProgressController',
+    require: 'progress',
+    scope: {},
+    template: '<div class="progress" ng-transclude></div>'
+  };
+}).directive('bar', function () {
+  return {
+    restrict: 'EA',
+    replace: true,
+    transclude: true,
+    require: '^progress',
     scope: {
-      value: '=percent',
-      onFull: '&',
-      onEmpty: '&'
+      value: '=',
+      type: '@'
     },
-    templateUrl: 'template/progressbar/progress.html',
-    link: function (scope, element, attrs, controller) {
-      scope.$watch('value', function (newValue, oldValue) {
-        controller.clearBars();
-        if (angular.isArray(newValue)) {
-          // Stacked progress bar
-          for (var i = 0, n = newValue.length; i < n; i++) {
-            controller.addBar(controller.makeBar(newValue[i], oldValue[i], i));
-          }
-        } else {
-          // Simple bar
-          controller.addBar(controller.makeBar(newValue, oldValue));
-        }
-      }, true);
-      // Total percent listeners
-      scope.$watch('totalPercent', function (value) {
-        if (value >= 100) {
-          scope.onFull();
-        } else if (value <= 0) {
-          scope.onEmpty();
-        }
-      }, true);
+    templateUrl: 'template/progressbar/bar.html',
+    link: function (scope, element, attrs, progressCtrl) {
+      progressCtrl.addBar(scope, element);
     }
   };
-}).directive('progressbar', [
-  '$transition',
-  function ($transition) {
-    return {
-      restrict: 'EA',
-      replace: true,
-      scope: {
-        width: '=',
-        old: '=',
-        type: '=',
-        animate: '='
-      },
-      templateUrl: 'template/progressbar/bar.html',
-      link: function (scope, element) {
-        scope.$watch('width', function (value) {
-          if (scope.animate) {
-            element.css('width', scope.old + '%');
-            $transition(element, { width: value + '%' });
-          } else {
-            element.css('width', value + '%');
-          }
-        });
-      }
-    };
-  }
-]);
+}).directive('progressbar', function () {
+  return {
+    restrict: 'EA',
+    replace: true,
+    transclude: true,
+    controller: 'ProgressController',
+    scope: {
+      value: '=',
+      type: '@'
+    },
+    templateUrl: 'template/progressbar/progressbar.html',
+    link: function (scope, element, attrs, progressCtrl) {
+      progressCtrl.addBar(scope, angular.element(element.children()[0]));
+    }
+  };
+});
 angular.module('ui.bootstrap.rating', []).constant('ratingConfig', {
   max: 5,
   stateOn: null,
@@ -29919,10 +30554,9 @@ angular.module('ui.bootstrap.rating', []).constant('ratingConfig', {
     // Get objects used in template
     $scope.range = angular.isDefined($attrs.ratingStates) ? this.createRateObjects(angular.copy($scope.$parent.$eval($attrs.ratingStates))) : this.createRateObjects(new Array(this.maxRange));
     $scope.rate = function (value) {
-      if ($scope.readonly || $scope.value === value) {
-        return;
+      if ($scope.value !== value && !$scope.readonly) {
+        $scope.value = value;
       }
-      $scope.value = value;
     };
     $scope.enter = function (value) {
       if (!$scope.readonly) {
@@ -29964,11 +30598,7 @@ angular.module('ui.bootstrap.rating', []).constant('ratingConfig', {
  * @description
  * AngularJS version of the tabs directive.
  */
-angular.module('ui.bootstrap.tabs', []).directive('tabs', function () {
-  return function () {
-    throw new Error('The `tabs` directive is deprecated, please migrate to `tabset`. Instructions can be found at http://github.com/angular-ui/bootstrap/tree/master/CHANGELOG.md');
-  };
-}).controller('TabsetController', [
+angular.module('ui.bootstrap.tabs', []).controller('TabsetController', [
   '$scope',
   function TabsetCtrl($scope) {
     var ctrl = this, tabs = ctrl.tabs = $scope.tabs = [];
@@ -30000,19 +30630,13 @@ angular.module('ui.bootstrap.tabs', []).directive('tabs', function () {
     restrict: 'EA',
     transclude: true,
     replace: true,
-    require: '^tabset',
     scope: {},
     controller: 'TabsetController',
     templateUrl: 'template/tabs/tabset.html',
-    compile: function (elm, attrs, transclude) {
-      return function (scope, element, attrs, tabsetCtrl) {
-        scope.vertical = angular.isDefined(attrs.vertical) ? scope.$parent.$eval(attrs.vertical) : false;
-        scope.type = angular.isDefined(attrs.type) ? scope.$parent.$eval(attrs.type) : 'tabs';
-        scope.direction = angular.isDefined(attrs.direction) ? scope.$parent.$eval(attrs.direction) : 'top';
-        scope.tabsAbove = scope.direction != 'below';
-        tabsetCtrl.$scope = scope;
-        tabsetCtrl.$transcludeFn = transclude;
-      };
+    link: function (scope, element, attrs) {
+      scope.vertical = angular.isDefined(attrs.vertical) ? scope.$parent.$eval(attrs.vertical) : false;
+      scope.justified = angular.isDefined(attrs.justified) ? scope.$parent.$eval(attrs.justified) : false;
+      scope.type = angular.isDefined(attrs.type) ? scope.$parent.$eval(attrs.type) : 'tabs';
     }
   };
 }).directive('tab', [
@@ -30118,39 +30742,21 @@ angular.module('ui.bootstrap.tabs', []).directive('tabs', function () {
   function isTabHeading(node) {
     return node.tagName && (node.hasAttribute('tab-heading') || node.hasAttribute('data-tab-heading') || node.tagName.toLowerCase() === 'tab-heading' || node.tagName.toLowerCase() === 'data-tab-heading');
   }
-}).directive('tabsetTitles', function () {
-  return {
-    restrict: 'A',
-    require: '^tabset',
-    templateUrl: 'template/tabs/tabset-titles.html',
-    replace: true,
-    link: function (scope, elm, attrs, tabsetCtrl) {
-      if (!scope.$eval(attrs.tabsetTitles)) {
-        elm.remove();
-      } else {
-        //now that tabs location has been decided, transclude the tab titles in
-        tabsetCtrl.$transcludeFn(tabsetCtrl.$scope.$parent, function (node) {
-          elm.append(node);
-        });
-      }
-    }
-  };
 });
+;
 angular.module('ui.bootstrap.timepicker', []).constant('timepickerConfig', {
   hourStep: 1,
   minuteStep: 1,
   showMeridian: true,
-  meridians: [
-    'AM',
-    'PM'
-  ],
+  meridians: null,
   readonlyInput: false,
   mousewheel: true
 }).directive('timepicker', [
   '$parse',
   '$log',
   'timepickerConfig',
-  function ($parse, $log, timepickerConfig) {
+  '$locale',
+  function ($parse, $log, timepickerConfig, $locale) {
     return {
       restrict: 'EA',
       require: '?^ngModel',
@@ -30161,7 +30767,7 @@ angular.module('ui.bootstrap.timepicker', []).constant('timepickerConfig', {
         if (!ngModel) {
           return;  // do nothing if no ng-model
         }
-        var selected = new Date(), meridians = timepickerConfig.meridians;
+        var selected = new Date(), meridians = angular.isDefined(attrs.meridians) ? scope.$parent.$eval(attrs.meridians) : timepickerConfig.meridians || $locale.DATETIME_FORMATS.AMPMS;
         var hourStep = timepickerConfig.hourStep;
         if (attrs.hourStep) {
           scope.$parent.$watch($parse(attrs.hourStep), function (value) {
@@ -30396,6 +31002,7 @@ angular.module('ui.bootstrap.typeahead', [
         //a callback executed when a match is selected
         var onSelectCallback = $parse(attrs.typeaheadOnSelect);
         var inputFormatter = attrs.typeaheadInputFormatter ? $parse(attrs.typeaheadInputFormatter) : undefined;
+        var appendToBody = attrs.typeaheadAppendToBody ? $parse(attrs.typeaheadAppendToBody) : false;
         //INTERNAL VARIABLES
         //model setter executed upon match selection
         var $setModelValue = $parse(attrs.ngModel).assign;
@@ -30447,7 +31054,7 @@ angular.module('ui.bootstrap.typeahead', [
                 //position pop-up with matches - we need to re-calculate its position each time we are opening a window
                 //with matches as a pop-up might be absolute-positioned and position of an input might have changed on a page
                 //due to other elements being rendered
-                scope.position = $position.position(element);
+                scope.position = appendToBody ? $position.offset(element) : $position.position(element);
                 scope.position.top = scope.position.top + element.prop('offsetHeight');
               } else {
                 resetMatches();
@@ -30533,9 +31140,6 @@ angular.module('ui.bootstrap.typeahead', [
         element.bind('keydown', function (evt) {
           //typeahead is open and an "interesting" key was pressed
           if (scope.matches.length === 0 || HOT_KEYS.indexOf(evt.which) === -1) {
-            if (evt.which === 13) {
-              evt.preventDefault();
-            }
             return;
           }
           evt.preventDefault();
@@ -30569,7 +31173,12 @@ angular.module('ui.bootstrap.typeahead', [
         originalScope.$on('$destroy', function () {
           $document.unbind('click', dismissClickHandler);
         });
-        element.after($compile(popUpEl)(scope));
+        var $popup = $compile(popUpEl)(scope);
+        if (appendToBody) {
+          $document.find('body').append($popup);
+        } else {
+          element.after($popup);
+        }
       }
     };
   }
@@ -30633,67 +31242,67 @@ angular.module('ui.bootstrap.typeahead', [
 angular.module('template/accordion/accordion-group.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/accordion/accordion-group.html', '<div class="accordion-group">\n' + '  <div class="accordion-heading" ><a class="accordion-toggle" ng-click="isOpen = !isOpen" accordion-transclude="heading">{{heading}}</a></div>\n' + '  <div class="accordion-body" collapse="!isOpen">\n' + '    <div class="accordion-inner" ng-transclude></div>  </div>\n' + '</div>');
+    $templateCache.put('template/accordion/accordion-group.html', '<div class="panel panel-default">\n' + '  <div class="panel-heading">\n' + '    <h4 class="panel-title">\n' + '      <a class="accordion-toggle" ng-click="isOpen = !isOpen" accordion-transclude="heading">{{heading}}</a>\n' + '    </h4>\n' + '  </div>\n' + '  <div class="panel-collapse" collapse="!isOpen">\n' + '\t  <div class="panel-body" ng-transclude></div>\n' + '  </div>\n' + '</div>');
   }
 ]);
 angular.module('template/accordion/accordion.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/accordion/accordion.html', '<div class="accordion" ng-transclude></div>');
+    $templateCache.put('template/accordion/accordion.html', '<div class="panel-group" ng-transclude></div>');
   }
 ]);
 angular.module('template/alert/alert.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/alert/alert.html', '<div class=\'alert\' ng-class=\'type && "alert-" + type\'>\n' + '    <button ng-show=\'closeable\' type=\'button\' class=\'close\' ng-click=\'close()\'>&times;</button>\n' + '    <div ng-transclude></div>\n' + '</div>\n' + '');
+    $templateCache.put('template/alert/alert.html', '<div class=\'alert\' ng-class=\'"alert-" + (type || "warning")\'>\n' + '    <button ng-show=\'closeable\' type=\'button\' class=\'close\' ng-click=\'close()\'>&times;</button>\n' + '    <div ng-transclude></div>\n' + '</div>\n' + '');
   }
 ]);
 angular.module('template/carousel/carousel.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/carousel/carousel.html', '<div ng-mouseenter="pause()" ng-mouseleave="play()" class="carousel">\n' + '    <ol class="carousel-indicators" ng-show="slides().length > 1">\n' + '        <li ng-repeat="slide in slides()" ng-class="{active: isActive(slide)}" ng-click="select(slide)"></li>\n' + '    </ol>\n' + '    <div class="carousel-inner" ng-transclude></div>\n' + '    <a ng-click="prev()" class="carousel-control left" ng-show="slides().length > 1">&lsaquo;</a>\n' + '    <a ng-click="next()" class="carousel-control right" ng-show="slides().length > 1">&rsaquo;</a>\n' + '</div>\n' + '');
+    $templateCache.put('template/carousel/carousel.html', '<div ng-mouseenter="pause()" ng-mouseleave="play()" class="carousel">\n' + '    <ol class="carousel-indicators" ng-show="slides().length > 1">\n' + '        <li ng-repeat="slide in slides()" ng-class="{active: isActive(slide)}" ng-click="select(slide)"></li>\n' + '    </ol>\n' + '    <div class="carousel-inner" ng-transclude></div>\n' + '    <a class="left carousel-control" ng-click="prev()" ng-show="slides().length > 1"><span class="icon-prev"></span></a>\n' + '    <a class="right carousel-control" ng-click="next()" ng-show="slides().length > 1"><span class="icon-next"></span></a>\n' + '</div>\n' + '');
   }
 ]);
 angular.module('template/carousel/slide.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/carousel/slide.html', '<div ng-class="{\n' + '    \'active\': leaving || (active && !entering),\n' + '    \'prev\': (next || active) && direction==\'prev\',\n' + '    \'next\': (next || active) && direction==\'next\',\n' + '    \'right\': direction==\'prev\',\n' + '    \'left\': direction==\'next\'\n' + '  }" class="item" ng-transclude></div>\n' + '');
+    $templateCache.put('template/carousel/slide.html', '<div ng-class="{\n' + '    \'active\': leaving || (active && !entering),\n' + '    \'prev\': (next || active) && direction==\'prev\',\n' + '    \'next\': (next || active) && direction==\'next\',\n' + '    \'right\': direction==\'prev\',\n' + '    \'left\': direction==\'next\'\n' + '  }" class="item text-center" ng-transclude></div>\n' + '');
   }
 ]);
 angular.module('template/datepicker/datepicker.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/datepicker/datepicker.html', '<table>\n' + '  <thead>\n' + '    <tr class="text-center">\n' + '      <th><button type="button" class="btn pull-left" ng-click="move(-1)"><i class="icon-chevron-left"></i></button></th>\n' + '      <th colspan="{{rows[0].length - 2 + showWeekNumbers}}"><button type="button" class="btn btn-block" ng-click="toggleMode()"><strong>{{title}}</strong></button></th>\n' + '      <th><button type="button" class="btn pull-right" ng-click="move(1)"><i class="icon-chevron-right"></i></button></th>\n' + '    </tr>\n' + '    <tr class="text-center" ng-show="labels.length > 0">\n' + '      <th ng-show="showWeekNumbers">#</th>\n' + '      <th ng-repeat="label in labels">{{label}}</th>\n' + '    </tr>\n' + '  </thead>\n' + '  <tbody>\n' + '    <tr ng-repeat="row in rows">\n' + '      <td ng-show="showWeekNumbers" class="text-center"><em>{{ getWeekNumber(row) }}</em></td>\n' + '      <td ng-repeat="dt in row" class="text-center">\n' + '        <button type="button" style="width:100%;" class="btn" ng-class="{\'btn-info\': dt.selected}" ng-click="select(dt.date)" ng-disabled="dt.disabled"><span ng-class="{muted: dt.secondary}">{{dt.label}}</span></button>\n' + '      </td>\n' + '    </tr>\n' + '  </tbody>\n' + '</table>\n' + '');
+    $templateCache.put('template/datepicker/datepicker.html', '<table>\n' + '  <thead>\n' + '    <tr>\n' + '      <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="move(-1)"><i class="glyphicon glyphicon-chevron-left"></i></button></th>\n' + '      <th colspan="{{rows[0].length - 2 + showWeekNumbers}}"><button type="button" class="btn btn-default btn-sm btn-block" ng-click="toggleMode()"><strong>{{title}}</strong></button></th>\n' + '      <th><button type="button" class="btn btn-default btn-sm pull-right" ng-click="move(1)"><i class="glyphicon glyphicon-chevron-right"></i></button></th>\n' + '    </tr>\n' + '    <tr ng-show="labels.length > 0" class="h6">\n' + '      <th ng-show="showWeekNumbers" class="text-center">#</th>\n' + '      <th ng-repeat="label in labels" class="text-center">{{label}}</th>\n' + '    </tr>\n' + '  </thead>\n' + '  <tbody>\n' + '    <tr ng-repeat="row in rows">\n' + '      <td ng-show="showWeekNumbers" class="text-center"><em>{{ getWeekNumber(row) }}</em></td>\n' + '      <td ng-repeat="dt in row" class="text-center">\n' + '        <button type="button" style="width:100%;" class="btn btn-default btn-sm" ng-class="{\'btn-info\': dt.selected}" ng-click="select(dt.date)" ng-disabled="dt.disabled"><span ng-class="{\'text-muted\': dt.secondary}">{{dt.label}}</span></button>\n' + '      </td>\n' + '    </tr>\n' + '  </tbody>\n' + '</table>\n' + '');
   }
 ]);
 angular.module('template/datepicker/popup.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/datepicker/popup.html', '<ul class="dropdown-menu" ng-style="{display: (isOpen && \'block\') || \'none\', top: position.top+\'px\', left: position.left+\'px\'}">\n' + '\t<li ng-transclude></li>\n' + '\t<li class="divider"></li>\n' + '\t<li style="padding: 9px;">\n' + '\t\t<span class="btn-group">\n' + '\t\t\t<button type="button" class="btn btn-small btn-inverse" ng-click="today()">{{currentText}}</button>\n' + '\t\t\t<button type="button" class="btn btn-small btn-info" ng-click="showWeeks = ! showWeeks" ng-class="{active: showWeeks}">{{toggleWeeksText}}</button>\n' + '\t\t\t<button type="button" class="btn btn-small btn-danger" ng-click="clear()">{{clearText}}</button>\n' + '\t\t</span>\n' + '\t\t<button type="button" class="btn btn-small btn-success pull-right" ng-click="isOpen = false">{{closeText}}</button>\n' + '\t</li>\n' + '</ul>\n' + '');
+    $templateCache.put('template/datepicker/popup.html', '<ul class="dropdown-menu" ng-style="{display: (isOpen && \'block\') || \'none\', top: position.top+\'px\', left: position.left+\'px\'}">\n' + '\t<li ng-transclude></li>\n' + '\t<li ng-show="showButtonBar" style="padding:10px 9px 2px">\n' + '\t\t<span class="btn-group">\n' + '\t\t\t<button type="button" class="btn btn-sm btn-info" ng-click="today()">{{currentText}}</button>\n' + '\t\t\t<button type="button" class="btn btn-sm btn-default" ng-click="showWeeks = ! showWeeks" ng-class="{active: showWeeks}">{{toggleWeeksText}}</button>\n' + '\t\t\t<button type="button" class="btn btn-sm btn-danger" ng-click="clear()">{{clearText}}</button>\n' + '\t\t</span>\n' + '\t\t<button type="button" class="btn btn-sm btn-success pull-right" ng-click="isOpen = false">{{closeText}}</button>\n' + '\t</li>\n' + '</ul>\n' + '');
   }
 ]);
 angular.module('template/modal/backdrop.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/modal/backdrop.html', '<div class="modal-backdrop fade" ng-class="{in: animate}" ng-style="{\'z-index\': 1040 + index*10}" ng-click="close($event)"></div>');
+    $templateCache.put('template/modal/backdrop.html', '<div class="modal-backdrop fade" ng-class="{in: animate}" ng-style="{\'z-index\': 1040 + index*10}"></div>');
   }
 ]);
 angular.module('template/modal/window.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/modal/window.html', '<div class="modal fade {{ windowClass }}" ng-class="{in: animate}" ng-style="{\'z-index\': 1050 + index*10}" ng-transclude></div>');
+    $templateCache.put('template/modal/window.html', '<div tabindex="-1" class="modal fade {{ windowClass }}" ng-class="{in: animate}" ng-style="{\'z-index\': 1050 + index*10, display: \'block\'}" ng-click="close($event)">\n' + '    <div class="modal-dialog"><div class="modal-content" ng-transclude></div></div>\n' + '</div>');
   }
 ]);
 angular.module('template/pagination/pager.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/pagination/pager.html', '<div class="pager">\n' + '  <ul>\n' + '    <li ng-repeat="page in pages" ng-class="{disabled: page.disabled, previous: page.previous, next: page.next}"><a ng-click="selectPage(page.number)">{{page.text}}</a></li>\n' + '  </ul>\n' + '</div>\n' + '');
+    $templateCache.put('template/pagination/pager.html', '<ul class="pager">\n' + '  <li ng-repeat="page in pages" ng-class="{disabled: page.disabled, previous: page.previous, next: page.next}"><a ng-click="selectPage(page.number)">{{page.text}}</a></li>\n' + '</ul>');
   }
 ]);
 angular.module('template/pagination/pagination.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/pagination/pagination.html', '<div class="pagination"><ul>\n' + '  <li ng-repeat="page in pages" ng-class="{active: page.active, disabled: page.disabled}"><a ng-click="selectPage(page.number)">{{page.text}}</a></li>\n' + '  </ul>\n' + '</div>\n' + '');
+    $templateCache.put('template/pagination/pagination.html', '<ul class="pagination">\n' + '  <li ng-repeat="page in pages" ng-class="{active: page.active, disabled: page.disabled}"><a ng-click="selectPage(page.number)">{{page.text}}</a></li>\n' + '</ul>');
   }
 ]);
 angular.module('template/tooltip/tooltip-html-unsafe-popup.html', []).run([
@@ -30717,19 +31326,25 @@ angular.module('template/popover/popover.html', []).run([
 angular.module('template/progressbar/bar.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/progressbar/bar.html', '<div class="bar" ng-class=\'type && "bar-" + type\'></div>');
+    $templateCache.put('template/progressbar/bar.html', '<div class="progress-bar" ng-class="type && \'progress-bar-\' + type" ng-transclude></div>');
   }
 ]);
 angular.module('template/progressbar/progress.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/progressbar/progress.html', '<div class="progress"><progressbar ng-repeat="bar in bars" width="bar.to" old="bar.from" animate="bar.animate" type="bar.type"></progressbar></div>');
+    $templateCache.put('template/progressbar/progress.html', '<div class="progress" ng-transclude></div>');
+  }
+]);
+angular.module('template/progressbar/progressbar.html', []).run([
+  '$templateCache',
+  function ($templateCache) {
+    $templateCache.put('template/progressbar/progressbar.html', '<div class="progress"><div class="progress-bar" ng-class="type && \'progress-bar-\' + type" ng-transclude></div></div>');
   }
 ]);
 angular.module('template/rating/rating.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/rating/rating.html', '<span ng-mouseleave="reset()">\n' + '\t<i ng-repeat="r in range" ng-mouseenter="enter($index + 1)" ng-click="rate($index + 1)" ng-class="$index < val && (r.stateOn || \'icon-star\') || (r.stateOff || \'icon-star-empty\')"></i>\n' + '</span>');
+    $templateCache.put('template/rating/rating.html', '<span ng-mouseleave="reset()">\n' + '    <i ng-repeat="r in range" ng-mouseenter="enter($index + 1)" ng-click="rate($index + 1)" class="glyphicon" ng-class="$index < val && (r.stateOn || \'glyphicon-star\') || (r.stateOff || \'glyphicon-star-empty\')"></i>\n' + '</span>');
   }
 ]);
 angular.module('template/tabs/tab.html', []).run([
@@ -30747,13 +31362,13 @@ angular.module('template/tabs/tabset-titles.html', []).run([
 angular.module('template/tabs/tabset.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/tabs/tabset.html', '\n' + '<div class="tabbable" ng-class="{\'tabs-right\': direction == \'right\', \'tabs-left\': direction == \'left\', \'tabs-below\': direction == \'below\'}">\n' + '  <div tabset-titles="tabsAbove"></div>\n' + '  <div class="tab-content">\n' + '    <div class="tab-pane" \n' + '         ng-repeat="tab in tabs" \n' + '         ng-class="{active: tab.active}"\n' + '         tab-content-transclude="tab">\n' + '    </div>\n' + '  </div>\n' + '  <div tabset-titles="!tabsAbove"></div>\n' + '</div>\n' + '');
+    $templateCache.put('template/tabs/tabset.html', '\n' + '<div class="tabbable">\n' + '  <ul class="nav {{type && \'nav-\' + type}}" ng-class="{\'nav-stacked\': vertical, \'nav-justified\': justified}" ng-transclude></ul>\n' + '  <div class="tab-content">\n' + '    <div class="tab-pane" \n' + '         ng-repeat="tab in tabs" \n' + '         ng-class="{active: tab.active}"\n' + '         tab-content-transclude="tab">\n' + '    </div>\n' + '  </div>\n' + '</div>\n' + '');
   }
 ]);
 angular.module('template/timepicker/timepicker.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/timepicker/timepicker.html', '<table class="form-inline">\n' + '\t<tr class="text-center">\n' + '\t\t<td><a ng-click="incrementHours()" class="btn btn-link"><i class="icon-chevron-up"></i></a></td>\n' + '\t\t<td>&nbsp;</td>\n' + '\t\t<td><a ng-click="incrementMinutes()" class="btn btn-link"><i class="icon-chevron-up"></i></a></td>\n' + '\t\t<td ng-show="showMeridian"></td>\n' + '\t</tr>\n' + '\t<tr>\n' + '\t\t<td class="control-group" ng-class="{\'error\': invalidHours}"><input type="text" ng-model="hours" ng-change="updateHours()" class="span1 text-center" ng-mousewheel="incrementHours()" ng-readonly="readonlyInput" maxlength="2"></td>\n' + '\t\t<td>:</td>\n' + '\t\t<td class="control-group" ng-class="{\'error\': invalidMinutes}"><input type="text" ng-model="minutes" ng-change="updateMinutes()" class="span1 text-center" ng-readonly="readonlyInput" maxlength="2"></td>\n' + '\t\t<td ng-show="showMeridian"><button type="button" ng-click="toggleMeridian()" class="btn text-center">{{meridian}}</button></td>\n' + '\t</tr>\n' + '\t<tr class="text-center">\n' + '\t\t<td><a ng-click="decrementHours()" class="btn btn-link"><i class="icon-chevron-down"></i></a></td>\n' + '\t\t<td>&nbsp;</td>\n' + '\t\t<td><a ng-click="decrementMinutes()" class="btn btn-link"><i class="icon-chevron-down"></i></a></td>\n' + '\t\t<td ng-show="showMeridian"></td>\n' + '\t</tr>\n' + '</table>\n' + '');
+    $templateCache.put('template/timepicker/timepicker.html', '<table>\n' + '\t<tbody>\n' + '\t\t<tr class="text-center">\n' + '\t\t\t<td><a ng-click="incrementHours()" class="btn btn-link"><span class="glyphicon glyphicon-chevron-up"></span></a></td>\n' + '\t\t\t<td>&nbsp;</td>\n' + '\t\t\t<td><a ng-click="incrementMinutes()" class="btn btn-link"><span class="glyphicon glyphicon-chevron-up"></span></a></td>\n' + '\t\t\t<td ng-show="showMeridian"></td>\n' + '\t\t</tr>\n' + '\t\t<tr>\n' + '\t\t\t<td style="width:50px;" class="form-group" ng-class="{\'has-error\': invalidHours}">\n' + '\t\t\t\t<input type="text" ng-model="hours" ng-change="updateHours()" class="form-control text-center" ng-mousewheel="incrementHours()" ng-readonly="readonlyInput" maxlength="2">\n' + '\t\t\t</td>\n' + '\t\t\t<td>:</td>\n' + '\t\t\t<td style="width:50px;" class="form-group" ng-class="{\'has-error\': invalidMinutes}">\n' + '\t\t\t\t<input type="text" ng-model="minutes" ng-change="updateMinutes()" class="form-control text-center" ng-readonly="readonlyInput" maxlength="2">\n' + '\t\t\t</td>\n' + '\t\t\t<td ng-show="showMeridian"><button type="button" class="btn btn-default text-center" ng-click="toggleMeridian()">{{meridian}}</button></td>\n' + '\t\t</tr>\n' + '\t\t<tr class="text-center">\n' + '\t\t\t<td><a ng-click="decrementHours()" class="btn btn-link"><span class="glyphicon glyphicon-chevron-down"></span></a></td>\n' + '\t\t\t<td>&nbsp;</td>\n' + '\t\t\t<td><a ng-click="decrementMinutes()" class="btn btn-link"><span class="glyphicon glyphicon-chevron-down"></span></a></td>\n' + '\t\t\t<td ng-show="showMeridian"></td>\n' + '\t\t</tr>\n' + '\t</tbody>\n' + '</table>\n' + '');
   }
 ]);
 angular.module('template/typeahead/typeahead-match.html', []).run([
@@ -30765,7 +31380,7 @@ angular.module('template/typeahead/typeahead-match.html', []).run([
 angular.module('template/typeahead/typeahead-popup.html', []).run([
   '$templateCache',
   function ($templateCache) {
-    $templateCache.put('template/typeahead/typeahead-popup.html', '<ul class="typeahead dropdown-menu" ng-style="{display: isOpen()&&\'block\' || \'none\', top: position.top+\'px\', left: position.left+\'px\'}">\n' + '    <li ng-repeat="match in matches" ng-class="{active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)">\n' + '        <div typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>\n' + '    </li>\n' + '</ul>');
+    $templateCache.put('template/typeahead/typeahead-popup.html', '<ul class="dropdown-menu" ng-style="{display: isOpen()&&\'block\' || \'none\', top: position.top+\'px\', left: position.left+\'px\'}">\n' + '    <li ng-repeat="match in matches" ng-class="{active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)">\n' + '        <div typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>\n' + '    </li>\n' + '</ul>');
   }
 ]);
 // Copyright 2009-2012 by contributors, MIT License
@@ -38557,7 +39172,7 @@ if (typeof define === 'function' && define.amd) {
                 case 'usage':
                   return _this.noop();
                 case 'headers':
-                  return _this.transform_named_params(property, allowParameterKeys);
+                  return _this.transform_named_params(property, allowParameterKeys, false);
                 case 'queryParameters':
                   return _this.transform_named_params(property, allowParameterKeys, false);
                 case 'baseUriParameters':
@@ -38592,7 +39207,7 @@ if (typeof define === 'function' && define.amd) {
                   case 'body':
                     return _this.transform_body(property, allowParameterKeys);
                   case 'headers':
-                    return _this.transform_named_params(property, allowParameterKeys);
+                    return _this.transform_named_params(property, allowParameterKeys, false);
                   default:
                     return _this.noop();
                   }
@@ -42068,7 +42683,7 @@ if (typeof define === 'function' && define.amd) {
     34: [
       function (require, module, exports) {
         (function (global) {
-          /*! http://mths.be/punycode v1.2.3 by @mathias */
+          /*! http://mths.be/punycode v1.2.4 by @mathias */
           ;
           (function (root) {
             /** Detect free variables */
@@ -42259,7 +42874,7 @@ if (typeof define === 'function' && define.amd) {
 	 */
             function decode(input) {
               // Don't use UCS-2
-              var output = [], inputLength = input.length, out, i = 0, n = initialN, bias = initialBias, basic, j, index, oldi, w, k, digit, t, length,
+              var output = [], inputLength = input.length, out, i = 0, n = initialN, bias = initialBias, basic, j, index, oldi, w, k, digit, t,
                 /** Cached calculation results */
                 baseMinusT;
               // Handle the basic code points: let `basic` be the number of input code
@@ -42429,7 +43044,7 @@ if (typeof define === 'function' && define.amd) {
             /*--------------------------------------------------------------------------*/
             /** Define the public API */
             punycode = {
-              'version': '1.2.3',
+              'version': '1.2.4',
               'ucs2': {
                 'decode': ucs2decode,
                 'encode': ucs2encode
@@ -42443,7 +43058,7 @@ if (typeof define === 'function' && define.amd) {
             // Some AMD build optimizers, like r.js, check for specific condition patterns
             // like the following:
             if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
-              define(function () {
+              define('punycode', function () {
                 return punycode;
               });
             } else if (freeExports && !freeExports.nodeType) {
@@ -43650,11 +44265,11 @@ if (typeof define === 'function' && define.amd) {
             }
             return -1;
           }
-        }.call(this, require('/Users/pavelstrashkin/mulesoft/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js')));
+        }.call(this, require('/Users/damian/projects/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js')));
       },
       {
         './index.js': 39,
-        '/Users/pavelstrashkin/mulesoft/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js': 30,
+        '/Users/damian/projects/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js': 30,
         'buffer': 31,
         'events': 23,
         'inherits': 29,
@@ -45461,11 +46076,11 @@ if (typeof define === 'function' && define.amd) {
           function hasOwnProperty(obj, prop) {
             return Object.prototype.hasOwnProperty.call(obj, prop);
           }
-        }.call(this, require('/Users/pavelstrashkin/mulesoft/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js'), typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : {}));
+        }.call(this, require('/Users/damian/projects/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js'), typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : {}));
       },
       {
         './support/isBuffer': 47,
-        '/Users/pavelstrashkin/mulesoft/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js': 30,
+        '/Users/damian/projects/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js': 30,
         'inherits': 29
       }
     ],
@@ -45821,19 +46436,15 @@ if (typeof define === 'function' && define.amd) {
                 return inflector._apply_rules(str, singular_rules, uncountable_words, singular);
               },
               camelize: function (str, lowFirstLetter) {
-                var str_path = str.split('/');
+                var str_path = str.toLowerCase().split('/');
                 var i = 0;
                 var j = str_path.length;
-                var str_arr, init_x, k, l;
                 for (; i < j; i++) {
-                  str_arr = str_path[i].split('_');
-                  init_x = lowFirstLetter && i + 1 === j ? 1 : 0;
-                  k = init_x;
-                  l = str_arr.length;
+                  var str_arr = str_path[i].split('_');
+                  var initX = lowFirstLetter && i + 1 === j ? 1 : 0;
+                  var k = initX;
+                  var l = str_arr.length;
                   for (; k < l; k++) {
-                    if (k !== 0) {
-                      str_arr[k] = str_arr[k].toLowerCase();
-                    }
                     str_arr[k] = str_arr[k].charAt(0).toUpperCase() + str_arr[k].substring(1);
                   }
                   str_path[i] = str_arr.join('');
@@ -45873,11 +46484,10 @@ if (typeof define === 'function' && define.amd) {
                 var str_arr = str.split(' ');
                 var i = 0;
                 var j = str_arr.length;
-                var d, k, l;
                 for (; i < j; i++) {
-                  d = str_arr[i].split('-');
-                  k = 0;
-                  l = d.length;
+                  var d = str_arr[i].split('-');
+                  var k = 0;
+                  var l = d.length;
                   for (; k < l; k++) {
                     if (inflector.indexOf(non_titlecased_words, d[k].toLowerCase()) < 0) {
                       d[k] = inflector.capitalize(d[k]);
@@ -45931,36 +46541,14 @@ if (typeof define === 'function' && define.amd) {
                   }
                 }
                 return str_arr.join(' ');
-              },
-              transform: function (str, arr) {
-                var i = 0;
-                var j = arr.length;
-                for (; i < j; i++) {
-                  var method = arr[i];
-                  if (this.hasOwnProperty(method)) {
-                    str = this[method](str);
-                  }
-                }
-                return str;
               }
             };
+          if (typeof exports === 'undefined')
+            return root.inflection = inflector;
           /**
  * @public
  */
-          inflector.version = '1.3.3';
-          // browser support
-          // requirejs
-          if (typeof define !== 'undefined') {
-            return define(function (require, exports, module) {
-              module.exports = inflector;
-            });
-          }
-          // browser support
-          // normal usage
-          if (typeof exports === 'undefined') {
-            root.inflection = inflector;
-            return;
-          }
+          inflector.version = '1.2.5';
           /**
  * Exports module.
  */
@@ -49400,11 +49988,9 @@ if (typeof define === 'function' && define.amd) {
               }
             };
           };
-        }.call(this, require('/Users/pavelstrashkin/mulesoft/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js'), require('buffer').Buffer));
+        }.call(this, require('/Users/damian/projects/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js'), require('buffer').Buffer));
       },
       {
-        '/Users/pavelstrashkin/mulesoft/raml-js-parser/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js': 30,
-        'buffer': 31,
         'child_process': 22,
         'fs': 22,
         'http': 24,
@@ -57611,7 +58197,7 @@ RAML.Inspector = function () {
   ////////////
   // tabset
   ////////////
-  RAML.Directives.consoleTabset = function () {
+  RAML.Directives.tabset = function () {
     return {
       restrict: 'E',
       replace: true,
@@ -57627,10 +58213,10 @@ RAML.Inspector = function () {
   var link = function ($scope, $element, $attrs, tabsetCtrl) {
     tabsetCtrl.addTab($scope);
   };
-  RAML.Directives.consoleTab = function () {
+  RAML.Directives.tab = function () {
     return {
       restrict: 'E',
-      require: '^consoleTabset',
+      require: '^tabset',
       replace: true,
       transclude: true,
       link: link,
@@ -57878,10 +58464,8 @@ RAML.Filters = {};
   module.directive('responses', RAML.Directives.responses);
   module.directive('rootDocumentation', RAML.Directives.rootDocumentation);
   module.directive('securitySchemes', RAML.Directives.securitySchemes);
-  module.directive('consoleTab', RAML.Directives.consoleTab);
-  //<- prepend 'console' to avoid collision w/angular-bootstrap tab
-  module.directive('consoleTabset', RAML.Directives.consoleTabset);
-  //<- prepend 'console' to avoid collision w/angular-bootstrap tabset
+  module.directive('tab', RAML.Directives.tab);
+  module.directive('tabset', RAML.Directives.tabset);
   module.directive('tryIt', RAML.Directives.tryIt);
   module.directive('validatedInput', RAML.Directives.validatedInput);
   module.controller('TryItController', RAML.Controllers.tryIt);
@@ -57897,7 +58481,7 @@ angular.module('ramlConsoleApp').run([
     $templateCache.put('views/api_resources.tmpl.html', '<div id="raml-console-api-reference" role="resources">\n' + '  <div collapsible collapsed=\'collapsed\' role="resource-group" class="resource-group" ng-repeat="resourceGroup in api.resourceGroups" ng-init=\'collapsed = groupView.collapsed[groupView.keyFor(resourceGroup)]\'>\n' + '    <h1 collapsible-toggle class=\'path\'>\n' + '      {{resourceGroup[0].pathSegments[0].toString()}}\n' + '      <i ng-class="{\'icon-caret-right\': collapsed, \'icon-caret-down\': !collapsed}"></i>\n' + '    </h1>\n' + '\n' + '    <div collapsible-content>\n' + '      <resource ng-repeat="resource in resourceGroup"></resource>\n' + '    </div>\n' + '  </div>\n' + '</div>\n');
     $templateCache.put('views/basic_auth.tmpl.html', '<fieldset class="labelled-inline" role="basic">\n' + '  <div class="control-group">\n' + '    <label for="username">Username:</label>\n' + '    <input type="text" name="username" ng-model=\'credentials.username\'/>\n' + '  </div>\n' + '\n' + '  <div class="control-group">\n' + '    <label for="password">Password:</label>\n' + '    <input type="password" name="password" ng-model=\'credentials.password\'/>\n' + '  </div>\n' + '</fieldset>\n');
     $templateCache.put('views/body_content.tmpl.html', '<div class="request-body" ng-show="body">\n' + '  <fieldset class="bordered">\n' + '    <legend>Body</legend>\n' + '\n' + '    <fieldset class="labelled-radio-group" role="media-types">\n' + '      <label>Content Type</label>\n' + '      <div class="radio-group">\n' + '        <label class="radio" ng-repeat="contentType in body.contentTypes">\n' + '          <input type="radio" name="media-type" value="{{contentType}}" ng-model="body.selected">\n' + '          {{contentType}}\n' + '        </label>\n' + '      </div>\n' + '    </fieldset>\n' + '\n' + '    <div ng-repeat="contentType in body.contentTypes">\n' + '      <div class="labelled-inline" ng-if=\'body.isForm(contentType)\' ng-show="body.isSelected(contentType)">\n' + '        <parameter-fields parameters=\'body.definitions[contentType]\'></parameter-fields>\n' + '      </div>\n' + '      <div ng-if="!body.isForm(contentType)" ng-show="body.isSelected(contentType)">\n' + '        <textarea name="{{contentType}}" ng-model="body.definitions[contentType].value"></textarea>\n' + '        <a href="#" class="body-prefill" ng-show="body.hasExample(contentType)" ng-click="body.fillWithExample($event)">Prefill with example</a>\n' + '      </div>\n' + '    </div>\n' + '  </fieldset>\n' + '</div>\n');
-    $templateCache.put('views/documentation.tmpl.html', '<section class=\'documentation\' role=\'documentation\'>\n' + '  <ul role="traits" class="modifiers">\n' + '    <li class="trait" ng-repeat="trait in documentation.traits()">\n' + '      {{trait|nameFromParameterizable}}\n' + '    </li>\n' + '  </ul>\n' + '\n' + '  <div role="full-description" class="description"\n' + '       ng-if="method.description"\n' + '       markdown="method.description">\n' + '  </div>\n' + '\n' + '  <console-tabset key-base=\'{{methodView.methodKey()}}\'>\n' + '    <console-tab role=\'documentation-requests\' heading="Request" active=\'documentation.requestsActive\' disabled="!documentation.hasRequestDocumentation()">\n' + '      <parameters></parameters>\n' + '      <requests></requests>\n' + '    </console-tab>\n' + '    <console-tab role=\'documentation-responses\' class="responses" heading="Responses" active=\'documentation.responsesActive\' disabled=\'!documentation.hasResponseDocumentation()\'>\n' + '      <responses></responses>\n' + '    </console-tab>\n' + '    <console-tab role="try-it" heading="Try It" active="documentation.tryItActive" disabled="!ramlConsole.tryItEnabled()">\n' + '      <try-it></try-it>\n' + '    </console-tab>\n' + '  </console-tabset>\n' + '</section>\n');
+    $templateCache.put('views/documentation.tmpl.html', '<section class=\'documentation\' role=\'documentation\'>\n' + '  <ul role="traits" class="modifiers">\n' + '    <li class="trait" ng-repeat="trait in documentation.traits()">\n' + '      {{trait|nameFromParameterizable}}\n' + '    </li>\n' + '  </ul>\n' + '\n' + '  <div role="full-description" class="description"\n' + '       ng-if="method.description"\n' + '       markdown="method.description">\n' + '  </div>\n' + '\n' + '  <tabset key-base=\'{{methodView.methodKey()}}\'>\n' + '    <tab role=\'documentation-requests\' heading="Request" active=\'documentation.requestsActive\' disabled="!documentation.hasRequestDocumentation()">\n' + '      <parameters></parameters>\n' + '      <requests></requests>\n' + '    </tab>\n' + '    <tab role=\'documentation-responses\' class="responses" heading="Responses" active=\'documentation.responsesActive\' disabled=\'!documentation.hasResponseDocumentation()\'>\n' + '      <responses></responses>\n' + '    </tab>\n' + '    <tab role="try-it" heading="Try It" active="documentation.tryItActive" disabled="!ramlConsole.tryItEnabled()">\n' + '      <try-it></try-it>\n' + '    </tab>\n' + '  </tabset>\n' + '</section>\n');
     $templateCache.put('views/enum.tmpl.html', '<div class="autocomplete">\n' + '  <span ng-transclude></span>\n' + '  <ul ng-show="focused">\n' + '    <li ng-click=\'selectItem(item)\' ng-class="{ selected: $index == selectedIndex }" ng-repeat="item in filteredEnum">\n' + '      {{item}}\n' + '    </li>\n' + '  </ul>\n' + '</div>\n');
     $templateCache.put('views/method.tmpl.html', '<div class=\'method\' role="method" ng-class="methodView.cssClass()">\n' + '  <div class=\'accordion-toggle method-summary\' role="methodSummary" ng-class=\'method.method\' ng-click=\'methodView.toggleExpansion($event)\'>\n' + '    <span role="verb" class=\'method-name\' ng-class=\'method.method\'>{{method.method}}</span>\n' + '    <div class=\'filler\' ng-show=\'methodView.expanded\' ng-class=\'method.method\'></div>\n' + '\n' + '    <div role="description" ng-if="!methodView.expanded">\n' + '       <div class=\'abbreviated-description\' markdown=\'method.description\'></div>\n' + '       <i class=\'icon-caret-right\'></i>\n' + '    </div>\n' + '\n' + '  </div>\n' + '\n' + '  <div ng-show=\'methodView.expanded\'>\n' + '    <documentation></documentation>\n' + '  </div>\n' + '</div>\n');
     $templateCache.put('views/named_parameters.tmpl.html', '<fieldset class=\'labelled-inline bordered\' ng-show="displayParameters()">\n' + '  <legend>{{heading}}</legend>\n' + '  <parameter-fields parameters="parameters"></parameter-fields>\n' + '</fieldset>\n');
